@@ -1,11 +1,7 @@
-# electron-react-boilerplate
+squelch
+=======
 
-[![NPM version][npm-image]][npm-url]
-[![Dependency Status][david_img]][david_site]
-
-> [Electron](http://electron.atom.io/) application boilerplate based on [React](https://facebook.github.io/react/), [React Router](http://rackt.github.io/react-router/), [Webpack](http://webpack.github.io/docs/), [React Hot Loader](http://gaearon.github.io/react-hot-loader/) for rapid application development
-
-Warning: react-hot-reload maybe temporarily fail because `ws` issue with latest node and iojs   [Automattic/engine.io-client#376](https://github.com/Automattic/engine.io-client/issues/376)
+An IRC client.
 
 ## Install
 
@@ -22,9 +18,7 @@ npm run hot-dev-server
 npm run start-hot
 ```
 
-To start a react-hot electron app development !
-
-> If you are using `OS X` and you place your Electron in `/Applications` folder, it will be fine. Otherwise you should see [Run your app](https://github.com/atom/electron/blob/master/docs/tutorial/quick-start.md#run-your-app) document for run this on your computer.
+> Make sure `electron` is available in your PATH!
 
 ## Package
 
@@ -51,18 +45,3 @@ We add some module's `peerDependencies` to ignore option as default for applicat
 - `node-libs-browser` is required by `webpack` and its size is ~3MB.
 
 > **Note:** If you want to use any above modules in runtime, for example: `require('babel/register')`, you should move them form `devDependencies` to `dependencies`.
-
-## To Do
-
-- simplify webpack config
-- yeoman generator
-- support react devtools when [atom/electron#915](https://github.com/atom/electron/issues/915) fixed
-- prerender production html
-
-## License
-MIT © [C. T. Lin](https://github.com/chentsulin)
-
-[npm-image]: https://img.shields.io/npm/v/electron-react-boilerplate.svg?style=flat-square
-[npm-url]: https://npmjs.org/package/electron-react-boilerplate
-[david_img]: https://img.shields.io/david/chentsulin/electron-react-boilerplate.svg
-[david_site]: https://david-dm.org/chentsulin/electron-react-boilerplate

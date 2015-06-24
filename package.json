@@ -1,41 +1,27 @@
 {
-  "name": "electron-react-boilerplate",
-  "version": "0.2.4",
-  "description": "Electron application boilerplate based on React, React Router, Webpack, React Hot Loader for rapid application development",
+  "name": "squelch-irc",
+  "version": "0.0.0",
+  "description": "An IRC client",
   "main": "main.js",
   "scripts": {
     "test": "mocha",
     "dev-server": "webpack-dev-server --config webpack-dev-server.config.js --progress --colors --port 2992 --inline",
     "hot-dev-server": "webpack-dev-server --config webpack-hot-dev-server.config.js --hot --progress --colors --port 2992 --inline",
     "build": "webpack --config webpack.config.production.js --progress --profile --colors",
-    "start": "/Applications/Electron.app/Contents/MacOS/Electron .",
-    "start-dev": "NODE_ENV=development /Applications/Electron.app/Contents/MacOS/Electron .",
-    "start-hot": "HOT=1 NODE_ENV=development /Applications/Electron.app/Contents/MacOS/Electron .",
+    "start": "electron .",
+    "start-dev": "NODE_ENV=development electron .",
+    "start-hot": "HOT=1 NODE_ENV=development electron .",
     "package": "node package.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/chentsulin/electron-react-boilerplate.git"
-  },
-  "author": {
-    "name": "C. T. Lin",
-    "email": "chentsulin@gmail.com",
-    "url": "https://github.com/chentsulin"
+    "url": "git+https://github.com/squelch-irc/squelch.git"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/chentsulin/electron-react-boilerplate/issues"
+    "url": "https://github.com/squelch-irc/squelch/issues"
   },
-  "keywords": [
-    "electron",
-    "boilerplate",
-    "react",
-    "react-router",
-    "flux",
-    "webpack",
-    "react-hot"
-  ],
-  "homepage": "https://github.com/chentsulin/electron-react-boilerplate#readme",
+  "homepage": "https://github.com/squelch-irc/squelch#readme",
   "devDependencies": {
     "asar": "^0.6.1",
     "babel-core": "^5.4.2",
