@@ -31,3 +31,4 @@ release
 
 .idea
 electron-packager-*
+dist
