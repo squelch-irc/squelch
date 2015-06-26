@@ -6,15 +6,7 @@
   "scripts": {
     "start": "electron .",
     "build": "node scripts/build-release.js",
-    "build-win32": "npm run build -- --platform win32 --arch ia32",
-    "build-win64": "npm run build -- --platform win32 --arch x64",
-    "build-osx32": "npm run build -- --platform darwin --arch ia32",
-    "build-osx64": "npm run build -- --platform darwin --arch x64",
-    "build-linux32": "npm run build -- --platform linux --arch ia32",
-    "build-linux64": "npm run build -- --platform linux --arch x64",
-    "build-linux": "npm run build-linux32 && npm run build-linux64",
-    "build-win": "npm run build-win32 && npm run build-win32",
-    "build-osx": "npm run build-osx32 && npm run build-osx32"
+    "build:all": "node scripts/build-release.js --platform win32,darwin,linux --arch ia32,x64"
   },
   "repository": {
     "type": "git",

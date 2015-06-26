@@ -1,47 +1,16 @@
 squelch
 =======
 
-An IRC client.
+An IRC client. **Currently in initial development, we'll have something to show you soon, we promise!**
 
 ## Install
 
-Install dependencies.
-
-```bash
-$ npm install
-```
+Install dependencies with `npm install`.
 
 ## Run
 
-```bash
-npm run hot-dev-server
-npm run start-hot
-```
+Run the app with `npm start`.
 
-> Make sure `electron` is available in your PATH!
+## Building Squelch
 
-## Package
-
-```
-npm run package
-```
-
-#### Options
-
-- --name, -n: Application name (default: ElectronReact)
-- --version, -v: Electron version (default: latest version)
-- --asar, -a: [asar](https://github.com/atom/asar) support (default: false)
-- --icon, -i: Application icon
-
-Use `electron-packager` to pack your app for darwin (osx), linux and win32 (windows) platform. After build, you will see them in `release` folder.
-
-`test`, `tools`, `release` folder and devDependencies in `package.json` will be ignored by default.
-
-#### Default Ignore modules
-
-We add some module's `peerDependencies` to ignore option as default for application size reduction.
-
-- `babel-core` is required by `babel-loader` and its size is ~19 MB
-- `node-libs-browser` is required by `webpack` and its size is ~3MB.
-
-> **Note:** If you want to use any above modules in runtime, for example: `require('babel/register')`, you should move them form `devDependencies` to `dependencies`.
+Run the command `npm run build` to build a packaged version of Squelch for your current platform and architecture. If you would like to build for a specific platform, run `npm run build -- --platform win32,darwin,linux --arch ia32,x64`, but with your choices of platforms and architectures. A handy shortcut to build all platforms and architectures is `npm run build:all`.
