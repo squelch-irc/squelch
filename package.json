@@ -6,7 +6,10 @@
   "scripts": {
     "start": "electron .",
     "clean": "rimraf release/",
-    "prebuild": "npm run clean",
+    "jshint": "jsxhint --jsx-only --babel app/**.jsx app/**.js script/**.js main.js",
+    "jscs": "jscs -x app scripts main.js",
+    "lint": "npm run jshint && npm run jscs",
+    "prebuild": "npm run clean && npm run lint",
     "prebuild:all": "npm run clean",
     "build": "node scripts/build-release.js",
     "build:all": "node scripts/build-release.js --platform win32,darwin,linux --arch ia32,x64"
@@ -21,12 +24,13 @@
   },
   "homepage": "https://github.com/squelch-irc/squelch#readme",
   "devDependencies": {
-    "babel-eslint": "^3.1.14",
+    "babel": "^5.6.14",
+    "babel-jscs": "^1.0.3",
     "electron-packager": "^4.1.0",
     "electron-prebuilt": "^0.28.3",
     "electron-rebuild": "^0.2.1",
-    "eslint": "^0.22.1",
-    "eslint-plugin-react": "^2.5.0",
+    "jscs": "^1.13.1",
+    "jsxhint": "^0.15.1",
     "minimist": "^1.1.1",
     "rimraf": "^2.4.0"
   },

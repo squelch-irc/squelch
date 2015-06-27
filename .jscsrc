@@ -1,0 +1,16 @@
+{
+  "esprima": "./node_modules/babel-jscs",
+  "fileExtensions": [".js", ".jsx"],
+  "preset": "google",
+  "disallowEmptyBlocks": true,
+  "disallowFunctionDeclarations": true,
+  "disallowTrailingComma": true,
+  "requireSemicolons": true,
+  "requireSpaceBetweenArguments": true,
+  "requireSpacesInForStatement": true,
+  "requireParenthesesAroundIIFE": true,
+  "validateQuoteMarks": "'",
+  "validateIndentation": 4,
+  "maximumLineLength": null,
+  "esnext": true
+}
