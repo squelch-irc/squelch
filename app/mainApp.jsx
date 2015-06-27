@@ -1,3 +1,7 @@
 import React from 'react';
+import {View} from './views/root.js';
 
-React.render(<h1>TODO: Implement Squelch</h1>, document.getElementById('squelch-root'));
+React.render(
+  <View />,
+  document.getElementById('squelch-root')
+);
