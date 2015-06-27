@@ -19,6 +19,7 @@ _.each(platforms.split(','), function(platform){
 			prune: true,
 			ignore: [
 			'/test($|/)',
+			'/tools($|/)',
 			'/scripts($|/)',
 			'/release($|/)',
 			]
