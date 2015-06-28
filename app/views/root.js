@@ -1,13 +1,12 @@
 import React from 'react';
-import {UserList} from './userlist';
-import {Chat} from './chat';
-import {Input} from './input';
+import {ChannelView} from './channel.js';
+import {Sidebar} from './sidebar.js';
 
 export class View extends React.Component {
   render() {
     return (
-      <div>
-      <UserList /><Chat /><Input />
+      <div id="main-view">
+      <Sidebar /><ChannelView />
       </div>
     );
   }
