@@ -12,7 +12,8 @@
     "prebuild": "npm run clean && npm run lint",
     "prebuild:all": "npm run clean",
     "build": "node scripts/build-release.js",
-    "build:all": "node scripts/build-release.js --platform win32,darwin,linux --arch ia32,x64"
+    "build:all": "node scripts/build-release.js --platform win32,darwin,linux --arch ia32,x64",
+    "test": "npm run lint"
   },
   "repository": {
     "type": "git",
