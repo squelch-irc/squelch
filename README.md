@@ -1,4 +1,4 @@
-squelch
+squelch [![Build Status](https://travis-ci.org/squelch-irc/squelch.svg?branch=master)](https://travis-ci.org/squelch-irc/squelch)
 =======
 
 An IRC client. **Currently in initial development, we'll have something to show you soon, we promise!**
