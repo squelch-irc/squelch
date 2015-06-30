@@ -17,7 +17,8 @@ export class Sidebar extends React.Component {
   render() {
     return (
       <div id="sidebar">
-        <ul>
+        <div className="sidebar-title">Servers</div>
+        <ul id="channel-list">
         	{
         		this.state.channels.map((channel) => {
         			return <li>{channel.name}</li>
