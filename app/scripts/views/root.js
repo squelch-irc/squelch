@@ -3,11 +3,11 @@ import {ChannelView} from './channel.js';
 import {Sidebar} from './sidebar.js';
 
 export class View extends React.Component {
-  render() {
-    return (
-      <div id="main-view">
-      <Sidebar /><ChannelView />
-      </div>
-    );
-  }
+    render() {
+        return (
+            <div id='main-view'>
+                <Sidebar /><ChannelView />
+            </div>
+        );
+    }
 };

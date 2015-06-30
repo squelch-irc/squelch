@@ -4,9 +4,9 @@ import LessLoader from 'less-hot';
 
 // Load our less styles
 var lessLoader = new LessLoader();
-document.querySelector('head').appendChild(lessLoader('./app/less/app.less'))
+document.querySelector('head').appendChild(lessLoader('./app/less/app.less'));
 
 React.render(
-  <View />,
-  document.getElementById('squelch-root')
+	<View />,
+	document.getElementById('squelch-root')
 );
