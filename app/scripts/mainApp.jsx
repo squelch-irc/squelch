@@ -7,13 +7,20 @@ import Squelch from './core/squelch'
 window.Squelch = Squelch;
 
 Squelch.config.read()
-.then(() => {
+.then((config) => {
+    config.servers.forEach((serverConfig) => {
+        if(serverConfig.autoConnect) {
+            Squelch.serverManager.addServer(serverConfig);
+        }
+    })
+
     // Render view after loading the config
     React.render(
         <View />,
         document.getElementById('squelch-root')
     );
-});
+})
+.done();
 
 // Load our less styles
 var lessLoader = new LessLoader();

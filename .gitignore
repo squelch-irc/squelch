@@ -34,3 +34,5 @@ release
 .idea
 electron-packager-*
 dist
+
+config.json
