@@ -1,6 +1,6 @@
 import React from 'react';
-import {ChannelView} from './channel.js';
-import {Sidebar} from './sidebar.js';
+import {ChannelView} from './channel';
+import {Sidebar} from './sidebar';
 
 export class View extends React.Component {
     render() {

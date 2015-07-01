@@ -1,5 +1,5 @@
 import React from 'react';
-import {View} from './views/root.js';
+import {View} from './views/root';
 import LessLoader from 'less-hot';
 import Squelch from './core/squelch'
 
