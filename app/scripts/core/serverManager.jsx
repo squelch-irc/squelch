@@ -76,7 +76,7 @@ export default class ServerManager {
     // Will disconnect server if not disconnected.
     removeServer(id) {
         let server = (id instanceof Client) ? id : this.servers[id];
-        if(!server) {
+        if (!server) {
             throw new Error(`Cannot remove ${(id instanceof Client) ? id.id : id}, it does not exist, or has already been removed. (Saving references to servers is highly discouraged, as it can lead to memory leaks.)`);
         }
         server.forceQuit();

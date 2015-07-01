@@ -9,18 +9,21 @@ window.Squelch = Squelch;
 Squelch.config.read()
 .then((config) => {
     config.servers.forEach((serverConfig) => {
-        if(serverConfig.autoConnect) {
+        if (serverConfig.autoConnect) {
             Squelch.serverManager.addServer(serverConfig);
         }
-    })
-
-    // Render view after loading the config
-    React.render(
-        <View />,
-        document.getElementById('squelch-root')
-    );
+    });
+})
+.catch((err) => {
+    alert('Something went wrong while trying to load your config\n\n' + (err.message || err));
+    require('remote').process.exit(1);
 })
 .done();
+
+React.render(
+    <View />,
+    document.getElementById('squelch-root')
+);
 
 // Load our less styles
 var lessLoader = new LessLoader();
