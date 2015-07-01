@@ -10,7 +10,7 @@ const CONFIG_PATHS = [
 ];
 
 const DEFAULT_CONFIG = {
-    servers: {},
+    servers: [],
     autoRejoin: false,
     autoReconnect: true,
     autoReconnectTries: 0,
