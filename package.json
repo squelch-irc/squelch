@@ -6,9 +6,9 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "clean": "./node_modules/.bin/rimraf release/",
-    "jshint": "./node_modules/.bin/jsxhint --jsx-only --babel app/**.jsx app/**.js script/**.js main.js",
-    "jscs": "./node_modules/.bin/jscs -x app scripts main.js",
+    "clean": "rimraf release/",
+    "jshint": "jsxhint --jsx-only --babel app/**.jsx app/**.js script/**.js main.js",
+    "jscs": "jscs -x app scripts main.js",
     "lint": "npm run jshint && npm run jscs",
     "prebuild": "npm run clean && npm run lint",
     "prebuild:all": "npm run clean",
