@@ -6,9 +6,9 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "clean": "rimraf release/",
-    "jshint": "jsxhint --jsx-only --babel app/**.jsx app/**.js script/**.js main.js",
-    "jscs": "jscs -x app scripts main.js",
+    "clean": "node ./node_modules/rimraf/bin.js release/",
+    "jshint": "node ./node_modules/jsxhint/jsxhint.js --jsx-only --babel app/**.jsx app/**.js script/**.js main.js",
+    "jscs": "node ./node_modules/jscs/bin/jscs -x app scripts main.js",
     "lint": "npm run jshint && npm run jscs",
     "prebuild": "npm run clean && npm run lint",
     "prebuild:all": "npm run clean",
@@ -34,7 +34,7 @@
     "jscs": "^1.13.1",
     "jsxhint": "^0.15.1",
     "minimist": "^1.1.1",
-    "rimraf": "^2.4.0"
+    "rimraf": "^2.4.1"
   },
   "dependencies": {
     "babel-core": "^5.6.15",
