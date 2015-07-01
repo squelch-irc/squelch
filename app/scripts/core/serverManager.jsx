@@ -23,9 +23,21 @@ const APP_SERVER_OPTIONS = [
     'timeout'
 ];
 
+// Default options for servers
+const DEFAULT_SERVER_OPTIONS = {
+    port: 6667,
+    nick: 'SquelchUser',
+    username: 'SquelchUser',
+    realname: 'SquelchUser',
+    channels: [],
+    ssl: false,
+    selfSigned: false,
+    certificateExpired: false
+};
+
 export default class ServerManager {
     constructor() {
-        this.servers = {}
+        this.servers = {};
     }
 
     /*
@@ -41,6 +53,7 @@ export default class ServerManager {
             certificateExpired
     */
     addServer(serverConfig) {
+        serverConfig = _.assign({}, DEFAULT_SERVER_OPTIONS, serverConfig);
         _.assign(serverConfig, HARDCODED_SERVER_OPTIONS);
         _.each(APP_SERVER_OPTIONS, (opt) => serverConfig[opt] = config.get(opt));
         console.log(serverConfig);
@@ -48,7 +61,7 @@ export default class ServerManager {
         var server = new Client(serverConfig);
         server.id = id;
         this.servers[id] = server;
-        return server
+        return server;
     }
 
     getServer(id) {
