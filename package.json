@@ -1,5 +1,6 @@
 {
   "name": "squelch",
+  "productName": "Squelch",
   "version": "0.0.0",
   "description": "An IRC client",
   "private": "true",
@@ -13,7 +14,7 @@
     "prebuild": "npm run clean && npm run lint",
     "prebuild:all": "npm run clean",
     "build": "node scripts/build-release.js",
-    "build:all": "node scripts/build-release.js --platform win32,darwin,linux --arch ia32,x64",
+    "build:all": "node scripts/build-release.js --platform all --arch all",
     "test": "npm run lint"
   },
   "repository": {
@@ -28,7 +29,7 @@
   "devDependencies": {
     "babel": "^5.6.14",
     "babel-jscs": "^1.0.3",
-    "electron-packager": "^4.1.0",
+    "electron-packager": "^5.0.0",
     "electron-prebuilt": "^0.28.3",
     "electron-rebuild": "^0.2.1",
     "jscs": "^1.13.1",
