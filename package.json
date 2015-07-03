@@ -12,9 +12,7 @@
     "jscs": "jscs -x app scripts main.js",
     "lint": "npm run jshint && npm run jscs",
     "prebuild": "npm run clean && npm run lint",
-    "prebuild:all": "npm run clean",
-    "build": "node scripts/build-release.js",
-    "build:all": "node scripts/build-release.js --platform all --arch all",
+    "build": "electron-packager . Squelch --asar --version=0.28.3 --all --out release --prune --ignore=\"/test($|/)|/tools($|/)|/scripts($|/)|/release($|/)\"",
     "test": "npm run lint"
   },
   "repository": {
