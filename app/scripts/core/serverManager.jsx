@@ -1,6 +1,7 @@
 import Client from 'squelch-client';
 import _ from 'lodash';
-import config from './config'
+import {EventEmitter2} from 'eventemitter2';
+import config from './config';
 
 // Options for squelch-client that are always the same
 // ...they just gotta be that way
@@ -35,8 +36,14 @@ const DEFAULT_SERVER_OPTIONS = {
     certificateExpired: false
 };
 
-export default class ServerManager {
+export default class ServerManager extends EventEmitter2{
     constructor() {
+        super({
+            wildcard: true,
+            delimiter: '::',
+            newListener: false
+        });
+        this.setMaxListeners(0);
         this.servers = {};
     }
 
@@ -61,6 +68,10 @@ export default class ServerManager {
         var server = new Client(serverConfig);
         server.id = id;
         this.servers[id] = server;
+        server.onAny((data) => {
+            data.client = server;
+            this.emit(server.event, data);
+        });
         return server;
     }
 
@@ -80,6 +91,7 @@ export default class ServerManager {
             throw new Error(`Cannot remove ${(id instanceof Client) ? id.id : id}, it does not exist, or has already been removed. (Saving references to servers is highly discouraged, as it can lead to memory leaks.)`);
         }
         server.forceQuit();
+        server.removeAllListeners();
         delete this.servers[id];
     }
 }
