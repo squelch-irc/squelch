@@ -10,6 +10,7 @@ export default class ServerView extends React.Component {
             name: this.server.name || this.server.opt.server,
             channels: this.server.channels()
         };
+        this.updateChannels = this.updateChannels.bind(this);
     }
 
     render() {
@@ -34,14 +35,14 @@ export default class ServerView extends React.Component {
     }
 
     componentDidMount() {
-        this.server.on('join', this.updateChannels.bind(this));
-        this.server.on('part', this.updateChannels.bind(this));
-        this.server.on('kick', this.updateChannels.bind(this));
+        this.server.on('join', this.updateChannels);
+        this.server.on('part', this.updateChannels);
+        this.server.on('kick', this.updateChannels);
     }
 
     componentWillUnmount() {
-        this.server.off('join', this.updateChannels.bind(this));
-        this.server.off('part', this.updateChannels.bind(this));
-        this.server.off('kick', this.updateChannels.bind(this));
+        this.server.off('join', this.updateChannels);
+        this.server.off('part', this.updateChannels);
+        this.server.off('kick', this.updateChannels);
     }
 };
