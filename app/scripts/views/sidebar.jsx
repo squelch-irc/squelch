@@ -1,4 +1,5 @@
 import React from 'react';
+import ServerList from './serverList'
 
 export class Sidebar extends React.Component {
 
@@ -18,13 +19,7 @@ export class Sidebar extends React.Component {
         return (
             <div id='sidebar'>
                 <div className='sidebar-title'>Servers</div>
-                <ul id='channel-list'>
-                {
-                    this.state.channels.map((channel) => {
-                        return <li>{channel.name}</li>;
-                    })
-                }
-                </ul>
+                <ServerList />
             </div>
         );
     }

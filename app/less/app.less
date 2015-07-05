@@ -62,7 +62,7 @@ body {
 			}
 		}
 	}
-	
+
 
 	.userlist-container {
 		background-color: #222;
@@ -107,14 +107,23 @@ body {
 		font-weight: bold;
 	}
 
-	ul {
-		.margin-reset;
-		list-style-type: none;
+    .server-list {
+        .tree-view_children {
+          margin-left: 0px;
+        }
 
-		li {
-			padding-left: 12px;
-			padding-top: 4px;
-			padding-bototm: 4px;
-		}
-	}
+        .channel {
+          margin-left: 26px;
+        }
+
+        .tree-view_arrow {
+          margin-left: 12px;
+          margin-right: 4px;
+        }
+
+        .server, .channel {
+            padding-top: 4px;
+            padding-bottom: 4px;
+        }
+    }
 }

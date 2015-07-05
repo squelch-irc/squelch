@@ -63,15 +63,16 @@ export default class ServerManager extends EventEmitter2{
         serverConfig = _.assign({}, DEFAULT_SERVER_OPTIONS, serverConfig);
         _.assign(serverConfig, HARDCODED_SERVER_OPTIONS);
         _.each(APP_SERVER_OPTIONS, (opt) => serverConfig[opt] = config.get(opt));
-        console.log(serverConfig);
         var id = _.uniqueId('server');
         var server = new Client(serverConfig);
         server.id = id;
         this.servers[id] = server;
         server.onAny((data) => {
+            data = _.assign({}, data);
             data.client = server;
             this.emit(server.event, data);
         });
+        this.emit('addServer', server);
         return server;
     }
 
@@ -93,5 +94,6 @@ export default class ServerManager extends EventEmitter2{
         server.forceQuit();
         server.removeAllListeners();
         delete this.servers[id];
+        this.emit('removeServer', server);
     }
 }
