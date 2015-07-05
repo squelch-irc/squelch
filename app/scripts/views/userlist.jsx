@@ -1,6 +1,6 @@
 import React from 'react';
 
-export class UserList extends React.Component {
+export default class UserList extends React.Component {
 
     constructor() {
         super();

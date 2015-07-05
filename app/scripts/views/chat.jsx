@@ -1,7 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 
-export class Chat extends React.Component {
+export default class Chat extends React.Component {
 
     constructor() {
         super();

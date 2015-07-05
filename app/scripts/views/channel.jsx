@@ -1,9 +1,9 @@
 import React from 'react';
-import {UserList} from './userlist';
-import {Chat} from './chat';
-import {Input} from './input';
+import UserList from './userlist';
+import Chat from './chat';
+import Input from './input';
 
-export class ChannelView extends React.Component {
+export default class ChannelView extends React.Component {
     render() {
         return (
             <div className='channel-view'>

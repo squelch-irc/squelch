@@ -1,5 +1,5 @@
 import React from 'react';
-import {View} from './views/root';
+import MainView from './views/root';
 import LessLoader from 'less-hot';
 import Squelch from './core/squelch'
 
@@ -21,7 +21,7 @@ Squelch.config.read()
 .done();
 
 React.render(
-    <View />,
+    <MainView />,
     document.getElementById('squelch-root')
 );
 

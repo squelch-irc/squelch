@@ -1,6 +1,6 @@
 import React from 'react';
 
-export class Input extends React.Component {
+export default class Input extends React.Component {
 
     render() {
         return (

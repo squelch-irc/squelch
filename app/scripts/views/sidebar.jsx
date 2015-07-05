@@ -1,7 +1,7 @@
 import React from 'react';
 import ServerList from './serverList'
 
-export class Sidebar extends React.Component {
+export default class Sidebar extends React.Component {
 
     constructor() {
         super();
