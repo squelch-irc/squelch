@@ -14,12 +14,16 @@ export default class ServerView extends React.Component {
         this.updateChannels = this.updateChannels.bind(this);
     }
 
+    sortedChannels() {
+        return _.sortBy(this.state.channels);
+    }
+
     render() {
         var serverLabel = <span>{this.state.name}</span>;
         return (
             <TreeView className='server' nodeLabel={serverLabel}>
             {
-                _.map(this.state.channels, (channel) => {
+                _.map(this.sortedChannels(), (channel) => {
                     return <div className='channel' key={channel.name()}>{ channel.name() }</div>;
                 })
             }
