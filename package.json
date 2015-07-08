@@ -47,6 +47,7 @@
     "q": "^1.4.1",
     "react": "^0.13.3",
     "react-treeview": "^0.3.12",
-    "squelch-client": "^0.2.0"
+    "squelch-client": "^0.2.6",
+    "squelch-irc": "0.0.0"
   }
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import ServerView from './server'
+import ServerView from './serverView'
 import _ from 'lodash';
 
 export default class ServerList extends React.Component {
