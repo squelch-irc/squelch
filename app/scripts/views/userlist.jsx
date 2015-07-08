@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 
 export default class UserList extends React.Component {
 
@@ -20,7 +21,7 @@ export default class UserList extends React.Component {
                 <div className='userlist-title'>Users</div>
                 <ul className='userlist'>
                 {
-                    this.state.users.map((user) => {
+                    _.map(this.state.users, (user) => {
                         return <li className='user' key={user.name}>
                             <span className='user-flag'>{user.flag}</span>
                             <span className='user-name'>{user.name}</span>

@@ -1,5 +1,6 @@
 import React from 'react';
 import TreeView from 'react-treeview';
+import _ from 'lodash';
 
 export default class ServerView extends React.Component {
 
@@ -18,7 +19,7 @@ export default class ServerView extends React.Component {
         return (
             <TreeView className='server' nodeLabel={serverLabel}>
             {
-                this.state.channels.map((channel) => {
+                _.map(this.state.channels, (channel) => {
                     return <div className='channel' key={channel.name()}>{ channel.name() }</div>;
                 })
             }

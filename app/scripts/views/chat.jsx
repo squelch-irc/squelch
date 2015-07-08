@@ -1,5 +1,6 @@
 import React from 'react';
 import moment from 'moment';
+import _ from 'lodash';
 
 export default class Chat extends React.Component {
 
@@ -21,7 +22,7 @@ export default class Chat extends React.Component {
             <div className='message-container'>
                 <ul className='messages'>
                 {
-                    this.state.messages.map((message) => {
+                    _.map(this.state.messages, (message) => {
                         return <li className='message' key={message.timestamp + message.sender}>
                             <span className='timestamp'>{moment(message.timestamp).format('MMMM Do YYYY, h:mm:ss a')}</span>
                             <span className='sender-flag'>{message.flag}</span>

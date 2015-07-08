@@ -1,14 +1,15 @@
 import React from 'react';
 import MainView from './views/root';
 import LessLoader from 'less-hot';
-import Squelch from './core/squelch'
+import Squelch from './core/squelch';
+import _ from 'lodash';
 
 // Make Squelch global
 window.Squelch = Squelch;
 
 Squelch.config.read()
 .then((config) => {
-    config.servers.forEach((serverConfig) => {
+    _.each(config.servers, (serverConfig) => {
         if (serverConfig.autoConnect) {
             Squelch.serverManager.addServer(serverConfig);
         }

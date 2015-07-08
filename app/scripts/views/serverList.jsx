@@ -1,5 +1,6 @@
 import React from 'react';
 import ServerView from './server'
+import _ from 'lodash';
 
 export default class ServerList extends React.Component {
 
@@ -15,7 +16,7 @@ export default class ServerList extends React.Component {
         return (
             <div className='server-list'>
                 {
-                    this.state.servers.map((server) => {
+                    _.map(this.state.servers, (server) => {
                         return <ServerView key={server.id} serverId={server.id}/>;
                     })
                 }
