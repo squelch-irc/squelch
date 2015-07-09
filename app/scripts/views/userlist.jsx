@@ -14,7 +14,8 @@ export default class UserList extends React.Component {
                 {name: 'KR', flag: '~'},
                 {name: 'Freek', flag: ''},
                 {name: 'Ergo', flag: '+'},
-                {name: 'Darkbuizel', flag: '+'}
+                {name: 'Darkbuizel', flag: '+'},
+                {name: 'FalconCaptain', flag: '+'}
             ]
         };
     }
@@ -30,10 +31,9 @@ export default class UserList extends React.Component {
         };
 
         return _(this.state.users)
-            .sortBy((user) => {
+            .sortByOrder([(user) => {
                 return ranks[user.flag];
-            })
-            .reverse()
+            }, 'name'], ['desc', 'asc'])
             .value();
     }
 
