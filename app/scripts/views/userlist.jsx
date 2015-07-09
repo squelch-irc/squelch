@@ -29,15 +29,12 @@ export default class UserList extends React.Component {
             '': 0   // none
         };
 
-        var x = _(this.state.users)
+        return _(this.state.users)
             .sortBy((user) => {
                 return ranks[user.flag];
             })
             .reverse()
             .value();
-
-        console.log(JSON.stringify(x));
-        return x;
     }
 
     render() {
