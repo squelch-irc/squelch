@@ -1,31 +1,35 @@
 import React from 'react';
-import MainView from './views/root';
+import SquelchView from './components/squelchView';
 import LessLoader from 'less-hot';
-import Squelch from './core/squelch';
 import _ from 'lodash';
 
-// Make Squelch global
-window.Squelch = Squelch;
+import Fluxible from 'fluxible';
+import FluxibleComponent from 'fluxible-addons-react/FluxibleComponent';
 
-Squelch.config.read()
-.then((config) => {
-    _.each(config.servers, (serverConfig) => {
-        if (serverConfig.autoConnect) {
-            Squelch.serverManager.addServer(serverConfig);
-        }
-    });
-})
-.catch((err) => {
-    alert('Something went wrong while trying to load your config\n\n' + (err.message || err));
-    require('remote').process.exit(1);
-})
-.done();
+import ServerStore from './stores/servers';
+import ConfigStore from './stores/config';
 
-React.render(
-    <MainView />,
-    document.getElementById('squelch-root')
-);
+import {ConfigLoadAction} from './actions/config.jsx'
 
 // Load our less styles
 var lessLoader = new LessLoader();
 document.querySelector('head').appendChild(lessLoader('./app/less/app.less'));
+
+let app = new Fluxible({
+    stores: [
+        ServerStore,
+        ConfigStore
+    ]
+});
+
+let context = app.createContext();
+context.executeAction(ConfigLoadAction);
+
+React.render(
+    <FluxibleComponent context={context.getComponentContext()}>
+        <SquelchView />
+    </FluxibleComponent>,
+    document.getElementById('squelch-root')
+);
+
+export default app;

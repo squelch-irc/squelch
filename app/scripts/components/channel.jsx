@@ -3,7 +3,7 @@ import UserList from './userlist';
 import Chat from './chat';
 import Input from './input';
 
-export default class ChannelView extends React.Component {
+class ChannelView extends React.Component {
     render() {
         return (
             <div className='channel-view'>
@@ -15,3 +15,5 @@ export default class ChannelView extends React.Component {
         );
     }
 };
+
+export default ChannelView;
