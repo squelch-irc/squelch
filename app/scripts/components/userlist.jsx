@@ -33,7 +33,7 @@ export default class UserList extends React.Component {
         return _(this.state.users)
             .sortByOrder([(user) => {
                 return ranks[user.flag];
-            }, 'name'], ['desc', 'asc'])
+            }, (user) => user.name.toLowerCase()], ['desc', 'asc'])
             .value();
     }
 
