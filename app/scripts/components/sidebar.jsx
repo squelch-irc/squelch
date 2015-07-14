@@ -5,14 +5,6 @@ export default class Sidebar extends React.Component {
 
     constructor() {
         super();
-        this.state = {
-            channels: [
-                {name: '#kellyirc'},
-                {name: '#dgr'},
-                {name: '#coders'},
-                {name: '#Furry'}
-            ]
-        };
     }
 
     render() {
