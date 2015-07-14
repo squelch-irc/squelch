@@ -51,7 +51,6 @@ var readConfig = (i = 0) => {
 };
 
 export var ConfigLoadAction = (context, payload, done) => {
-
     readConfig().then((payload) => {
         context.dispatch('SET_CONFIG', payload);
         _.each(payload.config.servers, (serverConfig) => {
