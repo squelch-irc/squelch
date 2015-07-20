@@ -1,6 +1,6 @@
 @import "./mixins";
 
-html, body, #squelch-root, #main-view {
+html, body, #squelch-root, #squelch-view {
 	width: 100%;
 	height: 100%;
 }
@@ -14,14 +14,21 @@ body {
   .margin-reset;
 }
 
-.channel-view {
-	overflow-x: hidden;
-	overflow-y: hidden;
-	height: 100%;
-	background-color: #EEE;
-	display: flex;
-	flex-direction: row;
+.main-view {
+    width: 100%;
+    height: 100%;
+}
 
+.main-view > div {
+    overflow-x: hidden;
+    overflow-y: hidden;
+    height: 100%;
+    background-color: #EEE;
+    display: flex;
+    flex-direction: row;
+}
+
+.channel-view {
 	.io-container {
 		display: flex;
 		flex-direction: column;
@@ -90,6 +97,29 @@ body {
 	}
 }
 
+div.welcome-view {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    img {
+        width: 200px;
+        height: 200px;
+        padding-bottom: 8px;
+    }
+    h1, p {
+        margin: 0;
+        padding: 0;
+        padding-bottom: 8px;
+    }
+    p {
+        color: rgba(0, 0, 0, .6);
+    }
+
+}
+
 #sidebar {
 	background-color: #222;
 	color: #CCC;
@@ -113,7 +143,21 @@ body {
         }
 
         .channel {
-          margin-left: 26px;
+          a {
+            display: block;
+            width: 100%;
+            height: 100%;
+            padding-left: 26px;
+            text-decoration: none;
+            color: #CCC;
+            &.selected {
+                background: rgba(255, 255, 255, .3);
+            }
+            &:not(.selected):hover {
+                background: rgba(255, 255, 255, .15);
+            }
+          }
+
         }
 
         .tree-view_arrow {
@@ -121,7 +165,7 @@ body {
           margin-right: 4px;
         }
 
-        .server, .channel {
+        .server, .channel a {
             padding-top: 4px;
             padding-bottom: 4px;
         }

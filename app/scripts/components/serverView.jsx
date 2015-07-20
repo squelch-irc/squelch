@@ -1,5 +1,6 @@
 import React from 'react';
 import TreeView from 'react-treeview';
+import {NavLink} from 'fluxible-router';
 import _ from 'lodash';
 
 export default class ServerView extends React.Component {
@@ -18,7 +19,17 @@ export default class ServerView extends React.Component {
             <TreeView className='server' nodeLabel={serverLabel}>
             {
                 _.map(this.sortedChannels(), (channel) => {
-                    return <div className='channel' key={channel.name()}>{ channel.name() }</div>;
+                    let params = {
+                        serverId: this.props.server.id,
+                        channel: channel.name()
+                    };
+                    return <div className='channel'><NavLink
+                        key={channel.name()}
+                        routeName='channel'
+                        navParams={params}
+                        activeClass='selected'>
+                        {channel.name()}
+                    </NavLink></div>;
                 })
             }
             </TreeView>
