@@ -21,7 +21,7 @@ export default class UserList extends React.Component {
     }
 
     sortedUsers() {
-        var ranks = {
+        const ranks = {
             '~': 5, // owner
             '&': 4, // admin
             '@': 3, // op
@@ -54,4 +54,4 @@ export default class UserList extends React.Component {
             </div>
         );
     }
-};
+}

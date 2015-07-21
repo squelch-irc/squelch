@@ -3,7 +3,7 @@ import moment from 'moment';
 import _ from 'lodash';
 import {connectToStores} from 'fluxible-addons-react';
 
-import MessageStore from "../stores/messages";
+import MessageStore from '../stores/messages';
 
 @connectToStores([MessageStore], (context) => context.getStore(MessageStore).getState())
 export default class Chat extends React.Component {
@@ -14,7 +14,7 @@ export default class Chat extends React.Component {
 
     render() {
         let chanMessages = [];
-        let {server, messages, channel} = this.props;
+        const {server, messages, channel} = this.props;
         if(messages[server] && messages[server][channel]) {
             chanMessages = messages[server][channel];
         }
@@ -24,7 +24,9 @@ export default class Chat extends React.Component {
                 <ul className='messages'>
                 {
                     _.map(chanMessages, (message) => {
-                        if(!message) return;
+                        if(!message) {
+                            return null;
+                        }
                         return <li className='message' key={message.timestamp + message.sender}>
                             [<span className='timestamp'>{moment(message.timestamp).format('MMMM Do YYYY, h:mm:ss a')}</span>]
                             &nbsp;
@@ -39,4 +41,4 @@ export default class Chat extends React.Component {
             </div>
         );
     }
-};
+}

@@ -15,6 +15,6 @@ class ChannelView extends React.Component {
             </div>
         );
     }
-};
+}
 
 export default ChannelView;

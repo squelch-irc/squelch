@@ -21,13 +21,19 @@ class MessageStore extends BaseStore {
     }
 
     _newMsg(payload) {
-        if(!_.contains(CHAT_EVENTS, payload.type)) return;
-        let id = payload.server.id;
-        let channel = payload.data.to;
-        if(!this.messages[id]) this.messages[id] = {};
-        if(!this.messages[id][channel]) this.messages[id][channel] = [];
+        if(!_.contains(CHAT_EVENTS, payload.type)) {
+            return;
+        }
+        const id = payload.server.id;
+        const channel = payload.data.to;
+        if(!this.messages[id]) {
+            this.messages[id] = {};
+        }
+        if(!this.messages[id][channel]) {
+            this.messages[id][channel] = [];
+        }
 
-        let messages = this.messages[id][channel];
+        const messages = this.messages[id][channel];
         messages.unshift({
             timestamp: Date.now(),
             sender: payload.data.from,
@@ -41,7 +47,7 @@ class MessageStore extends BaseStore {
 
 MessageStore.storeName = 'MessageStore';
 MessageStore.handlers = {
-    'SERVER_EVENT': '_newMsg'
+    SERVER_EVENT: '_newMsg'
 };
 
 export default MessageStore;

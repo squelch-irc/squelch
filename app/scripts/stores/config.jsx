@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import {BaseStore} from 'fluxible/addons';
-import Client from 'squelch-client';
 
 class ConfigStore extends BaseStore {
     constructor(dispatcher) {
@@ -25,7 +24,7 @@ class ConfigStore extends BaseStore {
 
 ConfigStore.storeName = 'ConfigStore';
 ConfigStore.handlers = {
-    'SET_CONFIG': '_setConfig'
+    SET_CONFIG: '_setConfig'
 };
 
 export default ConfigStore;

@@ -14,12 +14,12 @@ export default class ServerView extends React.Component {
     }
 
     render() {
-        var serverLabel = <span>{this.props.server.name || this.props.server.opt.server}</span>;
+        const serverLabel = <span>{this.props.server.name || this.props.server.opt.server}</span>;
         return (
             <TreeView className='server' nodeLabel={serverLabel}>
             {
                 _.map(this.sortedChannels(), (channel) => {
-                    let params = {
+                    const params = {
                         serverId: this.props.server.id,
                         channel: channel.name()
                     };
@@ -35,4 +35,4 @@ export default class ServerView extends React.Component {
             </TreeView>
         );
     }
-};
+}

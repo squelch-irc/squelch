@@ -29,13 +29,13 @@ class ServerStore extends BaseStore {
     }
 
     _addServer(payload) {
-        let server = payload.server;
-        let id = _.uniqueId('server');
+        const server = payload.server;
+        const id = _.uniqueId('server');
         server.id = id;
         this.servers[id] = server;
 
-        server.onAny((data) => {
-            if (_.contains(MUTATION_EVENTS, server.event)) {
+        server.onAny(() => {
+            if(_.contains(MUTATION_EVENTS, server.event)) {
                 this.emitChange();
             }
         });
@@ -44,9 +44,10 @@ class ServerStore extends BaseStore {
 
     // Accepts either id or client.
     _removeServer(payload) {
-        let server = this.servers[payload.id] || this.servers[payload.client.id];
-        if (!server) {
-            throw new Error(`Cannot remove ${(id instanceof Client) ? id.id : id}, it does not exist, or has already been removed. (Saving references to servers is highly discouraged, as it can lead to memory leaks.)`);
+        const id = payload.id || payload.client.id;
+        const server = this.servers[id];
+        if(!server) {
+            throw new Error(`Cannot remove ${id}, it does not exist, or has already been removed. (Saving references to servers is highly discouraged, as it can lead to memory leaks.)`);
         }
         server.forceQuit();
         server.removeAllListeners();
@@ -58,8 +59,8 @@ class ServerStore extends BaseStore {
 
 ServerStore.storeName = 'ServerStore';
 ServerStore.handlers = {
-    'ADD_SERVER': '_addServer',
-    'REMOVE_SERVER': '_removeServer'
+    ADD_SERVER: '_addServer',
+    REMOVE_SERVER: '_removeServer'
 };
 
 export default ServerStore;

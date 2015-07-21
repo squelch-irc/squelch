@@ -1,4 +1,4 @@
-import ConfigStore from '../stores/config'
+import ConfigStore from '../stores/config';
 
 import _ from 'lodash';
 import Client from 'squelch-client';
@@ -36,7 +36,7 @@ const DEFAULT_SERVER_OPTIONS = {
     certificateExpired: false
 };
 
-export var ServerEventAction = (context, payload, done) => {
+export const ServerEventAction = (context, payload, done) => {
     context.dispatch('SERVER_EVENT', payload);
     done();
 };
@@ -53,9 +53,9 @@ payload.config requires
     selfSigned
     certificateExpired
 */
-export var AddServerAction = (context, payload, done) => {
-    let config = context.getStore(ConfigStore).getState().config;
-    let serverConfig = _.assign(
+export const AddServerAction = (context, payload, done) => {
+    const config = context.getStore(ConfigStore).getState().config;
+    const serverConfig = _.assign(
         {},
         DEFAULT_SERVER_OPTIONS,
         payload.config,
@@ -63,7 +63,7 @@ export var AddServerAction = (context, payload, done) => {
     );
     _.each(APP_SERVER_OPTIONS, (opt) => serverConfig[opt] = config[opt]);
 
-    let server = new Client(serverConfig);
+    const server = new Client(serverConfig);
     server.onAny((data) => {
         context.executeAction(ServerEventAction, {
             type: server.event,
@@ -76,7 +76,7 @@ export var AddServerAction = (context, payload, done) => {
     done();
 };
 
-export var RemoveServerAction = (context, payload, done) => {
+export const RemoveServerAction = (context, payload, done) => {
     context.dispatch('REMOVE_SERVER', payload);
     done();
 };

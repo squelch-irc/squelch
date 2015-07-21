@@ -1,4 +1,4 @@
-export var Join = (context, payload, done) => {
+export const Join = (context, payload, done) => {
     context.dispatch('JOIN');
     done();
 };

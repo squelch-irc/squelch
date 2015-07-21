@@ -1,14 +1,13 @@
 import React from 'react';
 import {handleHistory} from 'fluxible-router';
-import ChannelView from './channel';
 import Sidebar from './sidebar';
 import _ from 'lodash';
 
 @handleHistory
 export default class SquelchView extends React.Component {
     render() {
-        let Handler = this.props.currentRoute.get('handler');
-        let params = _.mapValues(this.props.currentRoute.get('params').toJSON(), decodeURIComponent);
+        const Handler = this.props.currentRoute.get('handler');
+        const params = _.mapValues(this.props.currentRoute.get('params').toJSON(), decodeURIComponent);
         return (
                 <div id='squelch-view'>
                     <Sidebar />
@@ -18,4 +17,4 @@ export default class SquelchView extends React.Component {
                 </div>
         );
     }
-};
+}

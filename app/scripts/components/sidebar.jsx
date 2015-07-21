@@ -1,5 +1,5 @@
 import React from 'react';
-import ServerList from './serverList'
+import ServerList from './serverList';
 
 export default class Sidebar extends React.Component {
 
@@ -15,4 +15,4 @@ export default class Sidebar extends React.Component {
             </div>
         );
     }
-};
+}
