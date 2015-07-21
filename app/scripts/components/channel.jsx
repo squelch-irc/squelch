@@ -9,7 +9,7 @@ class ChannelView extends React.Component {
         return (
             <div className='channel-view'>
                 <div className='io-container'>
-                    <Chat /><Input />
+                    <Chat server={this.props.serverId} channel={this.props.channel} /><Input />
                 </div>
                 <UserList />
             </div>

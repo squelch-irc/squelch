@@ -67,6 +67,7 @@ export var AddServerAction = (context, payload, done) => {
     server.onAny((data) => {
         context.executeAction(ServerEventAction, {
             type: server.event,
+            server,
             data
         });
     });

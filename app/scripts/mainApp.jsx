@@ -9,9 +9,10 @@ import {RouteStore, navigateAction} from 'fluxible-router';
 
 import ServerStore from './stores/servers';
 import ConfigStore from './stores/config';
+import MessageStore from './stores/messages';
 import routes from './configs/routes';
 
-import {ConfigLoadAction} from './actions/config.jsx'
+import {ConfigLoadAction} from './actions/config'
 
 // Load our less styles
 let lessLoader = new LessLoader();
@@ -23,7 +24,8 @@ let app = new Fluxible({
     stores: [
         SquelchRouteStore,
         ServerStore,
-        ConfigStore
+        ConfigStore,
+        MessageStore
     ]
 });
 
