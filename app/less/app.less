@@ -75,7 +75,7 @@ body {
 		background-color: #222;
 		color: #CCC;
 		font-size: 12px;
-		text-shadow: 0px 1px 1px black;
+		text-shadow: 0 1px 1px black;
 		flex-shrink: 0;
 		width: 125px;
 		height: 100%;
@@ -91,7 +91,7 @@ body {
 			li {
 				padding-left: 12px;
 				padding-top: 4px;
-				padding-bototm: 4px;
+				padding-bottom: 4px;
 			}
 		}
 	}
@@ -124,7 +124,7 @@ div.welcome-view {
 	background-color: #222;
 	color: #CCC;
 	font-size: 12px;
-	text-shadow: 0px 1px 1px black;
+	text-shadow: 0 1px 1px black;
 	width: 150px;
 	height: 100%;
 	float: left;
@@ -138,8 +138,13 @@ div.welcome-view {
 	}
 
     .server-list {
+
+        .tree-view {
+            overflow: hidden;
+        }
+
         .tree-view_children {
-          margin-left: 0px;
+          margin-left: 0;
         }
 
         .channel {
