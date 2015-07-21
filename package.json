@@ -29,6 +29,7 @@
     "electron-prebuilt": "^0.28.3",
     "electron-rebuild": "^0.2.1",
     "eslint": "^0.24.1",
+    "eslint-config-kellyirc": "^1.0.0",
     "eslint-plugin-react": "^3.0.0",
     "minimist": "^1.1.1",
     "rimraf": "^2.4.1"
