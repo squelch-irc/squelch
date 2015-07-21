@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/squelch-irc/squelch#readme",
   "devDependencies": {
-    "babel-eslint": "^3.1.23",
+    "babel-eslint": "^3.1.24",
     "electron-packager": "^5.0.0",
     "electron-prebuilt": "^0.28.3",
     "electron-rebuild": "^0.2.1",

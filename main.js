@@ -1,4 +1,3 @@
-/* eslint-env es6:false */
 /* eslint no-var:0 */
 var app = require('app');
 var BrowserWindow = require('browser-window');
