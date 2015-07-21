@@ -8,9 +8,7 @@
   "scripts": {
     "start": "electron .",
     "clean": "rimraf release/",
-    "jshint": "jsxhint --jsx-only --babel app/**.jsx app/**.js main.js",
     "eslint": "eslint --ext .js,.jsx app main.js",
-    "jscs": "jscs -x app main.js",
     "lint": "npm run eslint",
     "prebuild": "npm run clean && npm run lint",
     "build": "electron-packager . Squelch --asar --version=0.28.3 --all --out release --prune --ignore=\"/test($|/)|/tools($|/)|/scripts($|/)|/release($|/)\"",
