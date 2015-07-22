@@ -34,11 +34,9 @@ class MessageStore extends BaseStore {
         }
 
         const messages = this.messages[id][channel];
-        messages.unshift({
-            timestamp: Date.now(),
-            sender: payload.data.from,
-            message: payload.data.msg
-        });
+        payload.data.type = payload.type;
+        payload.data.timestamp = Date.now();
+        messages.unshift(payload.data);
         messages.length = MESSAGE_LIMIT;
 
         this.emitChange();

@@ -1,43 +1,23 @@
 import React from 'react';
-import moment from 'moment';
 import _ from 'lodash';
-import {connectToStores} from 'fluxible-addons-react';
 
-import MessageStore from '../stores/messages';
+import Message from './message';
 
-@connectToStores([MessageStore], (context) => context.getStore(MessageStore).getState())
 export default class Chat extends React.Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
     }
 
     render() {
-        let chanMessages = [];
-        const {server, messages, channel} = this.props;
-        if(messages[server] && messages[server][channel]) {
-            chanMessages = messages[server][channel];
-        }
-        chanMessages = _(chanMessages).compact().reverse().value();
+        const messages = this.props.messages;
         return (
             <div className='message-container'>
-                <ul className='messages'>
-                {
-                    _.map(chanMessages, (message) => {
-                        if(!message) {
-                            return null;
-                        }
-                        return <li className='message' key={message.timestamp + message.sender}>
-                            [<span className='timestamp'>{moment(message.timestamp).format('MMMM Do YYYY, h:mm:ss a')}</span>]
-                            &nbsp;
-                            &lt;<span className='sender-flag'>{message.flag}</span>
-                            <span className='sender'>{message.sender}</span>&gt;
-                            &nbsp;
-                            <span className='sender-message'>{message.message}</span>
-                        </li>;
-                    })
-                }
-                </ul>
+                <ul className='messages'>{
+                    _(messages).compact().reverse().map((message) =>
+                        <Message message={message} key={message.timestamp + message.type} />
+                    ).value()
+                }</ul>
             </div>
         );
     }
