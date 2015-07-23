@@ -23,7 +23,7 @@ class ChannelView extends React.Component {
                 <div className='io-container'>
                     <Chat messages={chanMessages} /><Input />
                 </div>
-                <UserList />
+                <UserList serverId={serverId} channel={channel} />
             </div>
         );
     }

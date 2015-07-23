@@ -1,39 +1,31 @@
 import React from 'react';
 import _ from 'lodash';
+import {connectToStores} from 'fluxible-addons-react';
 
+import ServerStore from '../stores/servers';
+
+const RANK_ORDER = {
+    '~': 5, // owner
+    '&': 4, // admin
+    '@': 3, // op
+    '%': 2, // halfop
+    '+': 1, // voice
+    '': 0   // none
+};
+
+@connectToStores([ServerStore], (context) => context.getStore(ServerStore).getState())
 export default class UserList extends React.Component {
 
-    constructor() {
-        super();
-        this.state = {
-            users: [
-                {name: 'Seiyria', flag: '@'},
-                {name: 'Darkblizer', flag: '%'},
-                {name: 'Zesty', flag: '&'},
-                {name: 'Kurea', flag: '~'},
-                {name: 'KR', flag: '~'},
-                {name: 'Freek', flag: ''},
-                {name: 'Ergo', flag: '+'},
-                {name: 'Darkbuizel', flag: '+'},
-                {name: 'FalconCaptain', flag: '+'}
-            ]
-        };
-    }
-
     sortedUsers() {
-        const ranks = {
-            '~': 5, // owner
-            '&': 4, // admin
-            '@': 3, // op
-            '%': 2, // halfop
-            '+': 1, // voice
-            '': 0   // none
-        };
-
-        return _(this.state.users)
-            .sortByOrder([(user) => {
-                return ranks[user.flag];
-            }, (user) => user.name.toLowerCase()], ['desc', 'asc'])
+        const {servers, serverId, channel} = this.props;
+        const serverChannel = servers[serverId].getChannel(channel);
+        return _(serverChannel.users())
+            .map((nick) => ({
+                nick,
+                flag: serverChannel.getStatus(nick),
+                flagRank: RANK_ORDER[serverChannel.getStatus(nick)]
+            }))
+            .sortByOrder(['flagRank', 'nick'], ['desc', 'asc'])
             .value();
     }
 
@@ -44,9 +36,9 @@ export default class UserList extends React.Component {
                 <ul className='userlist'>
                 {
                     _.map(this.sortedUsers(), (user) => {
-                        return <li className='user' key={user.name}>
+                        return <li className='user' key={user.nick}>
                             <span className='user-flag'>{user.flag}</span>
-                            <span className='user-name'>{user.name}</span>
+                            <span className='user-name'>{user.nick}</span>
                         </li>;
                     })
                 }
