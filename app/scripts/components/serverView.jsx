@@ -5,10 +5,6 @@ import _ from 'lodash';
 
 export default class ServerView extends React.Component {
 
-    constructor(props) {
-        super(props);
-    }
-
     sortedChannels() {
         return _.sortBy(this.props.server.channels());
     }

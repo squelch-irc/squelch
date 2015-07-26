@@ -5,10 +5,6 @@ import Message from './message';
 
 export default class Chat extends React.Component {
 
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         const messages = this.props.messages;
         return (

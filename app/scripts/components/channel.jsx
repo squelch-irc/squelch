@@ -8,9 +8,6 @@ import Input from './input';
 
 @connectToStores([MessageStore], (context) => context.getStore(MessageStore).getState())
 class ChannelView extends React.Component {
-    constructor(props) {
-        super(props);
-    }
 
     render() {
         const {serverId, channel, messages} = this.props;
