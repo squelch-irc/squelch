@@ -13,7 +13,7 @@ const RANK_ORDER = {
     '': 0   // none
 };
 
-@connectToStores([ServerStore], (context) => context.getStore(ServerStore).getState())
+@connectToStores([ServerStore], context => context.getStore(ServerStore).getState())
 export default class UserList extends React.Component {
 
     sortedUsers() {

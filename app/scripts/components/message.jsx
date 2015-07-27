@@ -17,10 +17,6 @@ const messageHandlers = {
 
 export default class Message extends React.Component {
 
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         const message = this.props.message;
         const MessageHandler = messageHandlers[message && message.type];
