@@ -4,7 +4,7 @@ import _ from 'lodash';
 import ServerStore from '../stores/servers';
 import {connectToStores} from 'fluxible-addons-react';
 
-@connectToStores([ServerStore], (context) => context.getStore(ServerStore).getState())
+@connectToStores([ServerStore], context => context.getStore(ServerStore).getState())
 export default class ServerList extends React.Component {
 
     render() {

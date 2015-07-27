@@ -6,7 +6,7 @@ import UserList from './userlist';
 import Chat from './chat';
 import Input from './input';
 
-@connectToStores([MessageStore], (context) => context.getStore(MessageStore).getState())
+@connectToStores([MessageStore], context => context.getStore(MessageStore).getState())
 class ChannelView extends React.Component {
 
     render() {
