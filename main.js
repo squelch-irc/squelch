@@ -1,7 +1,8 @@
 /* eslint no-var:0 */
 var app = require('app');
-var BrowserWindow = require('browser-window');
 var path = require('path');
+var BrowserWindow = require('browser-window');
+var Menu = require('menu');
 
 require('electron-debug')();
 require('crash-reporter').start();
@@ -13,6 +14,8 @@ app.on('window-all-closed', function() {
 });
 
 app.on('ready', function() {
+    Menu.setApplicationMenu(require('./menu')(app));
+
     mainWindow = new BrowserWindow({
         width: 1024,
         height: 576

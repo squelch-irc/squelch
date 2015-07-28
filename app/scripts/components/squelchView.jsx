@@ -1,9 +1,9 @@
 import React from 'react';
-import {handleHistory} from 'fluxible-router';
+import {handleRoute} from 'fluxible-router';
 import Sidebar from './sidebar';
 import _ from 'lodash';
 
-@handleHistory
+@handleRoute
 export default class SquelchView extends React.Component {
     render() {
         const Handler = this.props.currentRoute.get('handler');
