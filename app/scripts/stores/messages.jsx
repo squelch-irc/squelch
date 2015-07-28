@@ -35,7 +35,7 @@ class MessageStore extends BaseStore {
     }
 
     _newMsg(payload) {
-        const id = payload.server.id;
+        const id = payload.server.id || payload.serverId;
         if(!this.messages[id]) {
             this.messages[id] = {};
         }
