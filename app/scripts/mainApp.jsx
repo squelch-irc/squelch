@@ -1,3 +1,4 @@
+import path from 'path';
 import React from 'react';
 import LessLoader from 'less-hot';
 
@@ -14,7 +15,7 @@ import {ConfigLoadAction} from './actions/config';
 
 // Load our less styles
 const lessLoader = new LessLoader();
-document.querySelector('head').appendChild(lessLoader('./app/less/app.less'));
+document.querySelector('head').appendChild(lessLoader(path.join(__dirname, '../less/app.less')));
 
 const SquelchRouteStore = RouteStore.withStaticRoutes(routes);
 
