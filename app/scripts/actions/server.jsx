@@ -7,7 +7,7 @@ import Client from 'squelch-client';
 // ...they just gotta be that way
 const HARDCODED_SERVER_OPTIONS = {
     verbose: true,
-    verboseError: false,
+    verboseError: true,
     autoNickChange: true,
     autoSplitMessage: true,
     messageDelay: 0,
@@ -37,6 +37,7 @@ const DEFAULT_SERVER_OPTIONS = {
 };
 
 export const ServerEventAction = (context, payload, done) => {
+    payload.data.id = _.uniqueId();
     context.dispatch('SERVER_EVENT', payload);
     done();
 };

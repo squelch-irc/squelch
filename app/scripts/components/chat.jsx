@@ -11,7 +11,7 @@ export default class Chat extends React.Component {
             <div className='message-container'>
                 <ul className='messages'>{
                     _(messages).compact().reverse().map((message) =>
-                        <Message message={message} key={message.timestamp + message.type} />
+                        <Message message={message} key={message.id} />
                     ).value()
                 }</ul>
             </div>
