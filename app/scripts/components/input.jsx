@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {ServerEventAction} from '../actions/server';
+import {SendMessage} from '../actions/channel';
 
 export default class Input extends React.Component {
 
@@ -12,15 +12,13 @@ export default class Input extends React.Component {
         const message = e.target.value.trim();
         if(!message) { return; }
 
-        this.context.executeAction(ServerEventAction, {
-            type: 'msg',
+        this.context.executeAction(SendMessage, {
             serverId: this.props.serverId,
-            data: {
-                to: this.props.channel,
-                from: 'Me',
-                msg: message
-            }
+            to: this.props.channel,
+            msg: message
         });
+
+        e.target.value = '';
     }
 
     render() {
