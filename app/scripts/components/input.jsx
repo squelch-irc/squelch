@@ -12,11 +12,13 @@ export default class Input extends React.Component {
         const message = e.target.value.trim();
         if(!message) { return; }
 
-        this.context.executeAction(SendMessage, {
-            serverId: this.props.serverId,
-            to: this.props.channel,
-            msg: message
-        });
+        if(this.props.channel) {
+            this.context.executeAction(SendMessage, {
+                serverId: this.props.serverId,
+                to: this.props.channel,
+                msg: message
+            });
+        }
 
         e.target.value = '';
     }

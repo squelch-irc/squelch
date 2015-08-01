@@ -1,5 +1,5 @@
 import React from 'react';
-import ServerView from './serverView';
+import ServerListItem from './serverListItem';
 import _ from 'lodash';
 import ServerStore from '../stores/servers';
 import {connectToStores} from 'fluxible-addons-react';
@@ -9,7 +9,7 @@ export default class ServerList extends React.Component {
 
     render() {
         const servers = _.map(this.props.servers, (server) => {
-            return <ServerView key={server.id} server={server}/>;
+            return <ServerListItem key={server.id} server={server}/>;
         });
         return (
             <div className='server-list'>{servers}</div>

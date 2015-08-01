@@ -12,8 +12,8 @@ class ChannelView extends React.Component {
     render() {
         const {serverId, channel, messages} = this.props;
         let chanMessages = [];
-        if(messages[serverId] && messages[serverId][channel]) {
-            chanMessages = messages[serverId][channel];
+        if(messages[serverId] && messages[serverId].channels[channel]) {
+            chanMessages = messages[serverId].channels[channel];
         }
         return (
             <div className='channel-view'>
