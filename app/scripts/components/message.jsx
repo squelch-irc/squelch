@@ -5,6 +5,7 @@ import Action from './messages/action';
 import Join from './messages/join';
 import Part from './messages/part';
 import Kick from './messages/kick';
+import Raw from './messages/raw';
 import Timestamp from './messages/timestamp';
 
 const messageHandlers = {
@@ -12,7 +13,8 @@ const messageHandlers = {
     action: Action,
     join: Join,
     part: Part,
-    kick: Kick
+    kick: Kick,
+    raw: Raw
 };
 
 export default class Message extends React.Component {

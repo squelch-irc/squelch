@@ -4,12 +4,12 @@ import LessLoader from 'less-hot';
 
 import Fluxible from 'fluxible';
 import FluxibleComponent from 'fluxible-addons-react/FluxibleComponent';
-import {RouteStore, navigateAction} from 'fluxible-router';
+import {navigateAction} from 'fluxible-router';
 
 import ServerStore from './stores/servers';
 import ConfigStore from './stores/config';
 import MessageStore from './stores/messages';
-import routes from './configs/routes';
+import RouteStore from './stores/routes';
 import SquelchView from './components/squelchView';
 import {ConfigLoadAction} from './actions/config';
 
@@ -17,11 +17,10 @@ import {ConfigLoadAction} from './actions/config';
 const lessLoader = new LessLoader();
 document.querySelector('head').appendChild(lessLoader(path.join(__dirname, '../less/app.less')));
 
-const SquelchRouteStore = RouteStore.withStaticRoutes(routes);
 
 const app = new Fluxible({
     stores: [
-        SquelchRouteStore,
+        RouteStore,
         ServerStore,
         ConfigStore,
         MessageStore

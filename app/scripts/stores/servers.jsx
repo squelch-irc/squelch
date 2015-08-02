@@ -34,11 +34,6 @@ class ServerStore extends BaseStore {
         server.id = id;
         this.servers[id] = server;
 
-        server.onAny(() => {
-            if(_.contains(MUTATION_EVENTS, server.event)) {
-                this.emitChange();
-            }
-        });
         this.emitChange();
     }
 
@@ -55,12 +50,19 @@ class ServerStore extends BaseStore {
 
         this.emitChange();
     }
+
+    _handleMsg(payload) {
+        if(_.contains(MUTATION_EVENTS, payload.type)) {
+            this.emitChange();
+        }
+    }
 }
 
 ServerStore.storeName = 'ServerStore';
 ServerStore.handlers = {
     ADD_SERVER: '_addServer',
-    REMOVE_SERVER: '_removeServer'
+    REMOVE_SERVER: '_removeServer',
+    SERVER_EVENT: '_handleMsg'
 };
 
 export default ServerStore;

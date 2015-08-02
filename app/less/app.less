@@ -28,7 +28,7 @@ body {
     flex-direction: row;
 }
 
-.channel-view {
+.channel-view, .server-view {
 	.io-container {
 		display: flex;
 		flex-direction: column;
@@ -139,6 +139,13 @@ div.welcome-view {
 
     .server-list {
 
+        .server.selected .tree-view_item {
+            background: rgba(255, 255, 255, .3);
+        }
+        .server:not(.selected) .tree-view_item:hover {
+            background: rgba(255, 255, 255, .15);
+        }
+
         .tree-view {
             overflow: hidden;
         }
@@ -146,13 +153,24 @@ div.welcome-view {
         .tree-view_children {
           margin-left: 0;
         }
-
-        .channel {
-          a {
+        .tree-view_item {
+            display: flex;
+            flex-direction: row;
+            a {
+                flex-grow: 1;
+                padding-top: 4px;
+                padding-bottom: 4px;
+                text-decoration: none;
+                color: #CCC;
+            }
+        }
+        .channel a {
             display: block;
             width: 100%;
             height: 100%;
             padding-left: 26px;
+            padding-top: 4px;
+            padding-bottom: 4px;
             text-decoration: none;
             color: #CCC;
             &.selected {
@@ -161,18 +179,18 @@ div.welcome-view {
             &:not(.selected):hover {
                 background: rgba(255, 255, 255, .15);
             }
-          }
+        }
+
+        .channel a {
 
         }
 
         .tree-view_arrow {
-          margin-left: 12px;
-          margin-right: 4px;
-        }
-
-        .server, .channel a {
+            margin-left: 12px;
+            margin-right: 4px;
             padding-top: 4px;
             padding-bottom: 4px;
         }
+
     }
 }
