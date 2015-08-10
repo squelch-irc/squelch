@@ -17,13 +17,15 @@ const CHANNEL_PROPERTIES = {
     kick: 'chan',
     '+mode': 'chan',
     '-mode': 'chan',
-    names: 'chan'
+    names: 'chan',
+    topic: 'chan',
+    topicwho: 'chan'
 };
 
 // Raw message commands we should ignore either because they
 // already have a parsed version or a user ain't wanna see that
 const RAW_COMMAND_BLACKLIST = [
-    'PING', 'PONG', 'PRIVMSG', 'NOTICE', 'JOIN', 'PART', 'KICK', 'MODE', '332', '333', '353', '366'
+    'PING', 'PONG', 'PRIVMSG', 'NOTICE', 'JOIN', 'PART', 'KICK', 'MODE', '331', '332', '333', '353', '366'
 ];
 
 // TODO: properly route the following events

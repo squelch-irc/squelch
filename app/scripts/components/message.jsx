@@ -5,6 +5,8 @@ import Action from './messages/action';
 import Join from './messages/join';
 import Part from './messages/part';
 import Kick from './messages/kick';
+import Topic from './messages/topic';
+import TopicWho from './messages/topicwho';
 import Raw from './messages/raw';
 import Timestamp from './messages/timestamp';
 
@@ -14,6 +16,8 @@ const messageHandlers = {
     join: Join,
     part: Part,
     kick: Kick,
+    topic: Topic,
+    topicwho: TopicWho,
     raw: Raw
 };
 
