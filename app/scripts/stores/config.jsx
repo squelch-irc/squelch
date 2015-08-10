@@ -15,8 +15,6 @@ class ConfigStore {
     }
 
     handleUpdateConfig(data) {
-        console.log(data);
-
         _.assign(this.config, data.config || {});
 
         this.configDir = data.dir || this.configDir;
