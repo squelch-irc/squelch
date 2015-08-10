@@ -1,26 +1,13 @@
-import ServerStore from '../stores/servers';
-import {ServerEventAction} from './server';
+import alt from '../alt';
 
-export const Join = (context, payload, done) => {
-    context.dispatch('JOIN');
-    done();
-};
+class ChannelActions {
+    join(data) {
+        this.dispatch(data);
+    }
 
-export const SendMessage = (context, payload, done) => {
-    const {servers} = context.getStore(ServerStore).getState();
-    const server = servers[payload.serverId];
+    sendMessage(data) {
+        this.dispatch(data);
+    }
+}
 
-    context.executeAction(ServerEventAction, {
-        type: 'msg',
-        server,
-        data: {
-            to: payload.to,
-            from: server.nick(),
-            msg: payload.msg
-        }
-    });
-
-    server.msg(payload.to, payload.msg);
-
-    done();
-};
+export default alt.createActions(ChannelActions);

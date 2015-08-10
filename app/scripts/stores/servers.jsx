@@ -1,45 +1,88 @@
 import _ from 'lodash';
-import {BaseStore} from 'fluxible/addons';
+import Client from 'squelch-client';
 
-const MUTATION_EVENTS = [
-    'connect',
-    'disconnect',
-    'error',
-    'nick',
-    'join',
-    'part',
-    'kick',
-    'quit',
-    '+mode',
-    '-mode',
-    '+usermode',
-    '-usermode'
+import alt from '../alt';
+
+import ServerActions from '../actions/server';
+
+import ConfigStore from './config';
+
+// Options for squelch-client that are always the same
+// ...they just gotta be that way
+const HARDCODED_SERVER_OPTIONS = {
+    verbose: true,
+    verboseError: true,
+    autoNickChange: true,
+    autoSplitMessage: true,
+    messageDelay: 0,
+    stripColors: false,
+    stripStyles: false
+};
+
+// Default options for servers
+const DEFAULT_SERVER_OPTIONS = {
+    port: 6667,
+    nick: 'SquelchUser',
+    username: 'SquelchUser',
+    realname: 'SquelchUser',
+    channels: [],
+    ssl: false,
+    selfSigned: false,
+    certificateExpired: false
+};
+
+// Options for squelch-client that can be set for all servers
+const APP_SERVER_OPTIONS = [
+    'autoRejoin',
+    'autoReconnect',
+    'autoReconnectTries',
+    'reconnectDelay',
+    'timeout'
 ];
 
-class ServerStore extends BaseStore {
-    constructor(dispatcher) {
-        super(dispatcher);
+class ServerStore {
+    constructor() {
         this.servers = {};
+
+        this.bindListeners({
+            addServer: ServerActions.ADD,
+            removeServer: ServerActions.REMOVE,
+            handleMessage: ServerActions.SERVER_EVENT
+        });
     }
 
-    getState() {
-        return {
-            servers: this.servers
-        };
-    }
+    addServer(data) {
+        this.waitFor(ConfigStore);
 
-    _addServer(payload) {
-        const server = payload.server;
+        const { config } = ConfigStore.getState();
+
+        const serverConfig = _.assign(
+            {},
+            DEFAULT_SERVER_OPTIONS,
+            data.config,
+            HARDCODED_SERVER_OPTIONS
+        );
+        _.each(APP_SERVER_OPTIONS, (opt) => serverConfig[opt] = config[opt]);
+
+        const server = new Client(serverConfig);
+        server.onAny((data) => {
+
+            ServerActions.serverEvent({
+                type: server.event,
+                server,
+                data
+            });
+        });
+
         const id = _.uniqueId('server');
         server.id = id;
-        this.servers[id] = server;
 
-        this.emitChange();
+        this.servers[id] = server;
     }
 
     // Accepts either id or client.
-    _removeServer(payload) {
-        const id = payload.id || payload.client.id;
+    removeServer(data) {
+        const id = data.id || data.client.id;
         const server = this.servers[id];
         if(!server) {
             throw new Error(`Cannot remove ${id}, it does not exist, or has already been removed. (Saving references to servers is highly discouraged, as it can lead to memory leaks.)`);
@@ -47,22 +90,11 @@ class ServerStore extends BaseStore {
         server.forceQuit();
         server.removeAllListeners();
         delete this.servers[id];
-
-        this.emitChange();
     }
 
-    _handleMsg(payload) {
-        if(_.contains(MUTATION_EVENTS, payload.type)) {
-            this.emitChange();
-        }
+    handleMessage() {
+        // noop
     }
 }
 
-ServerStore.storeName = 'ServerStore';
-ServerStore.handlers = {
-    ADD_SERVER: '_addServer',
-    REMOVE_SERVER: '_removeServer',
-    SERVER_EVENT: '_handleMsg'
-};
-
-export default ServerStore;
+export default alt.createStore(ServerStore);

@@ -1,49 +1,9 @@
-import ConfigStore from '../stores/config';
-
 import _ from 'lodash';
-import Client from 'squelch-client';
 
-// Options for squelch-client that are always the same
-// ...they just gotta be that way
-const HARDCODED_SERVER_OPTIONS = {
-    verbose: true,
-    verboseError: true,
-    autoNickChange: true,
-    autoSplitMessage: true,
-    messageDelay: 0,
-    stripColors: false,
-    stripStyles: false
-};
-
-// Options for squelch-client that can be set for all servers
-const APP_SERVER_OPTIONS = [
-    'autoRejoin',
-    'autoReconnect',
-    'autoReconnectTries',
-    'reconnectDelay',
-    'timeout'
-];
-
-// Default options for servers
-const DEFAULT_SERVER_OPTIONS = {
-    port: 6667,
-    nick: 'SquelchUser',
-    username: 'SquelchUser',
-    realname: 'SquelchUser',
-    channels: [],
-    ssl: false,
-    selfSigned: false,
-    certificateExpired: false
-};
-
-export const ServerEventAction = (context, payload, done) => {
-    payload.data.id = _.uniqueId();
-    context.dispatch('SERVER_EVENT', payload);
-    done();
-};
+import alt from '../alt';
 
 /*
-payload.config requires
+data.config requires
     server
     port
     nick
@@ -54,30 +14,19 @@ payload.config requires
     selfSigned
     certificateExpired
 */
-export const AddServerAction = (context, payload, done) => {
-    const config = context.getStore(ConfigStore).getState().config;
-    const serverConfig = _.assign(
-        {},
-        DEFAULT_SERVER_OPTIONS,
-        payload.config,
-        HARDCODED_SERVER_OPTIONS
-    );
-    _.each(APP_SERVER_OPTIONS, (opt) => serverConfig[opt] = config[opt]);
+class ServerActions {
+    add(data) {
+        this.dispatch(data);
+    }
 
-    const server = new Client(serverConfig);
-    server.onAny((data) => {
-        context.executeAction(ServerEventAction, {
-            type: server.event,
-            server,
-            data
-        });
-    });
+    remove(data) {
+        this.dispatch(data);
+    }
 
-    context.dispatch('ADD_SERVER', {server});
-    done();
-};
+    serverEvent(data) {
+        data.data.id = _.uniqueId();
+        this.dispatch(data);
+    }
+}
 
-export const RemoveServerAction = (context, payload, done) => {
-    context.dispatch('REMOVE_SERVER', payload);
-    done();
-};
+export default alt.createActions(ServerActions);

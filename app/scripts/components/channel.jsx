@@ -1,24 +1,32 @@
-import {connectToStores} from 'fluxible-addons-react';
+import React from 'react';
+import connectToStores from 'alt/utils/connectToStores';
 
 import MessageStore from '../stores/messages';
-import React from 'react';
+
 import UserList from './userlist';
 import Chat from './chat';
 import Input from './input';
 
-@connectToStores([MessageStore], context => context.getStore(MessageStore).getState())
+@connectToStores
 class ChannelView extends React.Component {
+    static getStores() { return [MessageStore]; }
+    static getPropsFromStores() { return MessageStore.getState(); };
 
     render() {
-        const {serverId, channel, messages} = this.props;
+        const { serverId } = this.props.params;
+        const { messages } = this.props;
+        const channel = decodeURIComponent(this.props.params.channel);
+
         let chanMessages = [];
         if(messages[serverId] && messages[serverId].channels[channel]) {
             chanMessages = messages[serverId].channels[channel];
         }
+
         return (
             <div className='channel-view'>
                 <div className='io-container'>
-                    <Chat messages={chanMessages} /><Input serverId={serverId} channel={channel} />
+                    <Chat messages={chanMessages} />
+                    <Input serverId={serverId} channel={channel} />
                 </div>
                 <UserList serverId={serverId} channel={channel} />
             </div>

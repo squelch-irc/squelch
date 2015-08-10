@@ -1,6 +1,6 @@
-import React from 'react';
 import _ from 'lodash';
-import {connectToStores} from 'fluxible-addons-react';
+import React from 'react';
+import connectToStores from 'alt/utils/connectToStores';
 
 import ServerStore from '../stores/servers';
 
@@ -13,11 +13,14 @@ const RANK_ORDER = {
     '': 0   // none
 };
 
-@connectToStores([ServerStore], context => context.getStore(ServerStore).getState())
+@connectToStores
 export default class UserList extends React.Component {
+    static getStores() { return [ServerStore]; }
+    static getPropsFromStores() { return ServerStore.getState(); }
 
     sortedUsers() {
-        const {servers, serverId, channel} = this.props;
+        const { servers, serverId, channel } = this.props;
+
         const serverChannel = servers[serverId].getChannel(channel);
         return _(serverChannel.users())
             .map((nick) => ({

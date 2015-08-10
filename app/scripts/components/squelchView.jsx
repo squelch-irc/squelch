@@ -1,20 +1,20 @@
-import React from 'react';
-import {handleRoute} from 'fluxible-router';
-import Sidebar from './sidebar';
 import _ from 'lodash';
+import React from 'react';
+import Router from 'react-router';
 
-@handleRoute
+import Sidebar from './sidebar';
+
+const { RouteHandler } = Router;
+
 export default class SquelchView extends React.Component {
     render() {
-        const Handler = this.props.currentRoute.get('handler');
-        const params = _.mapValues(this.props.currentRoute.get('params').toJSON(), decodeURIComponent);
         return (
-                <div id='squelch-view'>
-                    <Sidebar />
-                    <div className='main-view'>
-                        <Handler {...params} />
-                    </div>
+            <div id='squelch-view'>
+                <Sidebar />
+                <div className='main-view'>
+                    <RouteHandler />
                 </div>
+            </div>
         );
     }
 }

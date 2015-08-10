@@ -1,5 +1,11 @@
 import _ from 'lodash';
-import {BaseStore} from 'fluxible/addons';
+
+import alt from '../alt';
+
+import ServerActions from '../actions/server';
+import ChannelActions from '../actions/channel';
+
+import ServerStore from './servers';
 
 // The property of event types that define what channel its for
 const CHANNEL_PROPERTIES = {
@@ -25,20 +31,19 @@ const RAW_COMMAND_BLACKLIST = [
 
 const MESSAGE_LIMIT = 100;
 
-class MessageStore extends BaseStore {
-    constructor(dispatcher) {
-        super(dispatcher);
+class MessageStore {
+    constructor() {
         this.messages = {};
+
+        this.bindListeners({
+            newMessage: ServerActions.SERVER_EVENT,
+            sendMessage: ChannelActions.SEND_MESSAGE
+        });
     }
 
-    getState() {
-        return {
-            messages: this.messages
-        };
-    }
+    newMessage(data) {
+        const id = data.server.id || data.serverId;
 
-    _newMsg(payload) {
-        const id = payload.server.id || payload.serverId;
         if(!this.messages[id]) {
             this.messages[id] = {
                 serverMessages: [],
@@ -46,37 +51,52 @@ class MessageStore extends BaseStore {
             };
         }
 
-        payload.data.type = payload.type;
-        payload.data.timestamp = Date.now();
+        const msg = this.messages[id];
 
-        const chanProp = CHANNEL_PROPERTIES[payload.type];
+        data.data.type = data.type;
+        data.data.timestamp = Date.now();
+
+        let messages;
+
+        const chanProp = CHANNEL_PROPERTIES[data.type];
         if(chanProp) {
-            const channel = payload.data[chanProp];
-            if(!this.messages[id].channels[channel]) {
-                this.messages[id].channels[channel] = [];
+            const channel = data.data[chanProp];
+            if(!msg.channels[channel]) {
+                msg.channels[channel] = [];
             }
-            const messages = this.messages[id].channels[channel];
 
-            messages.unshift(payload.data);
-            messages.length = MESSAGE_LIMIT;
+            messages = msg.channels[channel];
         }
         else {
-            if(payload.type === 'raw' && _.contains(RAW_COMMAND_BLACKLIST, payload.data.command)) {
+            if(data.type === 'raw' && _.contains(RAW_COMMAND_BLACKLIST, data.data.command)) {
                 return;
             }
-            const messages = this.messages[id].serverMessages;
-
-            messages.unshift(payload.data);
-            messages.length = MESSAGE_LIMIT;
+            messages = msg.serverMessages;
         }
 
-        this.emitChange();
+        messages.unshift(data.data);
+        messages.length = MESSAGE_LIMIT;
+    }
+
+    sendMessage(data) {
+        this.waitFor(ServerStore);
+
+        const server = ServerStore.getState().servers[data.serverId];
+
+        server.msg(data.to, data.msg);
+
+        setImmediate(() => {
+            ServerActions.serverEvent({
+                type: 'msg',
+                server,
+                data: {
+                    to: data.to,
+                    from: server.nick(),
+                    msg: data.msg
+                }
+            });
+        });
     }
 }
 
-MessageStore.storeName = 'MessageStore';
-MessageStore.handlers = {
-    SERVER_EVENT: '_newMsg'
-};
-
-export default MessageStore;
+export default alt.createStore(MessageStore, 'MessageStore');

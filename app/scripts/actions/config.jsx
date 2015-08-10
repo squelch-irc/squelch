@@ -1,16 +1,18 @@
-import fs from 'fs-extra';
 import path from 'path';
+import fs from 'fs-extra';
 import Q from 'q';
 import _ from 'lodash';
 
-import {AddServerAction} from './server';
-import ConfigStore from '../stores/config';
+import alt from '../alt';
+
+import ServerActions from './server';
 
 const CONFIG_NAME = 'config.json';
 const CONFIG_PATHS = [
     '.',
     require('remote').require('app').getPath('userData')
 ];
+
 const DEFAULT_CONFIG = {
     servers: [],
     autoRejoin: false,
@@ -27,13 +29,16 @@ const DEFAULT_CONFIG = {
 */
 const readConfig = (i = 0) => {
     const configPath = path.join(CONFIG_PATHS[i], CONFIG_NAME);
+
     return Q.nfcall(fs.readJson, configPath)
+
     .then((configJSON) => {
         // Successfully read file
         const config = configJSON;
         const dir = path.resolve(CONFIG_PATHS[i]);
-        return {config, dir};
+        return { config, dir };
     })
+
     .catch((err) => {
         // Had different error than file not existing, HALT AND CATCH FIRE
         if(err.code !== 'ENOENT') {
@@ -43,33 +48,32 @@ const readConfig = (i = 0) => {
         if(i + 1 === CONFIG_PATHS.length) {
             const config = DEFAULT_CONFIG;
             const dir = path.resolve(CONFIG_PATHS[1]);
-            return {config, dir};
+            return { config, dir };
         }
         return readConfig(++i);
     });
 };
 
-export const ConfigLoadAction = (context, payload, done) => {
-    readConfig().then((result) => {
-        context.dispatch('SET_CONFIG', result);
-        _.each(result.config.servers, (serverConfig) => {
-            if (serverConfig.autoConnect) {
-                context.executeAction(AddServerAction, {config: serverConfig});
-            }
-        });
-        done();
-    })
-    .catch((err) => {
-        console.error('Something went wrong while trying to load your config\n\n' + (err.message || err));
-        console.error(err);
-        // require('remote').process.exit(1);
-    })
-    .done();
-};
+class ConfigActions {
+    load() {
+        readConfig()
 
-export const ConfigSetAction = (context, payload) => {
-    context.dispatch('SET_CONFIG', payload);
-    const state = context.getStore(ConfigStore).getState();
-    const configPath = path.join(state.dir, CONFIG_NAME);
-    return Q.nfcall(fs.outputFile, configPath, JSON.stringify(state.config, null, '\t'));
-};
+        .then((result) => {
+            this.dispatch(result);
+
+            _.each(result.config.servers, (serverConfig) => {
+                if (serverConfig.autoConnect) {
+                    ServerActions.add({ config: serverConfig });
+                }
+            });
+        })
+
+        .catch((err) => {
+            console.error('Something went wrong while trying to load your config\n\n' + (err.message || err));
+            throw err;
+        })
+        .done();
+    }
+}
+
+export default alt.createActions(ConfigActions);

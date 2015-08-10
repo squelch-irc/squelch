@@ -1,23 +1,30 @@
-import {connectToStores} from 'fluxible-addons-react';
+import React from 'react';
+import connectToStores from 'alt/utils/connectToStores';
 
 import MessageStore from '../stores/messages';
-import React from 'react';
+
 import Chat from './chat';
 import Input from './input';
 
-@connectToStores([MessageStore], context => context.getStore(MessageStore).getState())
+@connectToStores
 class ServerView extends React.Component {
+    static getStores() { return [MessageStore]; }
+    static getPropsFromStores() { return MessageStore.getState(); }
 
     render() {
-        const {serverId, messages} = this.props;
+        const { serverId } = this.props.params;
+        const { messages } = this.props;
+
         let serverMessages = [];
         if(messages[serverId]) {
             serverMessages = messages[serverId].serverMessages;
         }
+
         return (
             <div className='server-view'>
                 <div className='io-container'>
-                    <Chat messages={serverMessages} /><Input serverId={serverId} />
+                    <Chat messages={serverMessages} />
+                    <Input serverId={serverId} />
                 </div>
             </div>
         );

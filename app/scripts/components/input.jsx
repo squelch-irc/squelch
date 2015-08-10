@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {SendMessage} from '../actions/channel';
+import ChannelActions from '../actions/channel';
 
 export default class Input extends React.Component {
 
@@ -13,7 +13,7 @@ export default class Input extends React.Component {
         if(!message) { return; }
 
         if(this.props.channel) {
-            this.context.executeAction(SendMessage, {
+            ChannelActions.sendMessage({
                 serverId: this.props.serverId,
                 to: this.props.channel,
                 msg: message
@@ -31,7 +31,3 @@ export default class Input extends React.Component {
         );
     }
 }
-
-Input.contextTypes = {
-    executeAction: React.PropTypes.func.isRequired
-};

@@ -1,30 +1,26 @@
 import _ from 'lodash';
-import {BaseStore} from 'fluxible/addons';
 
-class ConfigStore extends BaseStore {
-    constructor(dispatcher) {
-        super(dispatcher);
+import alt from '../alt';
+
+import ConfigActions from '../actions/config';
+
+class ConfigStore {
+    constructor() {
         this.config = {};
         this.configDir = '.';
+
+        this.bindListeners({
+            handleUpdateConfig: ConfigActions.LOAD
+        });
     }
 
-    getState() {
-        return {
-            config: this.config,
-            dir: this.configDir
-        };
-    }
+    handleUpdateConfig(data) {
+        console.log(data);
 
-    _setConfig(payload) {
-        _.assign(this.config, payload.config || {});
-        this.configDir = payload.dir || this.configDir;
-        this.emitChange();
+        _.assign(this.config, data.config || {});
+
+        this.configDir = data.dir || this.configDir;
     }
 }
 
-ConfigStore.storeName = 'ConfigStore';
-ConfigStore.handlers = {
-    SET_CONFIG: '_setConfig'
-};
-
-export default ConfigStore;
+export default alt.createStore(ConfigStore, 'ConfigStore');
