@@ -8,6 +8,8 @@ import Kick from './messages/kick';
 import Topic from './messages/topic';
 import TopicWho from './messages/topicwho';
 import Motd from './messages/motd';
+import Mode from './messages/mode';
+import Usermode from './messages/usermode';
 import Raw from './messages/raw';
 import Timestamp from './messages/timestamp';
 
@@ -20,6 +22,8 @@ const messageHandlers = {
     topic: Topic,
     topicwho: TopicWho,
     motd: Motd,
+    mode: Mode,
+    usermode: Usermode,
     raw: Raw
 };
 

@@ -7,19 +7,34 @@ import ChannelActions from '../actions/channel';
 
 import ServerStore from './servers';
 
-// The property of event types that define what channel its for
-const CHANNEL_PROPERTIES = {
-    msg: 'to',
-    action: 'to',
-    notice: 'to',
-    join: 'chan',
-    part: 'chan',
-    kick: 'chan',
-    '+mode': 'chan',
-    '-mode': 'chan',
-    names: 'chan',
-    topic: 'chan',
-    topicwho: 'chan'
+
+// Returns a route function for MESSAGE_ROUTES to a single channel
+// specified by a prop in the message.
+const toChannelProp = (prop) => {
+    return (message) => {
+        return { server: false, channels: [message[prop]] };
+    };
+};
+
+// A route function that routes to the server log only
+const toServer = () => { return { server: true, channels: [] }; }
+
+// Functions that return where a message type should be sent to
+// Should return {server: boolean, channels: [..]}
+// If server is true, will route to server
+// If channels has channels, will route to those channels
+const MESSAGE_ROUTES = {
+    msg: toChannelProp('to'),
+    action: toChannelProp('to'),
+    notice: toServer, // TODO: route this to current channel, too
+    join: toChannelProp('chan'),
+    part: toChannelProp('chan'),
+    kick: toChannelProp('chan'),
+    names: toChannelProp('chan'),
+    topic: toChannelProp('chan'),
+    topicwho: toChannelProp('chan'),
+    mode: toChannelProp('chan'),
+    usermode: toServer
 };
 
 // Raw message commands we should ignore either because they
@@ -28,10 +43,12 @@ const RAW_COMMAND_BLACKLIST = [
     'PING', 'PONG', 'PRIVMSG', 'NOTICE', 'JOIN', 'PART', 'KICK', 'MODE', '331', '332', '333', '353', '366', '372', '375', '376'
 ];
 
-// TODO: properly route the following events
-// connect, disconnect, error, nick, motd, quit, invite, +usermode?, -usermode?
-
 const MESSAGE_LIMIT = 100;
+const appendToLog = (log, message) => {
+    log.unshift(message);
+    log.length = MESSAGE_LIMIT;
+}
+
 
 class MessageStore {
     constructor() {
@@ -53,31 +70,32 @@ class MessageStore {
             };
         }
 
-        const msg = this.messages[id];
+        const messages = this.messages[id];
 
         data.data.type = data.type;
         data.data.timestamp = Date.now();
 
-        let messages;
-
-        const chanProp = CHANNEL_PROPERTIES[data.type];
-        if(chanProp) {
-            const channel = data.data[chanProp];
-            if(!msg.channels[channel]) {
-                msg.channels[channel] = [];
+        // If we have a route defined for this type, send to the
+        // specified logs
+        if(MESSAGE_ROUTES[data.type]) {
+            const route = MESSAGE_ROUTES[data.type](data.data);
+            if(route.server) {
+                appendToLog(messages.serverMessages, data.data);
             }
-
-            messages = msg.channels[channel];
+            _.each(route.channels, (chan) => {
+                if(!messages.channels[chan]) {
+                    messages.channels[chan] = [];
+                }
+                appendToLog(messages.channels[chan], data.data);
+            });
         }
+        // Else, log to the server if it's not a blacklisted reply
         else {
             if(data.type === 'raw' && _.contains(RAW_COMMAND_BLACKLIST, data.data.command)) {
                 return;
             }
-            messages = msg.serverMessages;
+            appendToLog(messages.serverMessages, data.data);
         }
-
-        messages.unshift(data.data);
-        messages.length = MESSAGE_LIMIT;
     }
 
     sendMessage(data) {
