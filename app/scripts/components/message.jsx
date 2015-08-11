@@ -7,6 +7,7 @@ import Part from './messages/part';
 import Kick from './messages/kick';
 import Topic from './messages/topic';
 import TopicWho from './messages/topicwho';
+import Motd from './messages/motd';
 import Raw from './messages/raw';
 import Timestamp from './messages/timestamp';
 
@@ -18,6 +19,7 @@ const messageHandlers = {
     kick: Kick,
     topic: Topic,
     topicwho: TopicWho,
+    motd: Motd,
     raw: Raw
 };
 

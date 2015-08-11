@@ -25,7 +25,7 @@ const CHANNEL_PROPERTIES = {
 // Raw message commands we should ignore either because they
 // already have a parsed version or a user ain't wanna see that
 const RAW_COMMAND_BLACKLIST = [
-    'PING', 'PONG', 'PRIVMSG', 'NOTICE', 'JOIN', 'PART', 'KICK', 'MODE', '331', '332', '333', '353', '366'
+    'PING', 'PONG', 'PRIVMSG', 'NOTICE', 'JOIN', 'PART', 'KICK', 'MODE', '331', '332', '333', '353', '366', '372', '375', '376'
 ];
 
 // TODO: properly route the following events
