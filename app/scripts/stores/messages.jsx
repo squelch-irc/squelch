@@ -17,10 +17,14 @@ const toChannelProp = (prop) => {
 };
 
 // A route function that routes to the server log only
-const toServer = () => { return { server: true, channels: [] }; }
+const toServer = () => { return { server: true, channels: [] }; };
+
+// A route function that routes to all logs
+const toAll = () => { return { all: true }; };
 
 // Functions that return where a message type should be sent to
-// Should return {server: boolean, channels: [..]}
+// Should return {all: boolean, server: boolean, channels: [..]}
+// If all is true, will route to all logs, otherwise
 // If server is true, will route to server
 // If channels has channels, will route to those channels
 const MESSAGE_ROUTES = {
@@ -34,20 +38,31 @@ const MESSAGE_ROUTES = {
     topic: toChannelProp('chan'),
     topicwho: toChannelProp('chan'),
     mode: toChannelProp('chan'),
-    usermode: toServer
+    usermode: toServer,
+    nick: (message, channels, server) => {
+        if(message.me) {
+            return { all: true };
+        }
+        return {
+            server: false,
+            channels: _.filter(channels, (chan) => {
+                return server.isInChannel(chan, message.newNick);
+            })
+        };
+    }
 };
 
 // Raw message commands we should ignore either because they
 // already have a parsed version or a user ain't wanna see that
 const RAW_COMMAND_BLACKLIST = [
-    'PING', 'PONG', 'PRIVMSG', 'NOTICE', 'JOIN', 'PART', 'KICK', 'MODE', '331', '332', '333', '353', '366', '372', '375', '376'
+    'PING', 'PONG', 'PRIVMSG', 'NOTICE', 'JOIN', 'PART', 'KICK', 'MODE', 'NICK', '331', '332', '333', '353', '366', '372', '375', '376'
 ];
 
 const MESSAGE_LIMIT = 100;
 const appendToLog = (log, message) => {
     log.unshift(message);
     log.length = MESSAGE_LIMIT;
-}
+};
 
 
 class MessageStore {
@@ -61,7 +76,10 @@ class MessageStore {
     }
 
     newMessage(data) {
+        this.waitFor(ServerStore);
+
         const id = data.server.id || data.serverId;
+        const server = ServerStore.getState().servers[id];
 
         if(!this.messages[id]) {
             this.messages[id] = {
@@ -78,16 +96,25 @@ class MessageStore {
         // If we have a route defined for this type, send to the
         // specified logs
         if(MESSAGE_ROUTES[data.type]) {
-            const route = MESSAGE_ROUTES[data.type](data.data);
-            if(route.server) {
+            const route = MESSAGE_ROUTES[data.type](data.data, _.keys(messages.channels), server);
+            if(route.all) {
                 appendToLog(messages.serverMessages, data.data);
+                _.each(messages.channels, (msgs, chan) => {
+                    appendToLog(messages.channels[chan], data.data);
+                });
             }
-            _.each(route.channels, (chan) => {
-                if(!messages.channels[chan]) {
-                    messages.channels[chan] = [];
+            else {
+                if(route.server) {
+                    appendToLog(messages.serverMessages, data.data);
                 }
-                appendToLog(messages.channels[chan], data.data);
-            });
+                _.each(route.channels, (chan) => {
+                    if(!messages.channels[chan]) {
+                        messages.channels[chan] = [];
+                    }
+                    appendToLog(messages.channels[chan], data.data);
+                });
+            }
+
         }
         // Else, log to the server if it's not a blacklisted reply
         else {
