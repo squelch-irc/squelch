@@ -23,10 +23,11 @@ const toServer = () => { return { server: true, channels: [] }; };
 const toAll = () => { return { all: true }; };
 
 // Functions that return where a message type should be sent to
-// Should return {all: boolean, server: boolean, channels: [..]}
+// Should return {all: boolean, server: boolean, channels: [], message: {}}
 // If all is true, will route to all logs, otherwise
 // If server is true, will route to server
 // If channels has channels, will route to those channels
+// If message is specified, it will replace the original message.
 const MESSAGE_ROUTES = {
     msg: toChannelProp('to'),
     action: toChannelProp('to'),
@@ -48,6 +49,30 @@ const MESSAGE_ROUTES = {
             channels: _.filter(channels, (chan) => {
                 return server.isInChannel(chan, message.newNick);
             })
+        };
+    },
+    connecting: (message) => {
+        return {
+            server: true,
+            message: { type: 'info', msg: `Connecting to ${message.server} on port ${message.port}...` }
+        };
+    },
+    'connection-established': (message) => {
+        return {
+            server: true,
+            message: { type: 'info', msg: `Connection to host at ${message.server} established` }
+        };
+    },
+    connect: (message) => {
+        return {
+            server: true,
+            message: { type: 'info', msg: `Connected` }
+        };
+    },
+    reconnecting: (message) => {
+        return {
+            server: true,
+            message: { type: 'info', msg: `Reconnecting in ${message.delay/1000} seconds (${message.triesLeft} tries remaining)...` }
         };
     }
 };
@@ -97,21 +122,22 @@ class MessageStore {
         // specified logs
         if(MESSAGE_ROUTES[data.type]) {
             const route = MESSAGE_ROUTES[data.type](data.data, _.keys(messages.channels), server);
+            const message = route.message || data.data;
             if(route.all) {
-                appendToLog(messages.serverMessages, data.data);
+                appendToLog(messages.serverMessages, message);
                 _.each(messages.channels, (msgs, chan) => {
-                    appendToLog(messages.channels[chan], data.data);
+                    appendToLog(messages.channels[chan], message);
                 });
             }
             else {
                 if(route.server) {
-                    appendToLog(messages.serverMessages, data.data);
+                    appendToLog(messages.serverMessages, message);
                 }
                 _.each(route.channels, (chan) => {
                     if(!messages.channels[chan]) {
                         messages.channels[chan] = [];
                     }
-                    appendToLog(messages.channels[chan], data.data);
+                    appendToLog(messages.channels[chan], message);
                 });
             }
 

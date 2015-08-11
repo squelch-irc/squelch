@@ -12,6 +12,7 @@ import Mode from './messages/mode';
 import Usermode from './messages/usermode';
 import Nick from './messages/nick';
 import Raw from './messages/raw';
+import Info from './messages/info';
 import Timestamp from './messages/timestamp';
 
 const messageHandlers = {
@@ -26,7 +27,8 @@ const messageHandlers = {
     mode: Mode,
     usermode: Usermode,
     nick: Nick,
-    raw: Raw
+    raw: Raw,
+    info: Info
 };
 
 export default class Message extends React.Component {

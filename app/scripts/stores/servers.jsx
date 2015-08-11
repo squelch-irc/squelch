@@ -16,7 +16,8 @@ const HARDCODED_SERVER_OPTIONS = {
     autoSplitMessage: true,
     messageDelay: 0,
     stripColors: false,
-    stripStyles: false
+    stripStyles: false,
+    autoConnect: false
 };
 
 // Default options for servers
@@ -73,6 +74,9 @@ class ServerStore {
                 data
             });
         });
+
+        // Defer connection because it will try to dispatch a serverEvent action
+        setImmediate(() => { server.connect(3); });
 
         const id = _.uniqueId('server');
         server.id = id;
