@@ -10,6 +10,7 @@ import TopicWho from './messages/topicwho';
 import Motd from './messages/motd';
 import Mode from './messages/mode';
 import Usermode from './messages/usermode';
+import Notice from './messages/notice';
 import Nick from './messages/nick';
 import Raw from './messages/raw';
 import Info from './messages/info';
@@ -26,6 +27,7 @@ const messageHandlers = {
     motd: Motd,
     mode: Mode,
     usermode: Usermode,
+    notice: Notice,
     nick: Nick,
     raw: Raw,
     info: Info
