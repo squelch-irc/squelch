@@ -32,6 +32,7 @@ const MESSAGE_ROUTES = {
     msg: toChannelProp('to'),
     action: toChannelProp('to'),
     notice: toServer, // TODO: route this to current channel, too
+    invite: toServer, //TODO Also route this like above
     join: toChannelProp('chan'),
     part: toChannelProp('chan'),
     kick: toChannelProp('chan'),
@@ -80,7 +81,7 @@ const MESSAGE_ROUTES = {
 // Raw message commands we should ignore either because they
 // already have a parsed version or a user ain't wanna see that
 const RAW_COMMAND_BLACKLIST = [
-    'PING', 'PONG', 'PRIVMSG', 'NOTICE', 'JOIN', 'PART', 'KICK', 'MODE', 'NICK', '331', '332', '333', '353', '366', '372', '375', '376'
+    'PING', 'PONG', 'PRIVMSG', 'NOTICE', 'JOIN', 'PART', 'KICK', 'MODE', 'NICK', 'INVITE', '331', '332', '333', '353', '366', '372', '375', '376'
 ];
 
 const MESSAGE_LIMIT = 100;
