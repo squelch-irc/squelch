@@ -4,6 +4,7 @@ import Router from 'react-router';
 import LessLoader from 'less-hot';
 
 import ConfigActions from './actions/config';
+import RouteActions from './actions/route';
 
 import routes from './routes';
 
@@ -13,6 +14,7 @@ document.querySelector('head').appendChild(lessLoader(path.join(__dirname, '../l
 
 ConfigActions.load();
 
-Router.run(routes, (Root) => {
+Router.run(routes, (Root, state) => {
+    RouteActions.changeRoute(state);
     React.render(<Root />, document.getElementById('squelch-root'));
 });

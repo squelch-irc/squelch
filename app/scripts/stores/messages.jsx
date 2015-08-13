@@ -6,6 +6,7 @@ import ServerActions from '../actions/server';
 import ChannelActions from '../actions/channel';
 
 import ServerStore from './servers';
+import RouteStore from './route';
 
 
 // Returns a route function for MESSAGE_ROUTES to a single channel
@@ -19,6 +20,9 @@ const toChannelProp = (prop) => {
 // A route function that routes to the server log only
 const toServer = () => { return { server: true, channels: [] }; };
 
+// A route function that routes to current view (if possible) and server log
+const toCurrentAndServer = () => { return { server: true, current: true, channels: [] }; };
+
 // A route function that routes to all logs
 const toAll = () => { return { all: true }; };
 
@@ -26,13 +30,14 @@ const toAll = () => { return { all: true }; };
 // Should return {all: boolean, server: boolean, channels: [], message: {}}
 // If all is true, will route to all logs, otherwise
 // If server is true, will route to server
+// If current is true, will route to current view if possible
 // If channels has channels, will route to those channels
 // If message is specified, it will replace the original message.
 const MESSAGE_ROUTES = {
     msg: toChannelProp('to'),
     action: toChannelProp('to'),
-    notice: toServer, // TODO: route this to current channel, too
-    invite: toServer, //TODO Also route this like above
+    notice: toCurrentAndServer,
+    invite: toCurrentAndServer,
     join: toChannelProp('chan'),
     part: toChannelProp('chan'),
     kick: toChannelProp('chan'),
@@ -102,10 +107,13 @@ class MessageStore {
     }
 
     newMessage(data) {
-        this.waitFor(ServerStore);
+        this.waitFor([ServerStore, RouteStore]);
 
         const id = data.server.id || data.serverId;
         const server = ServerStore.getState().servers[id];
+        const currentServerId = RouteStore.getState().routeState.params.serverId;
+        const currentChannel = RouteStore.getState().routeState.params.channel;
+
 
         if(!this.messages[id]) {
             this.messages[id] = {
@@ -131,6 +139,12 @@ class MessageStore {
                 });
             }
             else {
+                // Route to current if it's the same server
+                // Don't route if current is server and we're already routing to server
+                if(route.current && id === currentServerId
+                    && !(route.server && !currentChannel)) {
+                    appendToLog(messages.channels[currentChannel], message);
+                }
                 if(route.server) {
                     appendToLog(messages.serverMessages, message);
                 }
