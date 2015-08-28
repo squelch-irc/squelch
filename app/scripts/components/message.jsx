@@ -13,6 +13,8 @@ import Usermode from './messages/usermode';
 import Invite from './messages/invite'
 import Notice from './messages/notice';
 import Nick from './messages/nick';
+import Quit from './messages/quit';
+import ErrorMsg from './messages/error';
 import Raw from './messages/raw';
 import Info from './messages/info';
 import Timestamp from './messages/timestamp';
@@ -31,6 +33,8 @@ const messageHandlers = {
     invite: Invite,
     notice: Notice,
     nick: Nick,
+    quit: Quit,
+    error: ErrorMsg,
     raw: Raw,
     info: Info
 };
