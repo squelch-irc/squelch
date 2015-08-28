@@ -14,7 +14,7 @@ class RouteStore {
 
     changeRoute(data) {
         this.routeState = data;
-        this.routeState.params = _.mapValues(this.routeState.params, decodeURIComponent)
+        this.routeState.params = _.mapValues(this.routeState.params, decodeURIComponent);
     }
 }
 

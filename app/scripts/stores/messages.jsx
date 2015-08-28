@@ -84,7 +84,7 @@ const MESSAGE_ROUTES = {
     disconnect: (message) => {
         return {
             all: true,
-            message: {type: 'info', msg: 'Disconnected'}
+            message: { type: 'info', msg: 'Disconnected' }
         };
     },
     quit: (message, channels, server) => {
