@@ -69,7 +69,7 @@ const MESSAGE_ROUTES = {
             message: { type: 'info', msg: `Connection to host at ${message.server} established` }
         };
     },
-    connect: (message) => {
+    connect: () => {
         return {
             server: true,
             message: { type: 'info', msg: `Connected` }
@@ -81,13 +81,13 @@ const MESSAGE_ROUTES = {
             message: { type: 'info', msg: `Reconnecting in ${message.delay/1000} seconds (${message.triesLeft} tries remaining)...` }
         };
     },
-    disconnect: (message) => {
+    disconnect: () => {
         return {
             all: true,
             message: { type: 'info', msg: 'Disconnected' }
         };
     },
-    quit: (message, channels, server) => {
+    quit: (message) => {
         return {
             channels: message.channels
         };

@@ -29,7 +29,7 @@ export default class ServerListItem extends React.Component {
 
         // const href = this.props.routeStore.makePath('server', serverParams);
         const treeClass = classnames({
-            server: true,
+            server: true
             // selected: this.props.routeStore.isActive(href)
         });
 

@@ -10,7 +10,7 @@ import Input from './input';
 @connectToStores
 class ChannelView extends React.Component {
     static getStores() { return [MessageStore]; }
-    static getPropsFromStores() { return MessageStore.getState(); };
+    static getPropsFromStores() { return MessageStore.getState(); }
 
     render() {
         const { serverId } = this.props.params;
