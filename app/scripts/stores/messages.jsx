@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import Immutable from 'immutable';
 
 import alt from '../alt';
 
@@ -53,7 +54,7 @@ const MESSAGE_ROUTES = {
         return {
             server: false,
             channels: _.filter(channels, (chan) => {
-                return server.isInChannel(chan, message.newNick);
+                return server.client.isInChannel(chan, message.newNick);
             })
         };
     },
@@ -100,17 +101,16 @@ const MESSAGE_ROUTES = {
 const RAW_COMMAND_BLACKLIST = [
     'PING', 'PONG', 'PRIVMSG', 'NOTICE', 'JOIN', 'PART', 'KICK', 'MODE', 'NICK', 'INVITE', 'ERROR', 'QUIT', '331', '332', '333', '353', '366', '372', '375', '376'
 ];
-
 const MESSAGE_LIMIT = 100;
-const appendToLog = (log, message) => {
-    log.unshift(message);
-    log.length = MESSAGE_LIMIT;
-};
 
+const Messages = Immutable.Record({
+    serverMessages: Immutable.List(),
+    channels: Immutable.Map()
+});
 
 class MessageStore {
     constructor() {
-        this.messages = {};
+        this.messages = Immutable.Map();
 
         this.bindListeners({
             newMessage: ServerActions.SERVER_EVENT,
@@ -121,20 +121,16 @@ class MessageStore {
     newMessage(data) {
         this.waitFor([ServerStore, RouteStore]);
 
-        const id = data.server.id || data.serverId;
-        const server = ServerStore.getState().servers[id];
+
+        const id = data.server.client.id;
+        const server = data.server;
         const currentServerId = RouteStore.getState().routeState.params.serverId;
         const currentChannel = RouteStore.getState().routeState.params.channel;
 
 
-        if(!this.messages[id]) {
-            this.messages[id] = {
-                serverMessages: [],
-                channels: {}
-            };
+        if(!this.messages.has(id)) {
+            this.messages = this.messages.set(id, new Messages());
         }
-
-        const messages = this.messages[id];
 
         data.data.type = data.type;
         data.data.timestamp = Date.now();
@@ -142,29 +138,31 @@ class MessageStore {
         // If we have a route defined for this type, send to the
         // specified logs
         if(MESSAGE_ROUTES[data.type]) {
-            const route = MESSAGE_ROUTES[data.type](data.data, _.keys(messages.channels), server);
+            const route = MESSAGE_ROUTES[data.type](
+                data.data,
+                server.channels.keySeq().toArray(),
+                server
+            );
             const message = route.message || data.data;
             if(route.all) {
-                appendToLog(messages.serverMessages, message);
-                _.each(messages.channels, (msgs, chan) => {
-                    appendToLog(messages.channels[chan], message);
-                });
+                this._appendToLog([id, 'serverMessages'], message);
+                this._appendToLog([id, 'channels'], message);
             }
             else {
                 // Route to current if it's the same server
                 // Don't route if current is server and we're already routing to server
                 if(route.current && id === currentServerId
                     && !(route.server && !currentChannel)) {
-                    appendToLog(messages.channels[currentChannel], message);
+                    this._appendToLog([id, 'channels', 'currentChannel'], message);
                 }
                 if(route.server) {
-                    appendToLog(messages.serverMessages, message);
+                    this._appendToLog([id, 'serverMessages'], message);
                 }
                 _.each(route.channels, (chan) => {
-                    if(!messages.channels[chan]) {
-                        messages.channels[chan] = [];
+                    if(!this.messages.get(id).channels.has(chan)) {
+                        this.messages = this.messages.setIn([id, 'channels', chan], Immutable.List());
                     }
-                    appendToLog(messages.channels[chan], message);
+                    this._appendToLog([id, 'channels', chan], message);
                 });
             }
 
@@ -172,18 +170,18 @@ class MessageStore {
         // Else, log to the server if it's not a blacklisted reply
         else {
             if(data.type === 'raw' && _.contains(RAW_COMMAND_BLACKLIST, data.data.command)) {
-                return;
+                return false;
             }
-            appendToLog(messages.serverMessages, data.data);
+            this._appendToLog([id, 'serverMessages'], data.data);
         }
     }
 
     sendMessage(data) {
         this.waitFor(ServerStore);
 
-        const server = ServerStore.getState().servers[data.serverId];
+        const server = ServerStore.getState().servers.get(data.serverId);
 
-        server.msg(data.to, data.msg);
+        server.client.msg(data.to, data.msg);
 
         setImmediate(() => {
             ServerActions.serverEvent({
@@ -191,8 +189,31 @@ class MessageStore {
                 server,
                 data: {
                     to: data.to,
-                    from: server.nick(),
+                    from: server.client.nick(),
                     msg: data.msg
+                }
+            });
+        });
+    }
+
+    _appendToLog(path, message) {
+        this.messages = this.messages.updateIn(path, function(log) {
+            // Append to all logs in this Map
+            if(log instanceof Immutable.Map) {
+                return log.map(function(chanLog) {
+                    return chanLog.withMutations(function(chanLog) {
+                        chanLog = chanLog.push(message);
+                        if(chanLog.size > MESSAGE_LIMIT) {
+                            chanLog = chanLog.shift();
+                        }
+                    });
+                });
+            }
+            // Just append to this log
+            return log.withMutations(function(log) {
+                log = log.push(message);
+                if(log.size > MESSAGE_LIMIT) {
+                    log = log.shift();
                 }
             });
         });

@@ -16,10 +16,12 @@ data.config requires
 */
 class ServerActions {
     add(data) {
+        data.id = _.uniqueId('server');
         this.dispatch(data);
     }
 
     remove(data) {
+        data.id = data.id || data.client.id;
         this.dispatch(data);
     }
 

@@ -1,8 +1,9 @@
 import React from 'react';
-import _ from 'lodash';
+import pureRender from 'pure-render-decorator';
 
 import Message from './message';
 
+@pureRender
 export default class Chat extends React.Component {
 
     render() {
@@ -10,9 +11,9 @@ export default class Chat extends React.Component {
         return (
             <div className='message-container'>
                 <ul className='messages'>{
-                    _(messages).compact().reverse().map((message) =>
+                    messages.map((message) =>
                         <Message message={message} key={message.id} />
-                    ).value()
+                    )
                 }</ul>
             </div>
         );

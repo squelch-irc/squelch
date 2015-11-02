@@ -1,5 +1,6 @@
 import React from 'react';
 import connectToStores from 'alt/utils/connectToStores';
+import pureRender from 'pure-render-decorator';
 
 import MessageStore from '../stores/messages';
 
@@ -7,6 +8,7 @@ import Chat from './chat';
 import Input from './input';
 
 @connectToStores
+@pureRender
 class ServerView extends React.Component {
     static getStores() { return [MessageStore]; }
     static getPropsFromStores() { return MessageStore.getState(); }
@@ -15,9 +17,9 @@ class ServerView extends React.Component {
         const { serverId } = this.props.params;
         const { messages } = this.props;
 
-        let serverMessages = [];
-        if(messages[serverId]) {
-            serverMessages = messages[serverId].serverMessages;
+        let serverMessages = null;
+        if(messages.has(serverId)) {
+            serverMessages = messages.get(serverId).serverMessages;
         }
 
         return (

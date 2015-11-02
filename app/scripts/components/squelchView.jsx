@@ -1,17 +1,16 @@
 import React from 'react';
-import Router from 'react-router';
+import pureRender from 'pure-render-decorator';
 
 import Sidebar from './sidebar';
 
-const { RouteHandler } = Router;
-
+@pureRender
 export default class SquelchView extends React.Component {
     render() {
         return (
             <div id='squelch-view'>
                 <Sidebar />
                 <div className='main-view'>
-                    <RouteHandler />
+                    {this.props.children}
                 </div>
             </div>
         );

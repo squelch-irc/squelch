@@ -42,13 +42,15 @@
     "electron-debug": "^0.1.0",
     "eventemitter2": "^0.4.14",
     "fs-extra": "^0.20.1",
+    "immutable": "^3.7.5",
     "less-hot": "^1.0.0",
     "lodash": "^3.10.0",
     "moment": "^2.10.3",
+    "pure-render-decorator": "^0.2.0",
     "q": "^1.4.1",
-    "react": "^0.13.3",
-    "react-router": "^0.13.3",
+    "react": "^0.14.1",
+    "react-router": "^1.0.0-rc3",
     "react-treeview": "^0.4.0",
-    "squelch-client": "^0.10.1"
+    "squelch-client": "^0.10.2"
   }
 }

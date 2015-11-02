@@ -1,55 +1,44 @@
 import _ from 'lodash';
 import React from 'react';
-import Router from 'react-router';
+import { Link } from 'react-router';
 import TreeView from 'react-treeview';
 import classnames from 'classnames';
+import pureRender from 'pure-render-decorator';
 
-const { Link } = Router;
-
+@pureRender
 export default class ServerListItem extends React.Component {
 
     sortedChannels() {
-        return _.sortBy(this.props.server.channels());
+        return _.sortBy(this.props.server._channels);
     }
 
     render() {
-        const serverParams = {
-            serverId: this.props.server.id
-        };
+        const { client, channels } = this.props.server;
 
         const serverLabel = <Link
             className='server'
-            key={this.props.server.id}
-            to='server'
-            params={serverParams}
+            key={client.id}
+            to={`/server/${client.id}`}
             activeClassName='selected'>
-
-            {this.props.server.name || this.props.server.opt.server}
+            {client.name || client.opt.server}
         </Link>;
 
-        // const href = this.props.routeStore.makePath('server', serverParams);
         const treeClass = classnames({
             server: true
-            // selected: this.props.routeStore.isActive(href)
         });
 
         return (
             <div className={treeClass}>
                 <TreeView nodeLabel={serverLabel}>
                 {
-                    _.map(this.sortedChannels(), (channel) => {
-                        const params = {
-                            serverId: this.props.server.id,
-                            channel: encodeURIComponent(channel.name())
-                        };
+                    channels.map((channel, name) => {
+                        const url = `/server/${client.id}/channel/${encodeURIComponent(name)}`;
 
-                        return <div key={channel.name()} className='channel'>
+                        return <div key={name} className='channel'>
                             <Link
-                                to='channel'
-                                params={params}
+                                to={url}
                                 activeClassName='selected'>
-
-                                {channel.name()}
+                                {name}
                             </Link>
                         </div>;
                     })

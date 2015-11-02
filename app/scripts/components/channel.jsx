@@ -1,5 +1,6 @@
 import React from 'react';
 import connectToStores from 'alt/utils/connectToStores';
+import pureRender from 'pure-render-decorator';
 
 import MessageStore from '../stores/messages';
 
@@ -8,6 +9,7 @@ import Chat from './chat';
 import Input from './input';
 
 @connectToStores
+@pureRender
 class ChannelView extends React.Component {
     static getStores() { return [MessageStore]; }
     static getPropsFromStores() { return MessageStore.getState(); }
@@ -17,9 +19,9 @@ class ChannelView extends React.Component {
         const { messages } = this.props;
         const channel = decodeURIComponent(this.props.params.channel);
 
-        let chanMessages = [];
-        if(messages[serverId] && messages[serverId].channels[channel]) {
-            chanMessages = messages[serverId].channels[channel];
+        let chanMessages = null;
+        if(messages.has(serverId) && messages.get(serverId).channels.has(channel)) {
+            chanMessages = messages.get(serverId).channels.get(channel);
         }
 
         return (
