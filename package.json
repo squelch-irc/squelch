@@ -11,7 +11,7 @@
     "eslint": "eslint --ext .js,.jsx app main.js",
     "lint": "npm run eslint",
     "prebuild": "npm run clean && npm run lint",
-    "build": "electron-packager . Squelch --asar --version=0.28.3 --all --out release --prune --ignore=\"/test($|/)|/tools($|/)|/release($|/)\"",
+    "build": "electron-packager . Squelch --asar --version=0.34.2 --all --out release --prune --ignore=\"/test($|/)|/tools($|/)|/release($|/)\"",
     "test": "npm run lint"
   },
   "repository": {
