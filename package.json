@@ -25,9 +25,9 @@
   "homepage": "https://github.com/squelch-irc/squelch#readme",
   "devDependencies": {
     "babel-eslint": "^3.1.24",
-    "electron-packager": "^5.0.0",
-    "electron-prebuilt": "^0.28.3",
-    "electron-rebuild": "^1.0.0",
+    "electron-packager": "^5.1.1",
+    "electron-prebuilt": "^0.34.2",
+    "electron-rebuild": "^1.0.2",
     "eslint": "^1.1.0",
     "eslint-config-kellyirc": "^3.1.0",
     "eslint-plugin-react": "^3.0.0",
