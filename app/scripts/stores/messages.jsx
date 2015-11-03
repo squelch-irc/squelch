@@ -197,20 +197,18 @@ class MessageStore {
     }
 
     _appendToLog(path, message) {
-        this.messages = this.messages.updateIn(path, function(log) {
+        this.messages = this.messages.updateIn(path, (log) => {
             // Append to all logs in this Map
             if(log instanceof Immutable.Map) {
-                return log.map(function(chanLog) {
-                    return chanLog.withMutations(function(chanLog) {
-                        chanLog = chanLog.push(message);
-                        if(chanLog.size > MESSAGE_LIMIT) {
-                            chanLog = chanLog.shift();
-                        }
-                    });
-                });
+                return log.map((chanLog) => chanLog.withMutations((chanLog) => {
+                    chanLog = chanLog.push(message);
+                    if(chanLog.size > MESSAGE_LIMIT) {
+                        chanLog = chanLog.shift();
+                    }
+                }));
             }
             // Just append to this log
-            return log.withMutations(function(log) {
+            return log.withMutations((log) => {
                 log = log.push(message);
                 if(log.size > MESSAGE_LIMIT) {
                     log = log.shift();

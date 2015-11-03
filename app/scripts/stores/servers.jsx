@@ -115,14 +115,15 @@ class ServerStore {
         const client = this.servers.get(id).client;
         switch(type) {
             case 'nick':
-                this.servers = this.servers.setIn([id, 'channels'],
-                    this.servers.get(id).channels.map(function(channel) {
-                        return channel.withMutations(function(channel) {
+                this.servers = this.servers.updateIn([id, 'channels'], (channels) =>
+                    channels.map((channel) =>
+                        channel.withMutations((channel) => {
+                            const user = channel.users.get(data.oldNick);
                             channel
                             .deleteIn(['users', data.oldNick])
-                            .setIn(['users', data.newNick]);
-                        });
-                    })
+                            .setIn(['users', data.newNick], user);
+                        })
+                    )
                 );
                 break;
             case 'join':
@@ -144,16 +145,16 @@ class ServerStore {
                 break;
             case 'names':
                 const chan = client.getChannel(data.chan);
-                const users = Immutable.Map().withMutations(function(users) {
-                    _.each(chan.users(), function(user) {
+                const users = Immutable.Map().withMutations((users) => {
+                    _.each(chan.users(), (user) => {
                         users.set(user, new User({ status: chan.getStatus(user) }));
                     });
                 });
                 this.servers = this.servers.setIn([id, 'channels', data.chan, 'users'], users);
                 break;
             case 'quit':
-                const channels = this.servers.get(id).channels.withMutations(function(channels) {
-                    _.each(data.channels, function(chan) {
+                const channels = this.servers.get(id).channels.withMutations((channels) => {
+                    _.each(data.channels, (chan) => {
                         channels.deleteIn([chan, 'users', data.nick]);
                     });
                 });
