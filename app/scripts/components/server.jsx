@@ -11,6 +11,14 @@ class ServerView extends React.Component {
     static getStores() { return [MessageStore]; }
     static getPropsFromStores() { return MessageStore.getState(); }
 
+    shouldComponentUpdate(newProps) {
+        const oldMessages = this.props.messages[this.props.params.serverId]
+            .serverMessages;
+        const newMessages = newProps.messages[newProps.params.serverId]
+            .serverMessages;
+        return oldMessages !== newMessages;
+    }
+
     render() {
         const { serverId } = this.props.params;
         const { messages } = this.props;

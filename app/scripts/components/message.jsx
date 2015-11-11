@@ -41,6 +41,11 @@ const messageHandlers = {
 
 export default class Message extends React.Component {
 
+    shouldComponentUpdate(newProps) {
+        return this.props.message !== newProps.message;
+
+    }
+
     render() {
         const message = this.props.message;
         const MessageHandler = messageHandlers[message && message.type];

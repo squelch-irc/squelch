@@ -6,6 +6,10 @@ import classnames from 'classnames';
 
 export default class ServerListItem extends React.Component {
 
+    shouldComponentUpdate(newProps) {
+        return this.props.server !== newProps.server;
+    }
+
     sortedChannels() {
         return _.sortBy(this.props.server._channels);
     }

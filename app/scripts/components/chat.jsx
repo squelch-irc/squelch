@@ -5,6 +5,10 @@ import Message from './message';
 
 export default class Chat extends React.Component {
 
+    shouldComponentUpdate(newProps) {
+        return this.props.messages !== newProps.messages;
+    }
+
     render() {
         const messages = this.props.messages;
         return (

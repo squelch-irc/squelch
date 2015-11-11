@@ -1,8 +1,5 @@
 import React from 'react';
 import _ from 'lodash';
-import connectToStores from 'alt/utils/connectToStores';
-
-import ServerStore from '../stores/servers';
 
 const RANK_ORDER = {
     '~': 5, // owner
@@ -13,14 +10,13 @@ const RANK_ORDER = {
     '': 0   // none
 };
 
-@connectToStores
 export default class UserList extends React.Component {
-    static getStores() { return [ServerStore]; }
-    static getPropsFromStores() { return ServerStore.getState(); }
+    shouldComponentUpdate(newProps) {
+        return this.props.users !== newProps.users;
+    }
 
     sortedUsers() {
-        const { servers, serverId, channel } = this.props;
-        return _(servers[serverId].channels[channel].users)
+        return _(this.props.users)
         .map((user, nick) => ({
             nick,
             nickLowercase: nick.toLowerCase(),
