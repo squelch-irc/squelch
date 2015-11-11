@@ -8,3 +8,9 @@ export default class Info extends React.Component {
         );
     }
 }
+
+Info.propTypes = {
+    message: React.PropTypes.shape({
+        msg: React.PropTypes.string.isRequired
+    }).isRequired
+};

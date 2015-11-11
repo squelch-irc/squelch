@@ -10,3 +10,10 @@ export default class Invite extends React.Component {
         );
     }
 }
+
+Invite.propTypes = {
+    message: React.PropTypes.shape({
+        from: React.PropTypes.string.isRequired,
+        chan: React.PropTypes.string.isRequired
+    }).isRequired
+};

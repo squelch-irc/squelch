@@ -61,3 +61,9 @@ export default class Message extends React.Component {
         );
     }
 }
+
+Message.propTypes = {
+    message: React.PropTypes.shape({
+        timestamp: React.PropTypes.instanceOf(Date).isRequired
+    }).isRequired
+};

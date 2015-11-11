@@ -11,3 +11,10 @@ export default class Join extends React.Component {
         );
     }
 }
+
+Join.propTypes = {
+    message: React.PropTypes.shape({
+        nick: React.PropTypes.string.isRequired,
+        chan: React.PropTypes.string.isRequired
+    }).isRequired
+};

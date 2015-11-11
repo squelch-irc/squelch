@@ -7,7 +7,7 @@ import Chat from './chat';
 import Input from './input';
 
 @connectToStores
-class ServerView extends React.Component {
+export default class ServerView extends React.Component {
     static getStores() { return [MessageStore]; }
     static getPropsFromStores() { return MessageStore.getState(); }
 
@@ -39,4 +39,8 @@ class ServerView extends React.Component {
     }
 }
 
-export default ServerView;
+ServerView.propTypes = {
+    params: React.PropTypes.shape({
+        serverId: React.PropTypes.string.isRequired
+    }).isRequired
+};

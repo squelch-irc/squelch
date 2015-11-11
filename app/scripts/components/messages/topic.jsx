@@ -14,3 +14,9 @@ export default class Topic extends React.Component {
         }
     }
 }
+
+Topic.propTypes = {
+    message: React.PropTypes.shape({
+        topic: React.PropTypes.string.isRequired
+    }).isRequired
+};

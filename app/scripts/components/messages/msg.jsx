@@ -11,3 +11,10 @@ export default class Msg extends React.Component {
         );
     }
 }
+
+Msg.propTypes = {
+    message: React.PropTypes.shape({
+        from: React.PropTypes.string.isRequired,
+        msg: React.PropTypes.string.isRequired
+    }).isRequired
+};

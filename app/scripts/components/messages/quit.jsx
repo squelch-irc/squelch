@@ -11,3 +11,10 @@ export default class Quit extends React.Component {
         );
     }
 }
+
+Quit.propTypes = {
+    message: React.PropTypes.shape({
+        nick: React.PropTypes.string.isRequired,
+        reason: React.PropTypes.string
+    }).isRequired
+};

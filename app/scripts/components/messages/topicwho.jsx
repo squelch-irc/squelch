@@ -13,3 +13,10 @@ export default class TopicWho extends React.Component {
         );
     }
 }
+
+TopicWho.propTypes = {
+    message: React.PropTypes.shape({
+        hostmask: React.PropTypes.string.isRequired,
+        time: React.PropTypes.instanceOf(Date).isRequired
+    }).isRequired
+};

@@ -22,3 +22,11 @@ export default class Chat extends React.Component {
         );
     }
 }
+
+Chat.propTypes = {
+    messages: React.PropTypes.arrayOf(
+        React.PropTypes.shape({
+            id: React.PropTypes.string.isRequired
+        }).isRequired
+    ).isRequired
+};

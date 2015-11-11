@@ -14,3 +14,7 @@ export default class Timestamp extends React.Component {
         return <span className='timestamp'>[{timestamp}]</span>;
     }
 }
+
+Timestamp.propTypes = {
+    timestamp: React.PropTypes.instanceOf(Date).isRequired
+};

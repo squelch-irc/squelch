@@ -19,6 +19,7 @@ export default class Input extends React.Component {
                 msg: message
             });
         }
+        // TODO: do something when channel isn't provided (server view)
 
         e.target.value = '';
     }
@@ -31,3 +32,8 @@ export default class Input extends React.Component {
         );
     }
 }
+
+Input.propTypes = {
+    serverId: React.PropTypes.string.isRequired,
+    channel: React.PropTypes.string
+};

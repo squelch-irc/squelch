@@ -10,3 +10,9 @@ export default class Error extends React.Component {
         );
     }
 }
+
+Error.propTypes = {
+    message: React.PropTypes.shape({
+        params: React.PropTypes.arrayOf(React.PropTypes.string).isRequired
+    }).isRequired
+};

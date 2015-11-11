@@ -19,3 +19,10 @@ export default class Nick extends React.Component {
         );
     }
 }
+
+Nick.propTypes = {
+    message: React.PropTypes.shape({
+        oldNick: React.PropTypes.string.isRequired,
+        newNick: React.PropTypes.string.isRequired
+    }).isRequired
+};

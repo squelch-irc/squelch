@@ -11,3 +11,10 @@ export default class Usermode extends React.Component {
         );
     }
 }
+
+Usermode.propTypes = {
+    message: React.PropTypes.shape({
+        sender: React.PropTypes.string.isRequired,
+        mode: React.PropTypes.string.isRequired
+    }).isRequired
+};

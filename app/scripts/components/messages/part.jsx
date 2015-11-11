@@ -11,3 +11,11 @@ export default class Part extends React.Component {
         );
     }
 }
+
+Part.propTypes = {
+    message: React.PropTypes.shape({
+        nick: React.PropTypes.string.isRequired,
+        chan: React.PropTypes.string.isRequired,
+        reason: React.PropTypes.string
+    }).isRequired
+};

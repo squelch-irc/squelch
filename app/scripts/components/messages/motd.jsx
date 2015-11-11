@@ -8,3 +8,9 @@ export default class Motd extends React.Component {
         );
     }
 }
+
+Motd.propTypes = {
+    message: React.PropTypes.shape({
+        motd: React.PropTypes.string.isRequired
+    }).isRequired
+};

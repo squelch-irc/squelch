@@ -11,3 +11,12 @@ export default class Kick extends React.Component {
         );
     }
 }
+
+Kick.propTypes = {
+    message: React.PropTypes.shape({
+        kicker: React.PropTypes.string.isRequired,
+        chan: React.PropTypes.string.isRequired,
+        nick: React.PropTypes.string.isRequired,
+        reason: React.PropTypes.string
+    }).isRequired
+};

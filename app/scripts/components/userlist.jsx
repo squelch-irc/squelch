@@ -46,3 +46,11 @@ export default class UserList extends React.Component {
         );
     }
 }
+
+UserList.propTypes = {
+    users: React.PropTypes.objectOf(
+        React.PropTypes.shape({
+            status: React.PropTypes.string.isRequired
+        })
+    ).isRequired
+};

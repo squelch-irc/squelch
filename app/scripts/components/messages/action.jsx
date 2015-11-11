@@ -11,3 +11,10 @@ export default class Action extends React.Component {
         );
     }
 }
+
+Action.propTypes = {
+    message: React.PropTypes.shape({
+        from: React.PropTypes.string.isRequired,
+        msg: React.PropTypes.string.isRequired
+    }).isRequired
+};

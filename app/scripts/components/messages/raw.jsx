@@ -6,3 +6,9 @@ export default class Raw extends React.Component {
         return <span className='message-info'>{message.params.slice(1).join(' ')}</span>;
     }
 }
+
+Raw.propTypes = {
+    message: React.PropTypes.shape({
+        params: React.PropTypes.arrayOf(React.PropTypes.string).isRequired
+    }).isRequired
+};

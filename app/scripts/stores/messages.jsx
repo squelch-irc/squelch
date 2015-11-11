@@ -160,7 +160,7 @@ class MessageStore {
         }
 
         data.data.type = data.type;
-        data.data.timestamp = Date.now();
+        data.data.timestamp = new Date();
 
         // If we have a route defined for this type, send to the
         // specified logs
@@ -170,6 +170,10 @@ class MessageStore {
                 _.keys(server.channels),
                 server
             );
+            if(route.message) {
+                route.message.id = data.data.id;
+                route.message.timestamp = data.data.timestamp;
+            }
             const message = route.message || data.data;
             if(route.all) {
                 appendToLog(messages, [id, 'serverMessages'], message);

@@ -51,3 +51,9 @@ export default class ServerListItem extends React.Component {
         );
     }
 }
+ServerListItem.propTypes = {
+    server: React.PropTypes.shape({
+        id: React.PropTypes.string.isRequired,
+        channels: React.PropTypes.objectOf(React.PropTypes.object).isRequired
+    })
+};

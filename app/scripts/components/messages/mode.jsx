@@ -6,8 +6,16 @@ export default class Mode extends React.Component {
         return (
             <span>
                 <span className='sender'>{message.sender}</span>
-                &nbsp;sets mode <span className='mode'>{message.mode} {message.params}</span>
+                &nbsp;sets mode <span className='mode'>{message.mode}</span>
             </span>
         );
     }
 }
+
+Mode.propTypes = {
+    message: React.PropTypes.shape({
+        sender: React.PropTypes.string.isRequired,
+        mode: React.PropTypes.string.isRequired
+
+    }).isRequired
+};
