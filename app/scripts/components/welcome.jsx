@@ -1,7 +1,5 @@
 import React from 'react';
-import pureRender from 'pure-render-decorator';
 
-@pureRender
 export default class WelcomeView extends React.Component {
     render() {
         return (

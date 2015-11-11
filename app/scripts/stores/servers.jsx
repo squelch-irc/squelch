@@ -6,21 +6,7 @@ import alt from '../alt';
 import ServerActions from '../actions/server';
 
 import ConfigStore from './config';
-
-import Immutable from 'immutable';
-
-const Server = Immutable.Record({
-    client: null,
-    channels: Immutable.Map()
-});
-
-const Channel = Immutable.Record({
-    users: Immutable.Map()
-});
-
-const User = Immutable.Record({
-    status: ''
-});
+import State from './state';
 
 // Options for squelch-client that are always the same
 // ...they just gotta be that way
@@ -58,7 +44,16 @@ const APP_SERVER_OPTIONS = [
 
 class ServerStore {
     constructor() {
-        this.servers = Immutable.Map();
+        const self = this;
+        // Clients are stored separately so they don't get
+        // frozen in the Freezer state
+        this.clients = {};
+        this.servers = State.get().servers;
+
+        State.on('update', () => {
+            self.setState({ servers: State.get().servers });
+            self.emitChange();
+        });
 
         this.bindListeners({
             addServer: ServerActions.ADD,
@@ -83,7 +78,7 @@ class ServerStore {
         client.onAny((data) => {
             ServerActions.serverEvent({
                 type: client.event,
-                server: this.servers.get(client.id),
+                server: State.get().servers[client.id],
                 data
             });
         });
@@ -93,89 +88,96 @@ class ServerStore {
 
         client.id = data.id;
 
-        this.servers = this.servers.set(client.id, new Server({
-            client,
-            channels: Immutable.Map()
-        }));
+        this.clients[client.id] = client;
+        State.get().servers.set(client.id, {
+            id: data.id,
+            channels: {},
+            getClient: () => this.clients[client.id]
+        });
     }
 
     removeServer({ id }) {
-        const server = this.servers.get(id);
-        if(!server) {
+        const server = State.get().servers[id];
+        const client = this.clients[id];
+        if(!server || !client) {
             throw new Error(`Cannot remove ${id}, it does not exist, or has already been removed. (Saving references to servers is highly discouraged, as it can lead to memory leaks.)`);
         }
-        server.client.forceQuit();
-        server.client.removeAllListeners();
-        this.servers = this.servers.delete(id);
+        client.forceQuit();
+        client.removeAllListeners();
+        delete this.clients[id];
+        State.get().servers().remove(id);
     }
 
     handleMessage({ type, server, data }) {
+        const client = server.getClient();
+        const { id } = server;
+        const channels = State.get().servers[id].channels;
+        channels.transact();
 
-        const id = server.client.id;
-        const client = this.servers.get(id).client;
         switch(type) {
             case 'nick':
-                this.servers = this.servers.updateIn([id, 'channels'], (channels) =>
-                    channels.map((channel) =>
-                        channel.withMutations((channel) => {
-                            const user = channel.users.get(data.oldNick);
-                            channel
-                            .deleteIn(['users', data.oldNick])
-                            .setIn(['users', data.newNick], user);
-                        })
-                    )
-                );
+                _.each(channels, (channel) => {
+                    const user = channel.users[data.oldNick];
+                    channel.users
+                    .remove(data.oldNick)
+                    .set(data.newNick, user);
+                });
                 break;
             case 'join':
                 if(data.me) {
-                    this.servers = this.servers.setIn([id, 'channels', data.chan], new Channel());
+                    channels.set(data.chan, { users: {}, mode: [] });
                 }
                 else {
-                    this.servers = this.servers.setIn([id, 'channels', data.chan, 'users', data.nick], new User());
+                    channels[data.chan].users.set(data.nick, { status: '' });
                 }
                 break;
             case 'part':
             case 'kick':
                 if(data.me) {
-                    this.servers = this.servers.deleteIn([id, 'channels', data.chan]);
+                    channels.remove(data.chan);
                 }
                 else {
-                    this.servers = this.servers.deleteIn([id, 'channels', data.chan, 'users', data.nick]);
+                    channels[data.chan].users.remove(data.nick);
                 }
                 break;
             case 'names':
                 const chan = client.getChannel(data.chan);
-                const users = Immutable.Map().withMutations((users) => {
-                    _.each(chan.users(), (user) => {
-                        users.set(user, new User({ status: chan.getStatus(user) }));
-                    });
-                });
-                this.servers = this.servers.setIn([id, 'channels', data.chan, 'users'], users);
+                channels[data.chan].set('users', _.reduce(
+                    chan.users(),
+                    (users, nick) =>  {
+                        users[nick] = { status: chan.getStatus(nick) };
+                        return users;
+                    },
+                    {}
+                ));
                 break;
             case 'quit':
-                const channels = this.servers.get(id).channels.withMutations((channels) => {
-                    _.each(data.channels, (chan) => {
-                        channels.deleteIn([chan, 'users', data.nick]);
-                    });
-                });
-
-                this.servers = this.servers.setIn([id, 'channels'], channels);
+                _.each(channels, (channel) => channel.users.remove(data.nick));
                 break;
             case '+mode':
+                // TODO: don't use client._, see squelch-client issue #25
                 if(client._.prefix[data.mode]) {
-                    this.servers = this.servers.setIn([id, 'channels', data.chan, 'users', data.param, 'status'], client._.prefix[data.mode]);
+                    channels[data.chan].users[data.param].set('status', client._.prefix[data.mode]);
                 }
-                // TODO: else set channel mode
+                else {
+                    channels[data.chan].mode.push(data.mode);
+                }
                 break;
             case '-mode':
                 if(client._.prefix[data.mode]) {
-                    this.servers = this.servers.setIn([id, 'channels', data.chan, 'users', data.param, 'status'], '');
+                    channels[data.chan].users[data.param].set('status', '');
                 }
-                // TODO: else set channel mode
+                else {
+                    channels[data.chan].set('mode',
+                        _.filter(channels[data.chan].mode, data.mode)
+                    );
+                }
                 break;
-            default:
-                return false;
         }
+
+        channels.run();
+        // Don't trigger update until Freezer Store updates
+        return false;
     }
 }
 

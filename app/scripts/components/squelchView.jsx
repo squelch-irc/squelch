@@ -1,9 +1,7 @@
 import React from 'react';
-import pureRender from 'pure-render-decorator';
 
 import Sidebar from './sidebar';
 
-@pureRender
 export default class SquelchView extends React.Component {
     render() {
         return (

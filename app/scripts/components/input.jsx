@@ -1,9 +1,7 @@
 import React from 'react';
-import pureRender from 'pure-render-decorator';
 
 import ChannelActions from '../actions/channel';
 
-@pureRender
 export default class Input extends React.Component {
 
     submitMessage(e) {

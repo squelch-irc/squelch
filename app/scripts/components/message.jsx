@@ -1,5 +1,4 @@
 import React from 'react';
-import pureRender from 'pure-render-decorator';
 
 import Msg from './messages/msg';
 import Action from './messages/action';
@@ -40,7 +39,6 @@ const messageHandlers = {
     info: Info
 };
 
-@pureRender
 export default class Message extends React.Component {
 
     render() {

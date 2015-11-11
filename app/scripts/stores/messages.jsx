@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import Immutable from 'immutable';
 
 import alt from '../alt';
 
@@ -8,6 +7,7 @@ import ChannelActions from '../actions/channel';
 
 import ServerStore from './servers';
 import RouteStore from './route';
+import State from './state';
 
 
 // Returns a route function for MESSAGE_ROUTES to a single channel
@@ -54,7 +54,7 @@ const MESSAGE_ROUTES = {
         return {
             server: false,
             channels: _.filter(channels, (chan) => {
-                return server.client.isInChannel(chan, message.newNick);
+                return server.getClient().isInChannel(chan, message.newNick);
             })
         };
     },
@@ -103,14 +103,37 @@ const RAW_COMMAND_BLACKLIST = [
 ];
 const MESSAGE_LIMIT = 100;
 
-const Messages = Immutable.Record({
-    serverMessages: Immutable.List(),
-    channels: Immutable.Map()
-});
+const appendToLog = function(messages, path, message) {
+    let log = _.get(messages, path).pivot();
+    if(log instanceof Array) {
+        log = log.push(message);
+        if(log.length > MESSAGE_LIMIT) {
+            log = log.shift();
+        }
+        return log;
+    }
+
+    // Else log is object of arrays
+    log = _.reduce(log, (log, chanLog, chan) => {
+        log = log[chan].push(message);
+        if(log[chan].length > MESSAGE_LIMIT) {
+            log = log[chan].shift();
+        }
+        return log;
+    }, log);
+    return _.get(messages, path.slice(0, path.length-1))
+    .set(path[path.length-1], log);
+};
 
 class MessageStore {
     constructor() {
-        this.messages = Immutable.Map();
+        const self = this;
+        this.messages = State.get().messages;
+
+        State.on('update', () => {
+            self.setState({ messages: State.get().messages });
+            self.emitChange();
+        });
 
         this.bindListeners({
             newMessage: ServerActions.SERVER_EVENT,
@@ -122,14 +145,18 @@ class MessageStore {
         this.waitFor([ServerStore, RouteStore]);
 
 
-        const id = data.server.client.id;
+        const { id } = data.server;
         const server = data.server;
         const currentServerId = RouteStore.getState().routeState.params.serverId;
         const currentChannel = RouteStore.getState().routeState.params.channel;
 
+        let messages = State.get().messages;
 
-        if(!this.messages.has(id)) {
-            this.messages = this.messages.set(id, new Messages());
+        if(!messages[id]) {
+            messages = messages.set(id, {
+                serverMessages: [],
+                channels: {}
+            });
         }
 
         data.data.type = data.type;
@@ -140,29 +167,30 @@ class MessageStore {
         if(MESSAGE_ROUTES[data.type]) {
             const route = MESSAGE_ROUTES[data.type](
                 data.data,
-                server.channels.keySeq().toArray(),
+                _.keys(server.channels),
                 server
             );
             const message = route.message || data.data;
             if(route.all) {
-                this._appendToLog([id, 'serverMessages'], message);
-                this._appendToLog([id, 'channels'], message);
+                appendToLog(messages, [id, 'serverMessages'], message);
+                appendToLog(messages, [id, 'channels'], message);
             }
             else {
                 // Route to current if it's the same server
                 // Don't route if current is server and we're already routing to server
                 if(route.current && id === currentServerId
                     && !(route.server && !currentChannel)) {
-                    this._appendToLog([id, 'channels', 'currentChannel'], message);
+                    appendToLog(messages, [id, 'channels', 'currentChannel'], message);
                 }
                 if(route.server) {
-                    this._appendToLog([id, 'serverMessages'], message);
+                    appendToLog(messages, [id, 'serverMessages'], message);
                 }
                 _.each(route.channels, (chan) => {
-                    if(!this.messages.get(id).channels.has(chan)) {
-                        this.messages = this.messages.setIn([id, 'channels', chan], Immutable.List());
+                    if(!messages[id].channels[chan]) {
+                        messages[id].channels.set(chan, []);
+                        messages = State.get().messages; // update state
                     }
-                    this._appendToLog([id, 'channels', chan], message);
+                    appendToLog(messages, [id, 'channels', chan], message);
                 });
             }
 
@@ -172,16 +200,17 @@ class MessageStore {
             if(data.type === 'raw' && _.contains(RAW_COMMAND_BLACKLIST, data.data.command)) {
                 return false;
             }
-            this._appendToLog([id, 'serverMessages'], data.data);
+            appendToLog(messages, [id, 'serverMessages'], data.data);
         }
+
     }
 
     sendMessage(data) {
         this.waitFor(ServerStore);
 
-        const server = ServerStore.getState().servers.get(data.serverId);
+        const server = ServerStore.getState().servers[data.serverId];
 
-        server.client.msg(data.to, data.msg);
+        server.getClient().msg(data.to, data.msg);
 
         setImmediate(() => {
             ServerActions.serverEvent({
@@ -189,29 +218,8 @@ class MessageStore {
                 server,
                 data: {
                     to: data.to,
-                    from: server.client.nick(),
+                    from: server.getClient().nick(),
                     msg: data.msg
-                }
-            });
-        });
-    }
-
-    _appendToLog(path, message) {
-        this.messages = this.messages.updateIn(path, (log) => {
-            // Append to all logs in this Map
-            if(log instanceof Immutable.Map) {
-                return log.map((chanLog) => chanLog.withMutations((chanLog) => {
-                    chanLog = chanLog.push(message);
-                    if(chanLog.size > MESSAGE_LIMIT) {
-                        chanLog = chanLog.shift();
-                    }
-                }));
-            }
-            // Just append to this log
-            return log.withMutations((log) => {
-                log = log.push(message);
-                if(log.size > MESSAGE_LIMIT) {
-                    log = log.shift();
                 }
             });
         });
