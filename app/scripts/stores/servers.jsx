@@ -5,7 +5,6 @@ import alt from '../alt';
 
 import ServerActions from '../actions/server';
 
-import ConfigStore from './config';
 import State from './state';
 
 // Options for squelch-client that are always the same
@@ -63,8 +62,7 @@ class ServerStore {
     }
 
     addServer(data) {
-        this.waitFor(ConfigStore);
-        const { config } = ConfigStore.getState();
+        const { config, servers } = State.get();
 
         const serverConfig = _.assign(
             {},
@@ -89,7 +87,7 @@ class ServerStore {
         client.id = data.id;
 
         this.clients[client.id] = client;
-        State.get().servers.set(client.id, {
+        servers.set(client.id, {
             id: data.id,
             channels: {},
             getClient: () => this.clients[client.id]
