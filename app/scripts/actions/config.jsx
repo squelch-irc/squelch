@@ -10,7 +10,7 @@ import ServerActions from './server';
 const CONFIG_NAME = 'config.json';
 const CONFIG_PATHS = [
     '.',
-    require('remote').require('app').getPath('userData')
+    require('electron').remote.app.getPath('userData')
 ];
 
 const DEFAULT_CONFIG = {

@@ -10,7 +10,7 @@
     "clean": "rimraf release/",
     "lint": "eslint --ext .js,.jsx app main.js",
     "prebuild": "npm run clean && npm run lint",
-    "build": "electron-packager . Squelch --asar --version=0.34.2 --all --out release --prune --ignore=\"/test($|/)|/tools($|/)|/release($|/)\"",
+    "build": "electron-packager . Squelch --asar --version=0.36.3 --all --out release --prune --ignore=\"/test($|/)|/tools($|/)|/release($|/)\"",
     "test": "npm run lint"
   },
   "repository": {
@@ -25,7 +25,7 @@
   "devDependencies": {
     "babel-eslint": "^3.1.24",
     "electron-packager": "^5.1.1",
-    "electron-prebuilt": "^0.34.2",
+    "electron-prebuilt": "^0.36.3",
     "electron-rebuild": "^1.0.2",
     "eslint": "^1.1.0",
     "eslint-config-kellyirc": "^3.1.0",

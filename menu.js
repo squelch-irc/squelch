@@ -1,9 +1,9 @@
-/* eslint no-var:0, object-shorthand:0 */
-var path = require('path');
-var Menu = require('menu');
-var BrowserWindow = require('browser-window');
+'use strict'; // eslint-disable-line strict
+const Menu = require('electron').Menu;
+const shell = require('electron').shell;
+const BrowserWindow = require('electron').BrowserWindow;
 
-var template;
+let template;
 module.exports = function(app) {
     if(process.platform === 'darwin') {
         template = [
@@ -44,7 +44,7 @@ module.exports = function(app) {
                     {
                         label: 'Quit',
                         accelerator: 'Command+Q',
-                        click: function() { app.quit(); }
+                        click() { app.quit(); }
                     }
                 ]
             },
@@ -92,8 +92,8 @@ module.exports = function(app) {
                     {
                         label: 'Reload Squelch',
                         accelerator: 'Command+R',
-                        click: function() {
-                            var focusedWindow = BrowserWindow.getFocusedWindow();
+                        click() {
+                            const focusedWindow = BrowserWindow.getFocusedWindow();
                             if(focusedWindow) {
                                 focusedWindow.reload();
                             }
@@ -102,8 +102,8 @@ module.exports = function(app) {
                     {
                         label: 'Toggle Full Screen',
                         accelerator: 'Ctrl+Command+F',
-                        click: function() {
-                            var focusedWindow = BrowserWindow.getFocusedWindow();
+                        click() {
+                            const focusedWindow = BrowserWindow.getFocusedWindow();
                             if(focusedWindow) {
                                 focusedWindow.setFullScreen(!focusedWindow.isFullScreen());
                             }
@@ -112,8 +112,8 @@ module.exports = function(app) {
                     {
                         label: 'Toggle Developer Tools',
                         accelerator: 'Alt+Command+I',
-                        click: function() {
-                            var focusedWindow = BrowserWindow.getFocusedWindow();
+                        click() {
+                            const focusedWindow = BrowserWindow.getFocusedWindow();
                             if(focusedWindow) {
                                 focusedWindow.toggleDevTools();
                             }
@@ -148,11 +148,11 @@ module.exports = function(app) {
                 submenu: [
                     {
                         label: 'Github Page',
-                        click: function() { require('shell').openExternal('https://github.com/squelch-irc/squelch') }
+                        click() { shell.openExternal('https://github.com/squelch-irc/squelch'); }
                     },
                     {
                         label: 'Search Issues',
-                        click: function() { require('shell').openExternal('https://github.com/squelch-irc/squelch/issues') }
+                        click() { shell.openExternal('https://github.com/squelch-irc/squelch/issues'); }
                     }
                 ]
             }
@@ -219,11 +219,11 @@ module.exports = function(app) {
                 submenu: [
                     {
                         label: 'Github Page',
-                        click: function() { require('shell').openExternal('https://github.com/squelch-irc/squelch'); }
+                        click: function() { shell.openExternal('https://github.com/squelch-irc/squelch'); }
                     },
                     {
                         label: 'Search Issues',
-                        click: function() { require('shell').openExternal('https://github.com/squelch-irc/squelch/issues'); }
+                        click: function() { shell.openExternal('https://github.com/squelch-irc/squelch/issues'); }
                     }
                 ]
             }
