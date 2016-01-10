@@ -7,6 +7,7 @@ import State from './stores/state';
 
 import './reactions/config';
 import './reactions/route';
+import './reactions/message';
 
 import SquelchView from './components/squelchView';
 import WelcomeView from './components/welcome';

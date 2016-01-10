@@ -1,6 +1,6 @@
 import React from 'react';
 
-import ChannelActions from '../actions/channel';
+import State from '../stores/state';
 
 export default class Input extends React.Component {
 
@@ -13,7 +13,7 @@ export default class Input extends React.Component {
         if(!message) { return; }
 
         if(this.props.channel) {
-            ChannelActions.sendMessage({
+            State.trigger('message:send', {
                 serverId: this.props.serverId,
                 to: this.props.channel,
                 msg: message

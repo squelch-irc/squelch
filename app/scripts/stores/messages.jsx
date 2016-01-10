@@ -3,7 +3,6 @@ import _ from 'lodash';
 import alt from '../alt';
 
 import ServerActions from '../actions/server';
-import ChannelActions from '../actions/channel';
 
 import ServerStore from './servers';
 import State from './state';
@@ -135,8 +134,7 @@ class MessageStore {
         });
 
         this.bindListeners({
-            newMessage: ServerActions.SERVER_EVENT,
-            sendMessage: ChannelActions.SEND_MESSAGE
+            newMessage: ServerActions.SERVER_EVENT
         });
     }
 
@@ -208,26 +206,6 @@ class MessageStore {
             appendToLog(messages, [id, 'serverMessages'], data.data);
         }
 
-    }
-
-    sendMessage(data) {
-        this.waitFor(ServerStore);
-
-        const server = ServerStore.getState().servers[data.serverId];
-
-        server.getClient().msg(data.to, data.msg);
-
-        setImmediate(() => {
-            ServerActions.serverEvent({
-                type: 'msg',
-                server,
-                data: {
-                    to: data.to,
-                    from: server.getClient().nick(),
-                    msg: data.msg
-                }
-            });
-        });
     }
 }
 
