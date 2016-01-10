@@ -7,21 +7,26 @@ import classnames from 'classnames';
 export default class ServerListItem extends React.Component {
 
     shouldComponentUpdate(newProps) {
-        return this.props.server !== newProps.server;
+        const { state } = this.props;
+        const newState = newProps.state;
+        return state.servers !== newState.servers ||
+            state.route !== newState.route;
     }
 
-    sortedChannels() {
-        return _.sortBy(this.props.server._channels);
+    getServer() {
+        const { state, serverId } = this.props;
+        return state.servers[serverId];
     }
 
     render() {
-        const { id, channels } = this.props.server;
-        const client = this.props.server.getClient();
+        const server = this.getServer();
+        const { id, channels } = server;
+        const client = server.getClient();
 
         const serverLabel = <Link
             className='server'
             key={id}
-            to={`/server/${id}`}
+            to={{ pathname: `/server/${id}` }}
             activeClassName='selected'>
             {client.name || client.opt.server}
         </Link>;
@@ -39,7 +44,7 @@ export default class ServerListItem extends React.Component {
 
                         return <div key={name} className='channel'>
                             <Link
-                                to={url}
+                                to={{ pathname: url }}
                                 activeClassName='selected'>
                                 {name}
                             </Link>
@@ -52,8 +57,10 @@ export default class ServerListItem extends React.Component {
     }
 }
 ServerListItem.propTypes = {
-    server: React.PropTypes.shape({
-        id: React.PropTypes.string.isRequired,
-        channels: React.PropTypes.objectOf(React.PropTypes.object).isRequired
+    state: React.PropTypes.shape({
+        server: React.PropTypes.shape({
+            id: React.PropTypes.string.isRequired,
+            channels: React.PropTypes.objectOf(React.PropTypes.object).isRequired
+        })
     })
 };

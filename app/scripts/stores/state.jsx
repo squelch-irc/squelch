@@ -4,7 +4,8 @@ const State = new Freezer({
     servers: {},
     messages: {},
     config: {},
-    configDir: ''
+    configDir: '',
+    route: {}
 }, { live: false });
 
 export default State;

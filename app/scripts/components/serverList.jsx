@@ -1,23 +1,20 @@
 import React from 'react';
 import _ from 'lodash';
-import connectToStores from 'alt/utils/connectToStores';
-
-import ServerStore from '../stores/servers';
 
 import ServerListItem from './serverListItem';
 
-@connectToStores
 export default class ServerList extends React.Component {
-    static getStores() { return [ServerStore]; }
-    static getPropsFromStores() { return ServerStore.getState(); }
 
     shouldComponentUpdate(newProps) {
-        return this.props.servers !== newProps.servers;
+        const { state } = this.props;
+        const newState = newProps.state;
+        return state.servers !== newState.servers ||
+            state.route !== newState.route;
     }
 
     render() {
-        const servers = _.map(this.props.servers, (server) =>
-            <ServerListItem key={server.id} server={server}/>
+        const servers = _.map(this.props.state.servers, (server) =>
+            <ServerListItem key={server.id} serverId={server.id} state={this.props.state}/>
         );
 
         return (
@@ -25,3 +22,7 @@ export default class ServerList extends React.Component {
         );
     }
 }
+
+ServerList.propTypes = {
+    state: React.PropTypes.object.isRequired
+};

@@ -7,8 +7,12 @@ export default class Sidebar extends React.Component {
         return (
             <div id='sidebar'>
                 <div className='sidebar-title'>Servers</div>
-                <ServerList />
+                <ServerList state={this.props.state}/>
             </div>
         );
     }
 }
+
+Sidebar.propTypes = {
+    state: React.PropTypes.object.isRequired
+};

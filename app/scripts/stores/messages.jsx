@@ -6,7 +6,6 @@ import ServerActions from '../actions/server';
 import ChannelActions from '../actions/channel';
 
 import ServerStore from './servers';
-import RouteStore from './route';
 import State from './state';
 
 
@@ -142,15 +141,17 @@ class MessageStore {
     }
 
     newMessage(data) {
-        this.waitFor([ServerStore, RouteStore]);
-
+        this.waitFor([ServerStore]);
+        const state = State.get();
+        const { route } = state;
+        let { messages } = state;
 
         const { id } = data.server;
         const server = data.server;
-        const currentServerId = RouteStore.getState().routeState.params.serverId;
-        const currentChannel = RouteStore.getState().routeState.params.channel;
+        const currentServerId = route.params.serverId;
+        const currentChannel = route.params.channel;
 
-        let messages = State.get().messages;
+
 
         if(!messages[id]) {
             messages = messages.set(id, {
