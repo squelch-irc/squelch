@@ -185,7 +185,7 @@ class MessageStore {
                 // Don't route if current is server and we're already routing to server
                 if(route.current && id === currentServerId
                     && !(route.server && !currentChannel)) {
-                    appendToLog(messages, [id, 'channels', 'currentChannel'], message);
+                    appendToLog(messages, [id, 'channels', currentChannel], message);
                 }
                 if(route.server) {
                     appendToLog(messages, [id, 'serverMessages'], message);
