@@ -1,5 +1,6 @@
 import path from 'path';
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { Router, Route, IndexRoute, hashHistory }  from 'react-router';
 import LessLoader from 'less-hot';
 
@@ -28,10 +29,8 @@ const onUpdate = function() {
     State.trigger('route:update', this.state);
 };
 
-// TODO: switch to react-dom
-
 // TODO: wrap in root node that re-renders on State 'update' event
-React.render(
+ReactDOM.render(
     <Router history={hashHistory} onUpdate={onUpdate}>
         <Route path="/" component={SquelchView}>
             <IndexRoute component={WelcomeView} />
