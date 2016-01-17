@@ -3,16 +3,10 @@ import fs from 'fs-extra';
 import Q from 'q';
 import _ from 'lodash';
 
-import alt from '../alt';
-
-import ServerActions from './server';
+import State from '../stores/state';
 
 const CONFIG_NAME = 'config.json';
-const CONFIG_PATHS = [
-    '.',
-    require('electron').remote.app.getPath('userData')
-];
-
+const DEFAULT_PATH = require('electron').remote.app.getPath('userData');
 const DEFAULT_CONFIG = {
     servers: [],
     autoRejoin: false,
@@ -21,6 +15,32 @@ const DEFAULT_CONFIG = {
     reconnectDelay: 5000,
     timeout: 60000
 };
+
+const CONFIG_PATHS = [
+    '.',
+    DEFAULT_PATH
+];
+
+State.on('config:load', () => {
+    readConfig()
+
+    .then((result) => {
+        State.get().set(result);
+
+        _(result.config.servers)
+        .filter('autoConnect')
+        .each((serverConfig) => {
+            State.trigger('server:add', { config: serverConfig });
+        })
+        .value();
+    })
+
+    .catch((err) => {
+        console.error('Something went wrong while trying to load your config\n\n' + (err.message || err));
+        throw err;
+    })
+    .done();
+});
 
 /**
 * Locates and loads the user's config file.
@@ -35,8 +55,8 @@ const readConfig = (i = 0) => {
     .then((configJSON) => {
         // Successfully read file
         const config = configJSON;
-        const dir = path.resolve(CONFIG_PATHS[i]);
-        return { config, dir };
+        const configDir = path.resolve(CONFIG_PATHS[i]);
+        return { config, configDir };
     })
 
     .catch((err) => {
@@ -47,33 +67,9 @@ const readConfig = (i = 0) => {
         // If no more locations,
         if(i + 1 === CONFIG_PATHS.length) {
             const config = DEFAULT_CONFIG;
-            const dir = path.resolve(CONFIG_PATHS[1]);
-            return { config, dir };
+            const configDir = path.resolve(DEFAULT_PATH);
+            return { config, configDir };
         }
         return readConfig(++i);
     });
 };
-
-class ConfigActions {
-    load() {
-        readConfig()
-
-        .then((result) => {
-            this.dispatch(result);
-
-            _.each(result.config.servers, (serverConfig) => {
-                if (serverConfig.autoConnect) {
-                    ServerActions.add({ config: serverConfig });
-                }
-            });
-        })
-
-        .catch((err) => {
-            console.error('Something went wrong while trying to load your config\n\n' + (err.message || err));
-            throw err;
-        })
-        .done();
-    }
-}
-
-export default alt.createActions(ConfigActions);

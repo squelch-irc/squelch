@@ -1,10 +1,14 @@
 import path from 'path';
 import React from 'react';
-import { Router, Route, IndexRoute }  from 'react-router';
+import { Router, Route, IndexRoute, hashHistory }  from 'react-router';
 import LessLoader from 'less-hot';
 
-import ConfigActions from './actions/config';
-import RouteActions from './actions/route';
+import State from './stores/state';
+
+import './reactions/config';
+import './reactions/route';
+import './reactions/message';
+import './reactions/server';
 
 import SquelchView from './components/squelchView';
 import WelcomeView from './components/welcome';
@@ -15,15 +19,20 @@ import ChannelView from './components/channel';
 const lessLoader = new LessLoader();
 document.querySelector('head').appendChild(lessLoader(path.join(__dirname, '../less/app.less')));
 
-ConfigActions.load();
+// Clear hash so reloads work
+window.location.hash = '';
+
+State.trigger('config:load');
 
 const onUpdate = function() {
-    RouteActions.changeRoute(this.state);
+    State.trigger('route:update', this.state);
 };
 
 // TODO: switch to react-dom
+
+// TODO: wrap in root node that re-renders on State 'update' event
 React.render(
-    <Router onUpdate={onUpdate}>
+    <Router history={hashHistory} onUpdate={onUpdate}>
         <Route path="/" component={SquelchView}>
             <IndexRoute component={WelcomeView} />
             <Route path="server/:serverId" component={ServerView} />

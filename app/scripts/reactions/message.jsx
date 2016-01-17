@@ -1,14 +1,6 @@
 import _ from 'lodash';
 
-import alt from '../alt';
-
-import ServerActions from '../actions/server';
-import ChannelActions from '../actions/channel';
-
-import ServerStore from './servers';
-import RouteStore from './route';
-import State from './state';
-
+import State from '../stores/state';
 
 // Returns a route function for MESSAGE_ROUTES to a single channel
 // specified by a prop in the message.
@@ -125,109 +117,85 @@ const appendToLog = function(messages, path, message) {
     .set(path[path.length-1], log);
 };
 
-class MessageStore {
-    constructor() {
-        const self = this;
-        this.messages = State.get().messages;
 
-        State.on('update', () => {
-            self.setState({ messages: State.get().messages });
-            self.emitChange();
-        });
+State.on('message:receive', ({ server, type, data }) => {
+    const state = State.get();
+    const { route } = state;
+    let { messages } = state;
 
-        this.bindListeners({
-            newMessage: ServerActions.SERVER_EVENT,
-            sendMessage: ChannelActions.SEND_MESSAGE
+    const { id } = server;
+    const currentServerId = route.params.serverId;
+    const currentChannel = route.params.channel;
+
+    // TODO: create this on the 'server:add' event
+    if(!messages[id]) {
+        messages = messages.set(id, {
+            serverMessages: [],
+            channels: {}
         });
     }
 
-    newMessage(data) {
-        this.waitFor([ServerStore, RouteStore]);
+    data.id = _.uniqueId();
+    data.type = type;
+    data.timestamp = new Date();
 
-
-        const { id } = data.server;
-        const server = data.server;
-        const currentServerId = RouteStore.getState().routeState.params.serverId;
-        const currentChannel = RouteStore.getState().routeState.params.channel;
-
-        let messages = State.get().messages;
-
-        if(!messages[id]) {
-            messages = messages.set(id, {
-                serverMessages: [],
-                channels: {}
-            });
+    // If we have a route defined for this type, send to the
+    // specified logs
+    if(MESSAGE_ROUTES[type]) {
+        const route = MESSAGE_ROUTES[type](
+            data,
+            _.keys(server.channels),
+            server
+        );
+        if(route.message) {
+            route.message.id = data.id;
+            route.message.timestamp = data.timestamp;
         }
 
-        data.data.type = data.type;
-        data.data.timestamp = new Date();
+        const message = route.message || data;
 
-        // If we have a route defined for this type, send to the
-        // specified logs
-        if(MESSAGE_ROUTES[data.type]) {
-            const route = MESSAGE_ROUTES[data.type](
-                data.data,
-                _.keys(server.channels),
-                server
-            );
-            if(route.message) {
-                route.message.id = data.data.id;
-                route.message.timestamp = data.data.timestamp;
-            }
-            const message = route.message || data.data;
-            if(route.all) {
-                appendToLog(messages, [id, 'serverMessages'], message);
-                appendToLog(messages, [id, 'channels'], message);
-            }
-            else {
-                // Route to current if it's the same server
-                // Don't route if current is server and we're already routing to server
-                if(route.current && id === currentServerId
-                    && !(route.server && !currentChannel)) {
-                    appendToLog(messages, [id, 'channels', 'currentChannel'], message);
-                }
-                if(route.server) {
-                    appendToLog(messages, [id, 'serverMessages'], message);
-                }
-                _.each(route.channels, (chan) => {
-                    if(!messages[id].channels[chan]) {
-                        messages[id].channels.set(chan, []);
-                        messages = State.get().messages; // update state
-                    }
-                    appendToLog(messages, [id, 'channels', chan], message);
-                });
-            }
-
+        if(route.all) {
+            appendToLog(messages, [id, 'serverMessages'], message);
+            appendToLog(messages, [id, 'channels'], message);
         }
-        // Else, log to the server if it's not a blacklisted reply
         else {
-            if(data.type === 'raw' && _.contains(RAW_COMMAND_BLACKLIST, data.data.command)) {
-                return false;
+            // Route to current if it's the same server
+            // Don't route if current is server and we're already routing to server
+            if(route.current && id === currentServerId
+                && !(route.server && !currentChannel)) {
+                appendToLog(messages, [id, 'channels', currentChannel], message);
             }
-            appendToLog(messages, [id, 'serverMessages'], data.data);
+            if(route.server) {
+                appendToLog(messages, [id, 'serverMessages'], message);
+            }
+            _.each(route.channels, (chan) => {
+                if(!messages[id].channels[chan]) {
+                    messages[id].channels.set(chan, []);
+                    messages = State.get().messages; // update state
+                }
+                appendToLog(messages, [id, 'channels', chan], message);
+            });
         }
 
     }
-
-    sendMessage(data) {
-        this.waitFor(ServerStore);
-
-        const server = ServerStore.getState().servers[data.serverId];
-
-        server.getClient().msg(data.to, data.msg);
-
-        setImmediate(() => {
-            ServerActions.serverEvent({
-                type: 'msg',
-                server,
-                data: {
-                    to: data.to,
-                    from: server.getClient().nick(),
-                    msg: data.msg
-                }
-            });
-        });
+    // Else, log to the server if it's not a blacklisted reply
+    else if(type === 'raw' && !_.contains(RAW_COMMAND_BLACKLIST, data.command)) {
+        appendToLog(messages, [id, 'serverMessages'], data);
     }
-}
 
-export default alt.createStore(MessageStore, 'MessageStore');
+});
+
+
+State.on('message:send', ({ serverId, to, msg }) => {
+    const server = State.get().servers[serverId];
+    server.getClient().msg(to, msg);
+    State.trigger('message:receive', {
+        type: 'msg',
+        server,
+        data: {
+            msg,
+            to,
+            from: server.getClient().nick()
+        }
+    });
+});

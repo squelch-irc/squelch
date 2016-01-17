@@ -1,27 +1,20 @@
 import React from 'react';
-import connectToStores from 'alt/utils/connectToStores';
-
-import MessageStore from '../stores/messages';
 
 import Chat from './chat';
 import Input from './input';
 
-@connectToStores
 export default class ServerView extends React.Component {
-    static getStores() { return [MessageStore]; }
-    static getPropsFromStores() { return MessageStore.getState(); }
-
     shouldComponentUpdate(newProps) {
-        const oldMessages = this.props.messages[this.props.params.serverId]
+        const oldMessages = this.props.state.messages[this.props.params.serverId]
             .serverMessages;
-        const newMessages = newProps.messages[newProps.params.serverId]
+        const newMessages = newProps.state.messages[newProps.params.serverId]
             .serverMessages;
         return oldMessages !== newMessages;
     }
 
     render() {
         const { serverId } = this.props.params;
-        const { messages } = this.props;
+        const { messages } = this.props.state;
 
         let serverMessages = null;
         if(messages[serverId]) {
