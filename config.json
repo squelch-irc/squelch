@@ -1,0 +1,21 @@
+{
+    "servers": [
+        {
+            "server": "irc.esper.net",
+            "port": 6667,
+            "nick": "SquelchUser",
+            "username": "SquelchUser",
+            "realname": "SquelchUser",
+            "channels": ["#kellyirc"],
+            "ssl": false,
+            "selfSigned": false,
+            "certificateExpired": false,
+            "autoConnect": true
+        }
+    ],
+    "autoRejoin": false,
+    "autoReconnect": true,
+    "autoReconnectTries": 0,
+    "reconnectDelay": 5000,
+    "timeout": 60000
+}
