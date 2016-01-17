@@ -17,6 +17,7 @@
         "no-this-before-super": 2,
         "no-var": 2,
         "object-shorthand": [2, "always"],
-        "prefer-const": 2
+        "prefer-const": 2,
+        "react/jsx-uses-react": 2
     }
 }
