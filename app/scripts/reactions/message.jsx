@@ -2,6 +2,8 @@ import _ from 'lodash';
 
 import State from '../stores/state';
 
+import PluginHandler from '../../core/pluginHandler';
+
 // Returns a route function for MESSAGE_ROUTES to a single channel
 // specified by a prop in the message.
 const toChannelProp = (prop) => {
@@ -188,6 +190,26 @@ State.on('message:receive', ({ server, type, data }) => {
 
 State.on('message:send', ({ serverId, to, msg }) => {
     const server = State.get().servers[serverId];
+
+    if(PluginHandler.hasCommand(msg)) {
+        if(PluginHandler.hasValidCommand(msg)) {
+            msg = PluginHandler.runCommand(msg);
+
+        } else {
+            State.trigger('message:receive', {
+                type: 'msg',
+                server,
+                data: {
+                    msg: `${PluginHandler.getCommandName(msg)} is not a valid command.`,
+                    to,
+                    from: '**squelch**'
+                }
+            });
+
+            return;
+        }
+    }
+
     server.getClient().msg(to, msg);
     State.trigger('message:receive', {
         type: 'msg',
