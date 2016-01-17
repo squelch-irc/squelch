@@ -18,6 +18,9 @@ import ChannelView from './components/channel';
 const lessLoader = new LessLoader();
 document.querySelector('head').appendChild(lessLoader(path.join(__dirname, '../less/app.less')));
 
+// Clear hash so reloads work
+window.location.hash = '';
+
 State.trigger('config:load');
 
 const onUpdate = function() {
