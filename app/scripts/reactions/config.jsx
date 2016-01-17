@@ -3,7 +3,6 @@ import fs from 'fs-extra';
 import Q from 'q';
 import _ from 'lodash';
 
-import ServerActions from '../actions/server';
 import State from '../stores/state';
 
 const CONFIG_NAME = 'config.json';
@@ -31,8 +30,7 @@ State.on('config:load', () => {
         _(result.config.servers)
         .filter('autoConnect')
         .each((serverConfig) => {
-            // TODO: replace with add server reaction
-            ServerActions.add({ config: serverConfig });
+            State.trigger('server:add', { config: serverConfig });
         })
         .value();
     })

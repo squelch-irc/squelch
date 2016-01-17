@@ -1,7 +1,6 @@
 import _ from 'lodash';
 
 import State from '../stores/state';
-import ServerActions from '../actions/server';
 
 // Returns a route function for MESSAGE_ROUTES to a single channel
 // specified by a prop in the message.
@@ -190,7 +189,7 @@ State.on('message:receive', ({ server, type, data }) => {
 State.on('message:send', ({ serverId, to, msg }) => {
     const server = State.get().servers[serverId];
     server.getClient().msg(to, msg);
-    ServerActions.serverEvent({
+    State.trigger('message:receive', {
         type: 'msg',
         server,
         data: {
