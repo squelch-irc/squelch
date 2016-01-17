@@ -23,18 +23,15 @@ const CONFIG_PATHS = [
 ];
 
 State.on('config:load', () => {
-    console.log('loading config');
     readConfig()
 
     .then((result) => {
-        console.log('loaded config');
         State.get().set(result);
 
         _(result.config.servers)
         .filter('autoConnect')
         .each((serverConfig) => {
             // TODO: replace with add server reaction
-            console.log('starting servre add action');
             ServerActions.add({ config: serverConfig });
         })
         .value();

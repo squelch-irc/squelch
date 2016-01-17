@@ -1,5 +1,6 @@
 import _ from 'lodash';
 
+import State from '../stores/state';
 import alt from '../alt';
 
 /*
@@ -26,7 +27,7 @@ class ServerActions {
     }
 
     serverEvent(data) {
-        data.data.id = _.uniqueId();
+        State.trigger('message:receive', data);
         this.dispatch(data);
     }
 }

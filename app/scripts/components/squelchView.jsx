@@ -22,7 +22,9 @@ export default class SquelchView extends React.Component {
             <div id='squelch-view'>
                 <Sidebar state={this.state.state} />
                 <div className='main-view'>
-                    {this.props.children}
+                    {React.cloneElement(this.props.children, {
+                        state: this.state.state
+                    })}
                 </div>
             </div>
         );
