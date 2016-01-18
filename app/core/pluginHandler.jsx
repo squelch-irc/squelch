@@ -1,6 +1,7 @@
 
 import _ from 'lodash';
 import State from '../scripts/stores/state';
+import StateWrapper from '../api/stateWrapper';
 
 const plugins = _(require('require-dir')('../plugins'))
     .values()
@@ -8,7 +9,7 @@ const plugins = _(require('require-dir')('../plugins'))
         return _(plugin)
             .keys()
             .map(key => {
-                const initializedPlugin = plugin[key](State.get());
+                const initializedPlugin = plugin[key]();
                 return _.extend({ name: key }, initializedPlugin);
             })
             .value();
@@ -41,13 +42,21 @@ export default class PluginHandler {
         return this.getCommandByName(command);
     }
 
-    static _runCommand(command, args) {
+    static _runCommand(command, opts = { msg: '', server: null, to: '' }) {
         const foundCommand = this.getCommandByName(command);
-        return foundCommand.run(args);
+        const args = this.getCommandArgs(opts.msg);
+
+        const irc = StateWrapper({
+            state: State.get(),
+            server: opts.server,
+            to: opts.to
+        });
+
+        return foundCommand.run(irc, args);
     }
 
-    static runCommand(msg) {
-        return this._runCommand(this.getCommandName(msg), this.getCommandArgs(msg));
+    static runCommand(opts = { msg: '', server: null, to: '' }) {
+        return this._runCommand(this.getCommandName(opts.msg), opts);
     }
 }
 

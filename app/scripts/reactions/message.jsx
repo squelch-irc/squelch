@@ -193,7 +193,14 @@ State.on('message:send', ({ serverId, to, msg }) => {
 
     if(PluginHandler.hasCommand(msg)) {
         if(PluginHandler.hasValidCommand(msg)) {
-            msg = PluginHandler.runCommand(msg);
+            msg = PluginHandler.runCommand({
+                server,
+                to,
+                msg
+            });
+
+            // some commands may only send messages to the user
+            if(!msg) return;
 
         } else {
             State.trigger('message:receive', {
