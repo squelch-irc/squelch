@@ -33,6 +33,9 @@ State.on('config:load', () => {
             State.trigger('server:add', { config: serverConfig });
         })
         .value();
+
+        State.trigger('theme:load', {});
+
     })
 
     .catch((err) => {

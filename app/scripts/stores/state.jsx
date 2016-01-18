@@ -5,7 +5,8 @@ const State = new Freezer({
     messages: {},
     config: {},
     configDir: '',
-    route: {}
+    route: {},
+    theme: {}
 }, { live: false });
 
 export default State;

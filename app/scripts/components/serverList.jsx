@@ -18,7 +18,10 @@ export default class ServerList extends React.Component {
         );
 
         return (
-            <div className='server-list'>{servers}</div>
+            <nav className='nav-group'>
+                <h5 className="nav-group-title">Servers</h5>
+                {servers}
+            </nav>
         );
     }
 }

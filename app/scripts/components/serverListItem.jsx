@@ -29,36 +29,40 @@ export default class ServerListItem extends React.Component {
         const { id, channels } = server;
         const client = server.getClient();
 
+        const currentServerId = this.props.state.route.params.serverId;
+        const currentChannel = this.props.state.route.params.channel;
+
+        const serverActiveClass = classnames({
+            active: currentServerId === id && !currentChannel
+        });
+
         const serverLabel = <Link
-            className='server'
+            className={'nav-group-item ' + serverActiveClass}
             key={id}
-            to={{ pathname: `/server/${id}` }}
-            activeClassName='selected'>
+            to={{ pathname: `/server/${id}` }}>
             {client.name || client.opt.server}
         </Link>;
 
-        const treeClass = classnames({
-            server: true
-        });
-
         return (
-            <div className={treeClass}>
-                <TreeView nodeLabel={serverLabel}>
-                {
-                    _.map(channels, (channel, name) => {
-                        const url = `/server/${id}/channel/${encodeURIComponent(name)}`;
-
-                        return <div key={name} className='channel' onContextMenu={this.loadContextMenu.bind(channel)}>
-                            <Link
-                                to={{ pathname: url }}
-                                activeClassName='selected'>
-                                {name}
-                            </Link>
-                        </div>;
-                    })
-                }
-                </TreeView>
-            </div>
+            <TreeView nodeLabel={serverLabel} className={serverActiveClass}>
+            {
+                _.map(channels, (channel, name) => {
+                    const url = `/server/${id}/channel/${encodeURIComponent(name)}`;
+                    const channelLabelClass = classnames({
+                        'nav-group-item': true,
+                        active: currentServerId === id && currentChannel === name
+                    });
+                    return <div key={name} className={channelLabelClass} onContextMenu={this.loadContextMenu.bind(channel)}>
+                        <Link
+                            className={channelLabelClass}
+                            key={name}
+                            to={{ pathname: url }}>
+                            {name}
+                        </Link>
+                    </div>;
+                })
+            }
+            </TreeView>
         );
     }
 }
