@@ -8,7 +8,7 @@ const plugins = _(require('require-dir')('../plugins'))
         return _(plugin)
             .keys()
             .map(key => {
-                const initializedPlugin = plugin[key](State);
+                const initializedPlugin = plugin[key](State.get());
                 return _.extend({ name: key }, initializedPlugin);
             })
             .value();
