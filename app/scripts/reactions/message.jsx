@@ -202,7 +202,8 @@ State.on('message:send', ({ serverId, to, msg }) => {
             // some commands may only send messages to the user
             if(!msg) return;
 
-        } else {
+        }
+        else {
             State.trigger('message:receive', {
                 type: 'msg',
                 server,
