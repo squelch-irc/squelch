@@ -29,7 +29,7 @@ export default class PluginHandler {
     }
 
     static getCommandArgs(msg) {
-        return msg.split(' ')[1];
+        return msg.substr(msg.split(' ')[0].length+1);
     }
 
     static getCommandByName(command) {

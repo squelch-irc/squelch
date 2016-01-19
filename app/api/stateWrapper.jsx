@@ -17,6 +17,12 @@ class StateWrapper {
             }
         });
     }
+
+    // if a channel name does not start with & or #, prepend # to it
+    fixChannelName(chanName) {
+        if(_.startsWith(chanName, '#') || _.startsWith(chanName, '&')) return chanName;
+        return `#${chanName}`;
+    }
 }
 
 export default (opts) => new StateWrapper(opts);
