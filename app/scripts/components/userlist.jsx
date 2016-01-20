@@ -1,6 +1,8 @@
 import React from 'react';
 import _ from 'lodash';
 
+import MenuHandler from '../../core/menuHandler';
+
 const RANK_ORDER = {
     '~': 5, // owner
     '&': 4, // admin
@@ -27,6 +29,11 @@ export default class UserList extends React.Component {
         .value();
     }
 
+    loadContextMenu(e) {
+        e.preventDefault();
+        MenuHandler.loadUserContextMenu(this);
+    }
+
     render() {
 
         return (
@@ -35,7 +42,7 @@ export default class UserList extends React.Component {
                 <ul className='userlist'>
                 {
                     this.sortedUsers().map((user) => {
-                        return <li className='user' key={user.nick}>
+                        return <li className='user' key={user.nick} onContextMenu={this.loadContextMenu.bind(user)}>
                             <span className='user-flag'>{user.status}</span>
                             <span className='user-name'>{user.nick}</span>
                         </li>;
