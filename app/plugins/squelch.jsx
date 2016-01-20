@@ -15,6 +15,14 @@ export const test = () => {
 
 export const voice = () => {
     return {
+        userMenu: (user) => {
+            return [
+                {
+                    label: `Voice ${user.nick}`,
+                    click: () => console.log('voice '+user)
+                }
+            ];
+        },
         run: (irc, argString) => {
             const args = argString.split(' ');
             const chan = args.length > 1 ? args[0] : irc.to;
