@@ -58,5 +58,13 @@ export default class PluginHandler {
     static runCommand(opts = { msg: '', server: null, to: '' }) {
         return this._runCommand(this.getCommandName(opts.msg), opts);
     }
+
+    static loadUserMenu(user) {
+        return _(plugins)
+            .filter(plugin => plugin.userMenu)
+            .map(plugin => plugin.userMenu(user))
+            .value();
+    }
+
 }
 
