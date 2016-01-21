@@ -47,7 +47,7 @@ export default class PluginHandler {
         const args = this.getCommandArgs(opts.msg);
 
         const irc = StateWrapper({
-            state: State.get(),
+            state: State,
             server: opts.server,
             to: opts.to
         });
