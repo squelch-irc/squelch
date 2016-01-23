@@ -13,6 +13,19 @@ export const test = () => {
     };
 };
 
+export const chanopts = () => {
+    return {
+        channelMenu: (channel) => {
+            return [
+                {
+                    label: `Options`,
+                    click: () => console.log('options '+channel)
+                }
+            ];
+        }
+    };
+};
+
 export const voice = () => {
     return {
         userMenu: (user) => {

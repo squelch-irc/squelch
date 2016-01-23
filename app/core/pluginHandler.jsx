@@ -66,5 +66,12 @@ export default class PluginHandler {
             .value();
     }
 
+    static loadChannelMenu(channel) {
+        return _(plugins)
+            .filter(plugin => plugin.channelMenu)
+            .map(plugin => plugin.channelMenu(channel))
+            .value();
+    }
+
 }
 

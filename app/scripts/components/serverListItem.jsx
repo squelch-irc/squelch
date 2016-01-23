@@ -3,6 +3,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import TreeView from 'react-treeview';
 import classnames from 'classnames';
+import MenuHandler from '../../core/menuHandler';
 
 export default class ServerListItem extends React.Component {
 
@@ -16,6 +17,11 @@ export default class ServerListItem extends React.Component {
     getServer() {
         const { state, serverId } = this.props;
         return state.servers[serverId];
+    }
+
+    loadContextMenu(e) {
+        e.preventDefault();
+        MenuHandler.loadChannelContextMenu(this);
     }
 
     render() {
@@ -42,7 +48,7 @@ export default class ServerListItem extends React.Component {
                     _.map(channels, (channel, name) => {
                         const url = `/server/${id}/channel/${encodeURIComponent(name)}`;
 
-                        return <div key={name} className='channel'>
+                        return <div key={name} className='channel' onContextMenu={this.loadContextMenu.bind(channel)}>
                             <Link
                                 to={{ pathname: url }}
                                 activeClassName='selected'>

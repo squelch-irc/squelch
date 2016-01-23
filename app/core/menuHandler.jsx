@@ -15,6 +15,17 @@ export default class MenuHandler {
             .value();
         menu.popup(remote.getCurrentWindow());
     }
+
+    static loadChannelContextMenu(user) {
+        const menu = new Menu();
+        const items = PluginHandler.loadChannelMenu(user);
+        _(items)
+            .flatten()
+            .map(item => new MenuItem(item))
+            .each(item => menu.append(item))
+            .value();
+        menu.popup(remote.getCurrentWindow());
+    }
 }
 
 
