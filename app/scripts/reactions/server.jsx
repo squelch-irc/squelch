@@ -146,6 +146,9 @@ State.on('message:receive', ({ type, server, data }) => {
                 {}
             ));
             break;
+        case 'topic':
+            channels[data.chan].set('topic', data.topic);
+            break;
         case 'quit':
             _.each(channels, (channel) => channel.users.remove(data.nick));
             break;
