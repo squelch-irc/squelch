@@ -1,6 +1,7 @@
 import React from 'react';
 
 import UserList from './userlist';
+import Topic from './topic';
 import Chat from './chat';
 import Input from './input';
 
@@ -18,7 +19,10 @@ export default class ChannelView extends React.Component {
         const oldChannel = this.props.state.servers[oldServerId].channels[oldChannelName];
         const newChannel = newProps.state.servers[newServerId].channels[newChannelName];
 
-        return oldMessages !== newMessages || oldChannel !== newChannel;
+        const oldTopic = this.props.state.servers[oldServerId].channels[oldChannelName].topic;
+        const newTopic = this.props.state.servers[newServerId].channels[newChannelName].topic;
+
+        return oldMessages !== newMessages || oldChannel !== newChannel || oldTopic !== newTopic;
     }
 
     render() {
@@ -36,9 +40,16 @@ export default class ChannelView extends React.Component {
             users = servers[serverId].channels[channel].users;
         }
 
+        let topic = '';
+        if(servers[serverId] && servers[serverId].channels[channel]) {
+            topic = servers[serverId].channels[channel].topic;
+        }
+
         return (
             <div className='channel-view'>
                 <div className='io-container'>
+                    <Topic topic={topic} />
+                    <hr />
                     <Chat messages={chanMessages} />
                     <Input serverId={serverId} channel={channel} />
                 </div>
