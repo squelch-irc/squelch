@@ -50,7 +50,7 @@ export default class ChannelView extends React.Component {
                 <div className='io-container'>
                     <Topic topic={topic} />
                     <hr />
-                    <Chat messages={chanMessages} />
+                    <Chat messages={chanMessages} channel={channel} />
                     <Input serverId={serverId} channel={channel} />
                 </div>
                 <UserList users={users} />
