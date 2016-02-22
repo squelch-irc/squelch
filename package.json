@@ -52,8 +52,9 @@
     "react": "^0.14.1",
     "react-dom": "^0.14.6",
     "react-router": "^2.0.0-rc4",
-    "react-treeview": "^0.4.0",
+    "react-treeview": "^0.4.3",
     "require-dir": "^0.3.0",
+    "squelch-base-theme": "0.0.0",
     "squelch-client": "^0.10.2"
   }
 }

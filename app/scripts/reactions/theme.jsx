@@ -25,6 +25,7 @@ State.on('theme:load', ({ useDefault }) => {
                 State.get().theme.set({ css });
             }));
         });
+        // TODO: Close stream when changing themes
     }
 
     catch (err) {

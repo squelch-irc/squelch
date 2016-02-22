@@ -55,8 +55,9 @@ export default class Message extends React.Component {
         return (
             <li className='message'>
                 <Timestamp timestamp={message.timestamp} />
-                &nbsp;
-                <MessageHandler message={message} />
+                <span className='message-contents'>
+                    <MessageHandler message={message} />
+                </span>
             </li>
         );
     }

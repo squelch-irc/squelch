@@ -44,7 +44,7 @@ export default class ServerListItem extends React.Component {
         </Link>;
 
         return (
-            <TreeView nodeLabel={serverLabel} className={serverActiveClass}>
+            <TreeView nodeLabel={serverLabel} itemClassName={serverActiveClass}>
             {
                 _.map(channels, (channel, name) => {
                     const url = `/server/${id}/channel/${encodeURIComponent(name)}`;

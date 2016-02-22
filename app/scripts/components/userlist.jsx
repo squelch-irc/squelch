@@ -32,17 +32,17 @@ export default class UserList extends React.Component {
     render() {
 
         return (
-            <div className='userlist-container'>
-                <div className='userlist-title'>Users</div>
-                <ul className='userlist'>
-                {
-                    this.sortedUsers().map((user) => {
-                        return <li className='user' key={user.nick}>
-                            <User nick={user.nick} status={user.status} />
-                        </li>;
-                    })
-                }
-                </ul>
+            <div className='userlist pane pane-sm sidebar'>
+                <div className='nav-group'>
+                    <h5 className='nav-group-title'>Users</h5>
+                    {
+                        this.sortedUsers().map((user) => {
+                            return <a href='' className='nav-group-item user' key={user.nick}>
+                                <User nick={user.nick} status={user.status} />
+                            </a>;
+                        })
+                    }
+                </div>
             </div>
         );
     }
