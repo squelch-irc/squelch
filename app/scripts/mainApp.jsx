@@ -1,4 +1,3 @@
-import path from 'path';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router, Route, IndexRoute, hashHistory }  from 'react-router';
@@ -35,4 +34,3 @@ ReactDOM.render(
         </Route>
     </Router>
 , document.getElementById('squelch-root'));
-
