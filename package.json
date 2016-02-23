@@ -54,7 +54,7 @@
     "react-router": "^2.0.0-rc4",
     "react-treeview": "^0.4.3",
     "require-dir": "^0.3.0",
-    "squelch-base-theme": "0.0.0",
+    "squelch-base-theme": "0.0.1",
     "squelch-client": "^0.10.2"
   }
 }
