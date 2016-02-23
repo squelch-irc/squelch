@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Sidebar from './sidebar';
+import Theme from './theme';
 import State from '../stores/state';
 
 export default class SquelchView extends React.Component {
@@ -19,12 +20,17 @@ export default class SquelchView extends React.Component {
 
     render() {
         return (
-            <div id='squelch-view'>
-                <Sidebar state={this.state.state} />
-                <div className='main-view'>
-                    {React.cloneElement(this.props.children, {
-                        state: this.state.state
-                    })}
+            <div className='window'>
+                <Theme theme={this.state.state.theme} />
+                <div className='window-content'>
+                    <div className='pane-group'>
+                        <Sidebar state={this.state.state} />
+                        <div className='pane main-view'>
+                            {React.cloneElement(this.props.children, {
+                                state: this.state.state
+                            })}
+                        </div>
+                    </div>
                 </div>
             </div>
         );
