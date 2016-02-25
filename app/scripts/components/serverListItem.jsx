@@ -26,30 +26,38 @@ export default class ServerListItem extends React.Component {
 
     render() {
         const server = this.getServer();
-        const { id, channels } = server;
+        const { id, channels, connected } = server;
         const client = server.getClient();
 
         const currentServerId = this.props.state.route.params.serverId;
         const currentChannel = this.props.state.route.params.channel;
 
         const serverActiveClass = classnames({
-            active: currentServerId === id && !currentChannel
+            'nav-group-item': true,
+            server: true,
+            active: currentServerId === id && !currentChannel,
+            connected
         });
 
+        const treeItemClass = classnames({
+            active: currentServerId === id && !currentChannel
+        })
+
         const serverLabel = <Link
-            className={'nav-group-item ' + serverActiveClass}
+            className={serverActiveClass}
             key={id}
             to={{ pathname: `/server/${id}` }}>
             {client.name || client.opt.server}
         </Link>;
 
         return (
-            <TreeView nodeLabel={serverLabel} itemClassName={serverActiveClass}>
+            <TreeView nodeLabel={serverLabel} itemClassName={treeItemClass}>
             {
                 _.map(channels, (channel, name) => {
                     const url = `/server/${id}/channel/${encodeURIComponent(name)}`;
                     const channelLabelClass = classnames({
                         'nav-group-item': true,
+                        channel: true,
                         active: currentServerId === id && currentChannel === name,
                         joined: channel.joined
                     });

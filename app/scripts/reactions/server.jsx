@@ -78,6 +78,7 @@ State.on('server:add', ({ config }) => {
         id,
         messages: [],
         channels: {},
+        connected: false,
         getClient: () => client
     });
 
@@ -108,16 +109,23 @@ State.on('message:receive', ({ type, server, data }) => {
     const client = server.getClient();
     const { id } = server;
     const channels = State.get().servers[id].channels;
-    channels.transact();
+
+    // Predefine this variable if any cases need it below
+    let transactChans;
 
     switch(type) {
+        case 'connect':
+            State.get().servers[id].set('connected', true);
+            break;
         case 'nick':
-            _.each(channels, (channel) => {
+            transactChans = channels.transact();
+            _.each(transactChans, (channel) => {
                 const user = channel.users[data.oldNick];
                 channel.users
                 .remove(data.oldNick)
                 .set(data.newNick, user);
             });
+            channels.run();
             break;
         case 'join':
             if(data.me) {
@@ -182,10 +190,20 @@ State.on('message:receive', ({ type, server, data }) => {
                 );
             }
             break;
+        case 'disconnect':
+            transactChans = channels.transact();
+            _.each(transactChans, (channel) => {
+                channel.set({
+                    joined: false,
+                    users: {},
+                    mode: [],
+                    topic: ''
+                });
+            });
+            channels.run();
+            State.get().servers[id].set('connected', false)
+            break;
     }
-
-    channels.run();
-
     State.trigger('message:route', { type, server, data });
 });
 
