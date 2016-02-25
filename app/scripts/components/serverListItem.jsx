@@ -50,16 +50,16 @@ export default class ServerListItem extends React.Component {
                     const url = `/server/${id}/channel/${encodeURIComponent(name)}`;
                     const channelLabelClass = classnames({
                         'nav-group-item': true,
-                        active: currentServerId === id && currentChannel === name
+                        active: currentServerId === id && currentChannel === name,
+                        joined: channel.joined
                     });
-                    return <div key={name} className={channelLabelClass} onContextMenu={this.loadContextMenu.bind(channel)}>
-                        <Link
-                            className={channelLabelClass}
-                            key={name}
-                            to={{ pathname: url }}>
-                            {name}
-                        </Link>
-                    </div>;
+                    return <Link
+                        className={channelLabelClass}
+                        key={name}
+                        to={{ pathname: url }}
+                        onContextMenu={this.loadContextMenu.bind(channel)}>
+                        {name}
+                    </Link>;
                 })
             }
             </TreeView>

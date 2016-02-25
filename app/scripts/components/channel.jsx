@@ -13,27 +13,18 @@ export default class ChannelView extends React.Component {
         const oldChannelName = decodeURIComponent(this.props.params.channel);
         const newChannelName = decodeURIComponent(newProps.params.channel);
 
-        const oldMessages = this.props.state.messages[oldServerId].channels[oldChannelName];
-        const newMessages = newProps.state.messages[newServerId].channels[newChannelName];
-
         const oldChannel = this.props.state.servers[oldServerId].channels[oldChannelName];
         const newChannel = newProps.state.servers[newServerId].channels[newChannelName];
 
-        const oldTopic = this.props.state.servers[oldServerId].channels[oldChannelName].topic;
-        const newTopic = this.props.state.servers[newServerId].channels[newChannelName].topic;
-
-        return oldMessages !== newMessages || oldChannel !== newChannel || oldTopic !== newTopic;
+        return oldChannel !== newChannel;
     }
 
     render() {
         const { serverId } = this.props.params;
-        const { messages, servers } = this.props.state;
+        const { servers } = this.props.state;
         const channel = decodeURIComponent(this.props.params.channel);
 
-        let chanMessages = null;
-        if(messages[serverId] && messages[serverId].channels[channel]) {
-            chanMessages = messages[serverId].channels[channel];
-        }
+        const messages = servers[serverId].channels[channel].messages;
 
         let users = null;
         if(servers[serverId] && servers[serverId].channels[channel]) {
@@ -49,7 +40,7 @@ export default class ChannelView extends React.Component {
             <div className='channel-view pane-group'>
                 <div className='io-container pane'>
                     <Topic topic={topic} />
-                    <Chat messages={chanMessages} channel={channel} />
+                    <Chat messages={messages} channel={channel} />
                     <Input serverId={serverId} channel={channel} />
                 </div>
                 <UserList users={users} />
@@ -59,6 +50,7 @@ export default class ChannelView extends React.Component {
 }
 
 ChannelView.propTypes = {
+    state: React.PropTypes.object.isRequired,
     params: React.PropTypes.shape({
         serverId: React.PropTypes.string.isRequired,
         channel: React.PropTypes.string.isRequired

@@ -76,6 +76,7 @@ State.on('server:add', ({ config }) => {
 
     servers.set(client.id, {
         id,
+        messages: [],
         channels: {},
         getClient: () => client
     });
@@ -120,7 +121,13 @@ State.on('message:receive', ({ type, server, data }) => {
             break;
         case 'join':
             if(data.me) {
-                channels.set(data.chan, { users: {}, mode: [] });
+                channels.set(data.chan, {
+                    users: {},
+                    mode: [],
+                    messages: [],
+                    topic: '',
+                    joined: true
+                });
             }
             else {
                 channels[data.chan].users.set(data.nick, { status: '' });
@@ -129,7 +136,12 @@ State.on('message:receive', ({ type, server, data }) => {
         case 'part':
         case 'kick':
             if(data.me) {
-                channels.remove(data.chan);
+                channels[data.chan].set({
+                    joined: false,
+                    users: {},
+                    mode: [],
+                    topic: ''
+                });
             }
             else {
                 channels[data.chan].users.remove(data.nick);
@@ -153,16 +165,15 @@ State.on('message:receive', ({ type, server, data }) => {
             _.each(channels, (channel) => channel.users.remove(data.nick));
             break;
         case '+mode':
-            // TODO: don't use client._, see squelch-client issue #25
-            if(client._.prefix[data.mode]) {
-                channels[data.chan].users[data.param].set('status', client._.prefix[data.mode]);
+            if(client.modeToPrefix(data.mode)) {
+                channels[data.chan].users[data.param].set('status', client.modeToPrefix(data.mode));
             }
             else {
                 channels[data.chan].mode.push(data.mode);
             }
             break;
         case '-mode':
-            if(client._.prefix[data.mode]) {
+            if(client.modeToPrefix(data.mode)) {
                 channels[data.chan].users[data.param].set('status', '');
             }
             else {
@@ -174,4 +185,17 @@ State.on('message:receive', ({ type, server, data }) => {
     }
 
     channels.run();
+
+    State.trigger('message:route', { type, server, data });
+});
+
+State.on('server:closeChannel', ({ serverId, channel }) => {
+    const server = State.get().servers[serverId];
+    const chan = server.channels[channel];
+
+    if(chan.joined) {
+        server.getClient().part(channel);
+    }
+
+    server.channels.remove(channel);
 });

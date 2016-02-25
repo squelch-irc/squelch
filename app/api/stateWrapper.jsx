@@ -7,7 +7,7 @@ class StateWrapper {
     }
 
     sendSystemMessage(msg, from = '**squelch**') {
-        this.state.trigger('message:receive', {
+        this.state.trigger('message:route', {
             type: 'msg',
             server: this.server,
             data: {

@@ -97,45 +97,24 @@ const RAW_COMMAND_BLACKLIST = [
 ];
 const MESSAGE_LIMIT = 100;
 
-const appendToLog = function(messages, path, message) {
-    let log = _.get(messages, path).pivot();
-    if(log instanceof Array) {
-        log = log.push(message);
-        if(log.length > MESSAGE_LIMIT) {
-            log = log.shift();
-        }
-        return log;
+const appendToLog = function(messages, message) {
+    let log = messages.pivot();
+    log = log.push(message);
+    if(log.length > MESSAGE_LIMIT) {
+        log = log.shift();
     }
-
-    // Else log is object of arrays
-    log = _.reduce(log, (log, chanLog, chan) => {
-        log = log[chan].push(message);
-        if(log[chan].length > MESSAGE_LIMIT) {
-            log = log[chan].shift();
-        }
-        return log;
-    }, log);
-    return _.get(messages, path.slice(0, path.length-1))
-    .set(path[path.length-1], log);
+    return log;
 };
 
 
-State.on('message:receive', ({ server, type, data }) => {
+State.on('message:route', ({ server, type, data }) => {
+    // TODO: put messages inside the server channel state, not in a separate object
     const state = State.get();
     const { route } = state;
-    let { messages } = state;
-
+    const { servers } = state;
     const { id } = server;
     const currentServerId = route.params.serverId;
     const currentChannel = route.params.channel;
-
-    // TODO: create this on the 'server:add' event
-    if(!messages[id]) {
-        messages = messages.set(id, {
-            serverMessages: [],
-            channels: {}
-        });
-    }
 
     data.id = _.uniqueId();
     data.type = type;
@@ -157,32 +136,31 @@ State.on('message:receive', ({ server, type, data }) => {
         const message = route.message || data;
 
         if(route.all) {
-            appendToLog(messages, [id, 'serverMessages'], message);
-            appendToLog(messages, [id, 'channels'], message);
+            appendToLog(servers[id].messages, message);
+            _.each(servers[id].channels,
+                chan => appendToLog(chan.messages, message)
+            );
         }
         else {
             // Route to current if it's the same server
-            // Don't route if current is server and we're already routing to server
+            // Don't route if current is server
+            // and we're already routing to server
             if(route.current && id === currentServerId
                 && !(route.server && !currentChannel)) {
-                appendToLog(messages, [id, 'channels', currentChannel], message);
+                appendToLog(servers[id].channels[currentChannel].messages, message);
             }
             if(route.server) {
-                appendToLog(messages, [id, 'serverMessages'], message);
+                appendToLog(servers[id].messages, message);
             }
             _.each(route.channels, (chan) => {
-                if(!messages[id].channels[chan]) {
-                    messages[id].channels.set(chan, []);
-                    messages = State.get().messages; // update state
-                }
-                appendToLog(messages, [id, 'channels', chan], message);
+                appendToLog(servers[id].channels[chan].messages, message);
             });
         }
 
     }
     // Else, log to the server if it's not a blacklisted reply
     else if(type === 'raw' && !_.contains(RAW_COMMAND_BLACKLIST, data.command)) {
-        appendToLog(messages, [id, 'serverMessages'], data);
+        appendToLog(servers[id].messages, data);
     }
 
 });
@@ -219,7 +197,7 @@ State.on('message:send', ({ serverId, to, msg }) => {
     }
 
     server.getClient().msg(to, msg);
-    State.trigger('message:receive', {
+    State.trigger('message:route', {
         type: 'msg',
         server,
         data: {
