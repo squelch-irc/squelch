@@ -201,7 +201,7 @@ State.on('message:receive', ({ type, server, data }) => {
                 });
             });
             channels.run();
-            State.get().servers[id].set('connected', false)
+            State.get().servers[id].set('connected', false);
             break;
     }
     State.trigger('message:route', { type, server, data });

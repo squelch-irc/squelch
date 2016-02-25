@@ -41,7 +41,7 @@ export default class ServerListItem extends React.Component {
 
         const treeItemClass = classnames({
             active: currentServerId === id && !currentChannel
-        })
+        });
 
         const serverLabel = <Link
             className={serverActiveClass}
