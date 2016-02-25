@@ -49,7 +49,6 @@ export default class ChannelView extends React.Component {
             <div className='channel-view pane-group'>
                 <div className='io-container pane'>
                     <Topic topic={topic} />
-                    <hr />
                     <Chat messages={chanMessages} channel={channel} />
                     <Input serverId={serverId} channel={channel} />
                 </div>

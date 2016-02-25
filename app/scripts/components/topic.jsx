@@ -4,7 +4,7 @@ export default class Topic extends React.Component {
 
     render() {
         return (
-            <div className='topic-wrapper'>
+            <div className='topic-bar'>
                 {this.props.topic}
             </div>
         );
