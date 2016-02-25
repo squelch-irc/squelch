@@ -64,9 +64,9 @@ State.on('server:add', ({ config }) => {
     _.each(APP_SERVER_OPTIONS, (opt) => serverConfig[opt] = rootConfig[opt]);
 
     const client = new Client(serverConfig);
-    client.onAny((data) => {
+    client.onAny((event, data) => {
         State.trigger('message:receive', {
-            type: client.event,
+            type: event,
             server: State.get().servers[client.id],
             data
         });
