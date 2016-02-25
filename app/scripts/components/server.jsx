@@ -22,8 +22,8 @@ export default class ServerView extends React.Component {
         }
 
         return (
-            <div className='server-view'>
-                <div className='io-container'>
+            <div className='server-view pane-group'>
+                <div className='io-container pane'>
                     <Chat messages={serverMessages} />
                     <Input serverId={serverId} />
                 </div>
