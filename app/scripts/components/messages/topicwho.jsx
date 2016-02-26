@@ -6,7 +6,7 @@ export default class TopicWho extends React.Component {
         const message = this.props.message;
 
         return (
-            <span>
+            <span className='topic-who'>
                 Set by <span className='topic-setter'>{message.hostmask}</span>
                 &nbsp;on <span className='topic-time'>{moment(message.time).format('LLLL')}</span>
             </span>

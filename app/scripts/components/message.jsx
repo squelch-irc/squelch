@@ -12,7 +12,7 @@ import Mode from './messages/mode';
 import Usermode from './messages/usermode';
 import Invite from './messages/invite';
 import Notice from './messages/notice';
-import Nick from './messages/nick';
+import NickMsg from './messages/nick';
 import Quit from './messages/quit';
 import ErrorMsg from './messages/error';
 import Raw from './messages/raw';
@@ -32,7 +32,7 @@ const messageHandlers = {
     usermode: Usermode,
     invite: Invite,
     notice: Notice,
-    nick: Nick,
+    nick: NickMsg,
     quit: Quit,
     error: ErrorMsg,
     raw: Raw,

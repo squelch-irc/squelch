@@ -11,6 +11,7 @@ export default class Timestamp extends React.Component {
 
     render() {
         const timestamp = moment(this.props.timestamp).format(TIMESTAMP_FORMAT);
+        
         return <span className='timestamp'>[{timestamp}]</span>;
     }
 }

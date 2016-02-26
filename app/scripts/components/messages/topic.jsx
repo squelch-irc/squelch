@@ -7,8 +7,8 @@ export default class Topic extends React.Component {
         // Ignore no topic messages
         if(message.topic) {
             return (
-                <span>
-                    Topic is <span className='topic'>{message.topic}</span>
+                <span className='topic'>
+                    Topic is <span className='topic-text'>{message.topic}</span>
                 </span>
             );
         }

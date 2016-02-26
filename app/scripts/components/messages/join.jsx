@@ -1,12 +1,14 @@
 import React from 'react';
+import Nick from '../nick';
 
 export default class Join extends React.Component {
     render() {
         const message = this.props.message;
+
         return (
-            <span>
-                →&nbsp;<span className='sender'>{message.nick}</span>&nbsp;
-                <span className='message-info'>has joined {message.chan}</span>
+            <span className='join'>
+                →&nbsp;<Nick nick={message.nick} />&nbsp;
+                has joined {message.chan}
             </span>
         );
     }

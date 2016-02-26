@@ -1,11 +1,13 @@
 import React from 'react';
+import Nick from '../nick';
 
 export default class Mode extends React.Component {
     render() {
         const message = this.props.message;
+
         return (
-            <span>
-                <span className='sender'>{message.sender}</span>
+            <span className='mode-set'>
+                <Nick nick={message.sender} />
                 &nbsp;sets mode <span className='mode'>{message.mode}</span>
             </span>
         );

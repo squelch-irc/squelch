@@ -55,6 +55,7 @@
     "react-treeview": "^0.4.3",
     "require-dir": "^0.3.0",
     "squelch-base-theme": "0.0.5",
-    "squelch-client": "^0.10.2"
+    "squelch-client": "^0.10.2",
+    "squelch-nick-hash": "^1.0.1"
   }
 }

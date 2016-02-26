@@ -1,12 +1,15 @@
 import React from 'react';
+import Nick from '../nick';
 
 export default class Kick extends React.Component {
     render() {
         const message = this.props.message;
         return (
-            <span>
-                <span className='sender'>{message.kicker}</span>&nbsp;
-                <span className='message-info'>kicked {message.nick} from {message.chan}&nbsp;{message.reason ? '(' + message.reason + ')' : ''}</span>
+            <span className='kick'>
+                <Nick nick={message.kicker} className='kicker' />&nbsp;
+                kicked
+                &nbsp;<Nick nick={message.nick} className='kicked'/>&nbsp;
+                from {message.chan}&nbsp;{message.reason ? '(' + message.reason + ')' : ''}
             </span>
         );
     }

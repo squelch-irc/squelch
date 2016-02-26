@@ -1,5 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
+import hash from 'squelch-nick-hash';
 
 import User from './user';
 
@@ -37,7 +38,8 @@ export default class UserList extends React.Component {
                     <h5 className='nav-group-title'>Users</h5>
                     {
                         this.sortedUsers().map((user) => {
-                            return <a href='' className='nav-group-item user' key={user.nick}>
+                            const userClass = `nav-group-item user nick-color-${hash(user.nick)}`;
+                            return <a href='' className={userClass} key={user.nick}>
                                 <User nick={user.nick} status={user.status} />
                             </a>;
                         })

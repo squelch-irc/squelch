@@ -1,12 +1,14 @@
 import React from 'react';
+import Nick from '../nick';
 
 export default class Quit extends React.Component {
     render() {
         const message = this.props.message;
+
         return (
-            <span>
-                ←&nbsp;<span className='sender'>{message.nick}</span>&nbsp;
-                <span className='message-info'>has quit&nbsp;{message.reason ? '(' + message.reason + ')' : ''}</span>
+            <span className='quit'>
+                ←&nbsp;<Nick nick={message.nick} />&nbsp;
+                has quit&nbsp;{message.reason ? '(' + message.reason + ')' : ''}
             </span>
         );
     }

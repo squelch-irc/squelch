@@ -1,12 +1,14 @@
 import React from 'react';
+import Nick from '../nick';
 
 export default class Notice extends React.Component {
     render() {
         const message = this.props.message;
+
         return (
-            <span>
-                &raquo;&nbsp;&lt;<span className='sender notice'>{message.from}</span>&gt;&nbsp;
-                <span className='sender-message notice-message'>{message.msg}</span>
+            <span className='notice'>
+                &raquo;&nbsp;&lt;<Nick nick={message.from} />&gt;&nbsp;
+                {message.msg}
             </span>
         );
     }
