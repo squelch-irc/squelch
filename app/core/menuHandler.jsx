@@ -11,8 +11,7 @@ export default class MenuHandler {
         _(items)
             .flatten()
             .map(item => new MenuItem(item))
-            .each(item => menu.append(item))
-            .value();
+            .each(item => menu.append(item));
         menu.popup(remote.getCurrentWindow());
     }
 
@@ -22,11 +21,7 @@ export default class MenuHandler {
         _(items)
             .flatten()
             .map(item => new MenuItem(item))
-            .each(item => menu.append(item))
-            .value();
+            .each(item => menu.append(item));
         menu.popup(remote.getCurrentWindow());
     }
 }
-
-
-

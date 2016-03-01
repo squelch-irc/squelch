@@ -36,3 +36,7 @@ export default class SquelchView extends React.Component {
         );
     }
 }
+
+SquelchView.propTypes = {
+    children: React.PropTypes.element.isRequired
+};

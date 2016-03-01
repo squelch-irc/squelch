@@ -67,7 +67,7 @@ const MESSAGE_ROUTES = {
     connect: () => {
         return {
             server: true,
-            message: { type: 'info', msg: `Connected` }
+            message: { type: 'info', msg: 'Connected' }
         };
     },
     reconnecting: (message) => {
@@ -159,7 +159,7 @@ State.on('message:route', ({ server, type, data }) => {
 
     }
     // Else, log to the server if it's not a blacklisted reply
-    else if(type === 'raw' && !_.contains(RAW_COMMAND_BLACKLIST, data.command)) {
+    else if(type === 'raw' && !_.includes(RAW_COMMAND_BLACKLIST, data.command)) {
         appendToLog(servers[id].messages, data);
     }
 

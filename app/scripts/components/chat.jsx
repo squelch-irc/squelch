@@ -34,5 +34,6 @@ Chat.propTypes = {
         React.PropTypes.shape({
             id: React.PropTypes.string.isRequired
         }).isRequired
-    ).isRequired
+    ).isRequired,
+    channel: React.PropTypes.string.isRequired
 };

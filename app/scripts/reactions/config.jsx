@@ -31,8 +31,7 @@ State.on('config:load', () => {
         .filter('autoConnect')
         .each((serverConfig) => {
             State.trigger('server:add', { config: serverConfig });
-        })
-        .value();
+        });
 
         State.trigger('theme:load', {});
 

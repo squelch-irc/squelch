@@ -156,11 +156,12 @@ State.on('message:receive', ({ type, server, data }) => {
             }
             break;
         case 'names':
-            const chan = client.getChannel(data.chan);
             channels[data.chan].set('users', _.reduce(
-                chan.users(),
+                client.getChannel(data.chan).users(),
                 (users, nick) =>  {
-                    users[nick] = { status: chan.getStatus(nick) };
+                    users[nick] = {
+                        status: client.getChannel(data.chan).getStatus(nick)
+                    };
                     return users;
                 },
                 {}

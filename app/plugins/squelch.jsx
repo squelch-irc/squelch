@@ -18,7 +18,7 @@ export const chanopts = () => {
         channelMenu: (channel) => {
             return [
                 {
-                    label: `Options`,
+                    label: 'Options',
                     click: () => console.log('options '+channel)
                 }
             ];

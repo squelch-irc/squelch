@@ -170,8 +170,8 @@ module.exports = function(app) {
                     {
                         label: '&Close',
                         accelerator: 'Ctrl+W',
-                        click: function() {
-                            var focusedWindow = BrowserWindow.getFocusedWindow();
+                        click() {
+                            const focusedWindow = BrowserWindow.getFocusedWindow();
                             if(focusedWindow) {
                                 focusedWindow.close();
                             }
@@ -185,8 +185,8 @@ module.exports = function(app) {
                     {
                         label: '&Reload Squelch',
                         accelerator: 'Ctrl+R',
-                        click: function() {
-                            var focusedWindow = BrowserWindow.getFocusedWindow();
+                        click() {
+                            const focusedWindow = BrowserWindow.getFocusedWindow();
                             if(focusedWindow) {
                                 focusedWindow.reload();
                             }
@@ -195,8 +195,8 @@ module.exports = function(app) {
                     {
                         label: 'Toggle &Full Screen',
                         accelerator: 'F11',
-                        click: function() {
-                            var focusedWindow = BrowserWindow.getFocusedWindow();
+                        click() {
+                            const focusedWindow = BrowserWindow.getFocusedWindow();
                             if(focusedWindow) {
                                 focusedWindow.setFullScreen(!focusedWindow.isFullScreen());
                             }
@@ -205,8 +205,8 @@ module.exports = function(app) {
                     {
                         label: 'Toggle &Developer Tools',
                         accelerator: 'Alt+Ctrl+I',
-                        click: function() {
-                            var focusedWindow = BrowserWindow.getFocusedWindow();
+                        click() {
+                            const focusedWindow = BrowserWindow.getFocusedWindow();
                             if(focusedWindow) {
                                 focusedWindow.toggleDevTools();
                             }
@@ -219,11 +219,11 @@ module.exports = function(app) {
                 submenu: [
                     {
                         label: 'Github Page',
-                        click: function() { shell.openExternal('https://github.com/squelch-irc/squelch'); }
+                        click() { shell.openExternal('https://github.com/squelch-irc/squelch'); }
                     },
                     {
                         label: 'Search Issues',
-                        click: function() { shell.openExternal('https://github.com/squelch-irc/squelch/issues'); }
+                        click() { shell.openExternal('https://github.com/squelch-irc/squelch/issues'); }
                     }
                 ]
             }

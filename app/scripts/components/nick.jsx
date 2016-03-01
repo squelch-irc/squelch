@@ -15,7 +15,7 @@ export default class Nick extends React.Component {
     }
 }
 
-Error.propTypes = {
+Nick.propTypes = {
     nick: React.PropTypes.string.isRequired,
     className: React.PropTypes.string
 };

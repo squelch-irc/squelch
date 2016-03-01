@@ -76,9 +76,10 @@ export default class ServerListItem extends React.Component {
 }
 ServerListItem.propTypes = {
     state: React.PropTypes.shape({
-        server: React.PropTypes.shape({
-            id: React.PropTypes.string.isRequired,
-            channels: React.PropTypes.objectOf(React.PropTypes.object).isRequired
-        })
-    })
+        servers: React.PropTypes.object.isRequired,
+        route: React.PropTypes.shape({
+            params: React.PropTypes.object
+        }).isRequired
+    }),
+    serverId: React.PropTypes.string.isRequired
 };

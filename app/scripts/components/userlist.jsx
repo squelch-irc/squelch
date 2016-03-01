@@ -26,7 +26,7 @@ export default class UserList extends React.Component {
             status: user.status,
             rank: RANK_ORDER[user.status]
         }))
-        .sortByOrder(['rank', 'nickLowercase'], ['desc', 'asc'])
+        .orderBy(['rank', 'nickLowercase'], ['desc', 'asc'])
         .value();
     }
 

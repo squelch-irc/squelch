@@ -17,7 +17,7 @@ const plugins = _(require('require-dir')('../plugins'))
     .flatten()
     .value();
 
-console.info(`Loaded plugins: ${_.pluck(plugins, 'name')}`);
+console.info(`Loaded plugins: ${_.map(plugins, 'name')}`);
 
 export default class PluginHandler {
     static hasCommand(msg) {
@@ -33,7 +33,7 @@ export default class PluginHandler {
     }
 
     static getCommandByName(command) {
-        const foundCommand = _.findWhere(plugins, { name: command });
+        const foundCommand = _.find(plugins, { name: command });
         return foundCommand && foundCommand.run ? foundCommand : null;
     }
 
@@ -74,4 +74,3 @@ export default class PluginHandler {
     }
 
 }
-
