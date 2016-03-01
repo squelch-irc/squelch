@@ -108,7 +108,6 @@ const appendToLog = function(messages, message) {
 
 
 State.on('message:route', ({ server, type, data }) => {
-    // TODO: put messages inside the server channel state, not in a separate object
     const state = State.get();
     const { route } = state;
     const { servers } = state;
