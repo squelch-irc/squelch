@@ -24,7 +24,6 @@ const onUpdate = function() {
     State.trigger('route:update', this.state);
 };
 
-// TODO: wrap in root node that re-renders on State 'update' event
 ReactDOM.render(
     <Router history={hashHistory} onUpdate={onUpdate}>
         <Route path="/" component={SquelchView}>

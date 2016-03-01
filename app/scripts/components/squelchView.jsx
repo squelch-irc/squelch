@@ -19,19 +19,29 @@ export default class SquelchView extends React.Component {
     }
 
     render() {
-        return (
-            <div className='window'>
-                <Theme theme={this.state.state.theme} />
+        const { state } = this.state;
+
+        let content;
+
+        if(!state.ready) {
+            content = <div className='squelch-loading'>Loading</div>;
+        }
+        else {
+            content = (
                 <div className='window-content'>
                     <div className='pane-group'>
-                        <Sidebar state={this.state.state} />
+                        <Sidebar state={state} />
                         <div className='pane main-view'>
-                            {React.cloneElement(this.props.children, {
-                                state: this.state.state
-                            })}
+                            {React.cloneElement(this.props.children, { state })}
                         </div>
                     </div>
                 </div>
+            );
+        }
+        return (
+            <div className='window'>
+                <Theme theme={state.theme} />
+                {content}
             </div>
         );
     }

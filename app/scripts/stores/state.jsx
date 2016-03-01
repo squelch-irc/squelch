@@ -4,7 +4,7 @@ const State = new Freezer({
     servers: {},
     config: {},
     configDir: '',
-    route: {},
+    route: { params: {} },
     theme: {}
 }, { live: false });
 
