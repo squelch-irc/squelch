@@ -202,6 +202,7 @@ State.on('message:receive', ({ type, server, data }) => {
             break;
 
         case 'disconnect':
+            server = server.set('connected', false);
             _.each(channels, (channel) => {
                 channel.set({
                     joined: false,
@@ -210,7 +211,6 @@ State.on('message:receive', ({ type, server, data }) => {
                     topic: ''
                 });
             });
-            server.set('connected', false);
             break;
     }
 
