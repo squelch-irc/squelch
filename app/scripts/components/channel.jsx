@@ -41,7 +41,7 @@ export default class ChannelView extends React.Component {
                 <div className='io-container pane'>
                     <Topic topic={topic} />
                     <Chat messages={messages} channel={channel} />
-                    <Input serverId={serverId} channel={channel} />
+                    <Input serverId={serverId} target={channel} />
                 </div>
                 <UserList users={users} />
             </div>

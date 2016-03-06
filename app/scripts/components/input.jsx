@@ -12,10 +12,10 @@ export default class Input extends React.Component {
         const message = e.target.value.trim();
         if(!message) { return; }
 
-        if(this.props.channel) {
+        if(this.props.target) {
             State.trigger('message:send', {
                 serverId: this.props.serverId,
-                to: this.props.channel,
+                to: this.props.target,
                 msg: message
             });
         }
@@ -35,5 +35,5 @@ export default class Input extends React.Component {
 
 Input.propTypes = {
     serverId: React.PropTypes.string.isRequired,
-    channel: React.PropTypes.string
+    target: React.PropTypes.string
 };
