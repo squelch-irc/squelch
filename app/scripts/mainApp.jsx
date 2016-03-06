@@ -14,6 +14,7 @@ import SquelchView from './components/squelchView';
 import WelcomeView from './components/welcome';
 import ServerView from './components/server';
 import ChannelView from './components/channel';
+import QueryView from './components/query';
 
 // Clear hash so reloads work
 window.location.hash = '';
@@ -24,13 +25,13 @@ const onUpdate = function() {
     State.trigger('route:update', this.state);
 };
 
-// TODO: wrap in root node that re-renders on State 'update' event
 ReactDOM.render(
     <Router history={hashHistory} onUpdate={onUpdate}>
         <Route path="/" component={SquelchView}>
             <IndexRoute component={WelcomeView} />
             <Route path="server/:serverId" component={ServerView} />
             <Route path="server/:serverId/channel/:channel" component={ChannelView} />
+             <Route path="server/:serverId/user/:user" component={QueryView} /> 
         </Route>
     </Router>
 , document.getElementById('squelch-root'));

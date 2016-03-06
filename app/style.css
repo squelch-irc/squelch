@@ -1,0 +1,12 @@
+/* Loading View */
+/* This needs to be loaded before the theme style is loaded */
+.squelch-loading {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    font-family: sans-serif;
+    color: gray;
+}

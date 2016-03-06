@@ -4,11 +4,14 @@
         <meta charset="utf-8">
         <title>Squelch</title>
         <link rel="stylesheet" href="../node_modules/react-treeview/react-treeview.css">
+        <link rel="stylesheet" href="style.css">
     </head>
     <body>
         <div id="squelch-root"></div>
         <script>
-            require('babel-register');
+            require('babel-register')({
+                sourceMaps: 'inline'
+            });
             require('./scripts/mainApp');
         </script>
     </body>

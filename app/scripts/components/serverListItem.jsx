@@ -26,21 +26,21 @@ export default class ServerListItem extends React.Component {
 
     render() {
         const server = this.getServer();
-        const { id, channels, connected } = server;
+        const { id, channels, userMessages, connected } = server;
         const client = server.getClient();
 
-        const currentServerId = this.props.state.route.params.serverId;
-        const currentChannel = this.props.state.route.params.channel;
+        const current = this.props.state.route.params;
 
         const serverActiveClass = classnames({
             'nav-group-item': true,
             server: true,
-            active: currentServerId === id && !currentChannel,
+            active: current.serverId === id && !current.channel,
             connected
         });
 
         const treeItemClass = classnames({
-            active: currentServerId === id && !currentChannel
+            active: current.serverId === id && !current.channel,
+            connected
         });
 
         const serverLabel = <Link
@@ -58,7 +58,7 @@ export default class ServerListItem extends React.Component {
                     const channelLabelClass = classnames({
                         'nav-group-item': true,
                         channel: true,
-                        active: currentServerId === id && currentChannel === name,
+                        active: current.serverId === id && current.channel === name,
                         joined: channel.joined
                     });
                     return <Link
@@ -67,6 +67,22 @@ export default class ServerListItem extends React.Component {
                         to={{ pathname: url }}
                         onContextMenu={this.loadContextMenu.bind(channel)}>
                         {name}
+                    </Link>;
+                })
+            }
+            {
+                _.map(userMessages, (messages, user) => {
+                    const url = `/server/${id}/user/${encodeURIComponent(user)}`;
+                    const userLabelClass = classnames({
+                        'nav-group-item': true,
+                        user: true,
+                        active: current.serverId === id && current.user === user
+                    });
+                    return <Link
+                        className={userLabelClass}
+                        key={user}
+                        to={{ pathname: url }}>
+                        {user}
                     </Link>;
                 })
             }

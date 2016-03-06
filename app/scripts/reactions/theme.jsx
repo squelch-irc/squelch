@@ -22,7 +22,10 @@ State.on('theme:load', ({ useDefault }) => {
             .on('error', (err) => console.error(err))
             .pipe(concat({ encoding: 'string' }, (css) => {
                 console.log('setting css');
-                State.get().theme.set({ css });
+                State.get().set({
+                    theme: { css },
+                    ready: true
+                });
             }));
         });
         // TODO: Close stream when changing themes
