@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import React from 'react';
+import ReactDOM from 'react-dom';
 
 import Message from './message';
 import MenuHandler from '../../core/menuHandler';
@@ -26,6 +27,18 @@ export default class Chat extends React.Component {
                 }</ul>
             </div>
         );
+    }
+
+    componentWillUpdate() {
+        const node = ReactDOM.findDOMNode(this);
+        this.shouldScrollBottom = node.scrollTop + node.offsetHeight === node.scrollHeight;
+    }
+
+    componentDidUpdate() {
+        if (this.shouldScrollBottom) {
+            const node = ReactDOM.findDOMNode(this);
+            node.scrollTop = node.scrollHeight;
+        }
     }
 }
 
