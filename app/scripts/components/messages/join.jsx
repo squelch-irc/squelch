@@ -7,7 +7,7 @@ export default class Join extends React.Component {
 
         return (
             <span className='join'>
-                →&nbsp;<Nick nick={message.nick} />&nbsp;
+                <Nick nick={message.nick} />&nbsp;
                 has joined {message.chan}
             </span>
         );
