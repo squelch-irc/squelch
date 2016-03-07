@@ -7,7 +7,7 @@ export default class Part extends React.Component {
 
         return (
             <span className='part'>
-                ←&nbsp;<Nick nick={message.nick} />&nbsp;
+                <Nick nick={message.nick} />&nbsp;
                 has left {message.chan}&nbsp;{message.reason ? '(' + message.reason + ')' : ''}
             </span>
         );

@@ -6,7 +6,7 @@ export default class Error extends React.Component {
 
         return (
             <span className='message-error'>
-                Error: {message.params.join(' ')}
+                {message.params.join(' ')}
             </span>
         );
     }

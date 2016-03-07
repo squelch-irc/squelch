@@ -7,7 +7,7 @@ export default class Action extends React.Component {
 
         return (
             <span className='action'>
-                •&nbsp;<Nick nick={message.from} />&nbsp;
+                <Nick nick={message.from} />&nbsp;
                 {message.msg}
             </span>
         );
