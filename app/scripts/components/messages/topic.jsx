@@ -8,7 +8,7 @@ export default class Topic extends React.Component {
         if(message.topic) {
             return (
                 <span className='topic'>
-                    <span className='topic-text'>{message.topic}</span>
+                    Topic is <span className='topic-text'>{message.topic}</span>
                 </span>
             );
         }

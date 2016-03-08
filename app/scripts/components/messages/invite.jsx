@@ -7,7 +7,7 @@ export default class Invite extends React.Component {
 
         return (
             <span className='invite'>
-                <Nick nick={message.from} /> has invited you to join {message.chan}
+                &raquo;&nbsp;<Nick nick={message.from} /> has invited you to join {message.chan}
             </span>
         );
     }
