@@ -7,7 +7,7 @@ export default class Quit extends React.Component {
 
         return (
             <span className='quit'>
-                <Nick nick={message.nick} />&nbsp;
+                ←&nbsp;<Nick nick={message.nick} />&nbsp;
                 has quit&nbsp;{message.reason ? '(' + message.reason + ')' : ''}
             </span>
         );

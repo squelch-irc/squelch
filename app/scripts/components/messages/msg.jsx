@@ -6,7 +6,7 @@ export default class Msg extends React.Component {
         const message = this.props.message;
         return (
             <span className='msg'>
-                <Nick nick={message.from} />&nbsp;
+                &lt;<Nick nick={message.from} />&gt;&nbsp;
                 {message.msg}
             </span>
         );

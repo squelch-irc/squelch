@@ -5,7 +5,7 @@ export default class Motd extends React.Component {
         const message = this.props.message;
 
         return (
-            <span className='motd'><pre class-name='motd-text'>{message.motd}</pre></span>
+            <span className='motd'>MOTD: <pre class-name='motd-text'>{message.motd}</pre></span>
         );
     }
 }
