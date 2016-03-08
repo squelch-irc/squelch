@@ -4,6 +4,7 @@ import UserList from './userlist';
 import Topic from './topic';
 import Chat from './chat';
 import Input from './input';
+import WelcomeView from './welcome';
 
 export default class ChannelView extends React.Component {
     shouldComponentUpdate(newProps) {
@@ -23,6 +24,10 @@ export default class ChannelView extends React.Component {
         const { serverId } = this.props.params;
         const { servers } = this.props.state;
         const channel = decodeURIComponent(this.props.params.channel);
+
+        if(!servers[serverId].channels[channel]) {
+            return <WelcomeView />;
+        }
 
         const messages = servers[serverId].channels[channel].messages;
 

@@ -16,9 +16,6 @@ import ServerView from './components/server';
 import ChannelView from './components/channel';
 import QueryView from './components/query';
 
-// Clear hash so reloads work
-window.location.hash = '';
-
 State.trigger('config:load');
 
 const onUpdate = function() {
@@ -31,7 +28,7 @@ ReactDOM.render(
             <IndexRoute component={WelcomeView} />
             <Route path="server/:serverId" component={ServerView} />
             <Route path="server/:serverId/channel/:channel" component={ChannelView} />
-             <Route path="server/:serverId/user/:user" component={QueryView} /> 
+             <Route path="server/:serverId/user/:user" component={QueryView} />
         </Route>
     </Router>
 , document.getElementById('squelch-root'));
