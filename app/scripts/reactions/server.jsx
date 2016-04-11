@@ -64,13 +64,16 @@ State.on('server:add', ({ config }) => {
     _.each(APP_SERVER_OPTIONS, (opt) => serverConfig[opt] = rootConfig[opt]);
 
     const client = new Client(serverConfig);
-    client.onAny((event, data) => {
+    // Monkeypatch .emit to catch all events
+    const oldEmit = client.emit;
+    client.emit = function(event, data) {
         State.trigger('message:receive', {
             type: event,
             server: State.get().servers[client.id],
             data
         });
-    });
+        oldEmit.call(client, event, data);
+    };
 
     client.id = id;
 

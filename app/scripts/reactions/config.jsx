@@ -1,9 +1,11 @@
 import path from 'path';
 import fs from 'fs-extra';
-import Q from 'q';
+import Promise from 'bluebird';
 import _ from 'lodash';
 
 import State from '../stores/state';
+
+const readJson = Promise.promisify(fs.readJson);
 
 const CONFIG_NAME = 'config.json';
 const DEFAULT_PATH = require('electron').remote.app.getPath('userData');
@@ -38,7 +40,8 @@ State.on('config:load', () => {
     })
 
     .catch((err) => {
-        console.error('Something went wrong while trying to load your config\n\n' + (err.message || err));
+        console.error('Something went wrong while trying to load your config');
+        console.error(err.message || err);
         throw err;
     })
     .done();
@@ -52,7 +55,7 @@ State.on('config:load', () => {
 const readConfig = (i = 0) => {
     const configPath = path.join(CONFIG_PATHS[i], CONFIG_NAME);
 
-    return Q.nfcall(fs.readJson, configPath)
+    return readJson(configPath)
 
     .then((configJSON) => {
         // Successfully read file
