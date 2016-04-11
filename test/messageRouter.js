@@ -207,6 +207,35 @@ test('notice', t => {
     testMessageInChannel(t, message, '#kellyirc');
 });
 
+test('preconnection notice', t => {
+    const message = fakeMsg({
+        type: 'notice',
+        from: 'server.ircnet.net',
+        to: '*',
+        msg: '*** No ident server found ***'
+    });
+
+    MessageRouter({
+        message,
+        server: t.context.state.get().servers.server1,
+        current: t.context.current
+    });
+
+    testModified(t, 'server1');
+    testNotModified(t, 'server2');
+    testMessageInServer(t, message);
+
+    // Test other logs are unmodified
+    t.is(
+        t.context.state.get().servers['server1'].channels,
+        t.context.oldState.servers['server1'].channels
+    );
+    t.is(
+        t.context.state.get().servers['server1'].userMessages,
+        t.context.oldState.servers['server1'].userMessages
+    );
+});
+
 test('invite', t => {
     const message = fakeMsg({
         type: 'invite',

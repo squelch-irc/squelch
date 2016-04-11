@@ -39,7 +39,13 @@ const toAll = () => { return { all: true }; };
 const MESSAGE_ROUTES = {
     msg: toTargetProp('to', 'from'),
     action: toTargetProp('to', 'from'),
-    notice: toCurrentAndServer,
+    notice: (message, server) => {
+        if(message.to === server.getClient().nick()) {
+            return toCurrentAndServer(message, server);
+        }
+        // Send notices like pre-connection notices only to server
+        return { server: true };
+    },
     invite: toCurrentAndServer,
     join: toTargetProp('chan'),
     part: toTargetProp('chan'),
