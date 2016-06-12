@@ -12,14 +12,11 @@ export default class Input extends React.Component {
         const message = e.target.value.trim();
         if(!message) { return; }
 
-        if(this.props.target) {
-            State.trigger('message:send', {
-                serverId: this.props.serverId,
-                to: this.props.target,
-                msg: message
-            });
-        }
-        // TODO: do something when channel isn't provided (server view)
+        State.trigger('message:send', {
+            serverId: this.props.serverId,
+            to: this.props.target,
+            msg: message
+        });
 
         e.target.value = '';
     }

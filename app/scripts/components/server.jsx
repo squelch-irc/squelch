@@ -5,10 +5,8 @@ import Input from './input';
 
 export default class ServerView extends React.Component {
     shouldComponentUpdate(newProps) {
-        const oldMessages = this.props.state.servers[this.props.params.serverId].messages
-            .serverMessages;
-        const newMessages = newProps.state.servers[newProps.params.serverId].messages
-            .serverMessages;
+        const oldMessages = this.props.state.servers[this.props.params.serverId].messages;
+        const newMessages = newProps.state.servers[newProps.params.serverId].messages;
         return oldMessages !== newMessages;
     }
 

@@ -37,6 +37,7 @@ const toAll = () => { return { all: true }; };
 // If targets has strings, will route to those targets (channel or user)
 // If message is specified, it will replace the original message.
 const MESSAGE_ROUTES = {
+    info: toCurrentAndServer,
     msg: toTargetProp('to', 'from'),
     action: toTargetProp('to', 'from'),
     notice: (message, server) => {
@@ -115,6 +116,10 @@ const MESSAGE_ROUTES = {
     },
     error: toAll
 };
+
+// TODO: Route certain raw commands.
+// Need to route 421 -> toCurrentAndServer
+// May need to route ranges of number messages depending on what they are?
 
 // Raw message commands we should ignore either because they
 // already have a parsed version or a user ain't wanna see that
