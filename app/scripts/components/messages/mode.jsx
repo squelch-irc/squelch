@@ -1,7 +1,7 @@
-import React from 'react';
-import Nick from '../nick';
+const React = require('react');
+const Nick = require('../nick');
 
-export default class Mode extends React.Component {
+class Mode extends React.Component {
     render() {
         const message = this.props.message;
 
@@ -21,3 +21,5 @@ Mode.propTypes = {
 
     }).isRequired
 };
+
+module.exports = Mode;

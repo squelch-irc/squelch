@@ -1,19 +1,19 @@
 
 // all plugins are passed a wrapper for State
 
-export const shrug = () => {
+const shrug = () => {
     return {
         run: (irc, args) => `${args || ''} ¯\\_(ツ)_/¯`.trim()
     };
 };
 
-export const test = () => {
+const test = () => {
     return {
         run: () => 'this is a test'
     };
 };
 
-export const chanopts = () => {
+const chanopts = () => {
     return {
         channelMenu: (channel) => {
             return [
@@ -26,7 +26,7 @@ export const chanopts = () => {
     };
 };
 
-export const voice = () => {
+const voice = () => {
     return {
         userMenu: (user) => {
             return [
@@ -47,3 +47,5 @@ export const voice = () => {
         }
     };
 };
+
+module.exports = { shrug, test, chanopts, voice };

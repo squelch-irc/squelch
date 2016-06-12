@@ -1,9 +1,9 @@
-import React from 'react';
+const React = require('react');
 
-import Chat from './chat';
-import Input from './input';
+const Chat = require('./chat');
+const Input = require('./input');
 
-export default class ServerView extends React.Component {
+class ServerView extends React.Component {
     shouldComponentUpdate(newProps) {
         const oldMessages = this.props.state.servers[this.props.params.serverId].messages;
         const newMessages = newProps.state.servers[newProps.params.serverId].messages;
@@ -31,3 +31,5 @@ ServerView.propTypes = {
         serverId: React.PropTypes.string.isRequired
     }).isRequired
 };
+
+module.exports = ServerView;

@@ -1,7 +1,7 @@
-import React from 'react';
-import ServerList from './serverList';
+const React = require('react');
+const ServerList = require('./serverList');
 
-export default class Sidebar extends React.Component {
+class Sidebar extends React.Component {
 
     render() {
         return (
@@ -15,3 +15,5 @@ export default class Sidebar extends React.Component {
 Sidebar.propTypes = {
     state: React.PropTypes.object.isRequired
 };
+
+module.exports = Sidebar;

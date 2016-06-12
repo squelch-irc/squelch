@@ -1,23 +1,23 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { Router, Route, IndexRoute, hashHistory }  from 'react-router';
+const React = require('react');
+const ReactDOM = require('react-dom');
+const { Router, Route, IndexRoute, hashHistory }  = require('react-router');
 
-import State from './stores/state';
+const State = require('./stores/state');
 
-import './reactions/config';
-import './reactions/route';
-import './reactions/message';
-import './reactions/server';
-import './reactions/theme';
+require('./reactions/config');
+require('./reactions/route');
+require('./reactions/message');
+require('./reactions/server');
+require('./reactions/theme');
 
-import SquelchView from './components/squelchView';
-import WelcomeView from './components/welcome';
-import ServerView from './components/server';
-import ChannelView from './components/channel';
-import QueryView from './components/query';
+const SquelchView = require('./components/squelchView');
+const WelcomeView = require('./components/welcome');
+const ServerView = require('./components/server');
+const ChannelView = require('./components/channel');
+const QueryView = require('./components/query');
 
-import Squelch from './core/squelchGlobal';
-import corePkg from './core/corePackage';
+const Squelch = require('./core/squelchGlobal');
+const corePkg = require('./core/corePackage');
 
 window.Squelch = Squelch;
 

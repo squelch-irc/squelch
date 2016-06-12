@@ -1,11 +1,11 @@
-import _ from 'lodash';
-import React from 'react';
-import ReactDOM from 'react-dom';
+const _ = require('lodash');
+const React = require('react');
+const ReactDOM = require('react-dom');
 
-import Message from './message';
-import MenuHandler from '../../core/menuHandler';
+const Message = require('./message');
+const MenuHandler = require('../../core/menuHandler');
 
-export default class Chat extends React.Component {
+class Chat extends React.Component {
 
     shouldComponentUpdate(newProps) {
         return this.props.messages !== newProps.messages;
@@ -50,3 +50,5 @@ Chat.propTypes = {
     ).isRequired,
     channel: React.PropTypes.string.isRequired
 };
+
+module.exports = Chat;

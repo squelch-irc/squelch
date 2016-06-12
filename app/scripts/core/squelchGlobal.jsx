@@ -1,11 +1,12 @@
-import showMsg from './showInfoMsg';
-import CommandRegistry from './commandRegistry';
-import PackageManager from './packageManager';
+const showMsg = require('./showInfoMsg');
+const CommandRegistry = require('./commandRegistry');
+const PackageManager = require('./packageManager');
 
-const squelch = {
-    showMsg,
-    commands: new CommandRegistry(),
-    packages: new PackageManager()
+const Squelch = {
+    showMsg
 };
 
-export default squelch;
+Squelch.commands = new CommandRegistry(Squelch);
+Squelch.packages = new PackageManager(Squelch);
+
+module.exports = Squelch;

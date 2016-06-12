@@ -1,11 +1,11 @@
-import { Disposable } from 'event-kit';
-import _ from 'lodash';
+const { Disposable } = require('event-kit');
+const _ = require('lodash');
 
-import State from '../stores/state';
-import Squelch from './squelchGlobal';
+const State = require('../stores/state');
 
-export default class CommandRegistry {
-    constructor() {
+class CommandRegistry {
+    constructor(Squelch) {
+        this.Squelch = Squelch;
         this.commands = {};
     }
 
@@ -73,7 +73,7 @@ export default class CommandRegistry {
             context.client.msg(context.target, result);
         }
         else {
-            Squelch.showMsg(result);
+            this.Squelch.showMsg(result);
         }
     }
 
@@ -126,3 +126,5 @@ export default class CommandRegistry {
         return true;
     }
 }
+
+module.exports = CommandRegistry;

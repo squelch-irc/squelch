@@ -1,7 +1,7 @@
-import moment from 'moment';
-import React from 'react';
+const moment = require('moment');
+const React = require('react');
 
-export default class TopicWho extends React.Component {
+class TopicWho extends React.Component {
     render() {
         const message = this.props.message;
 
@@ -20,3 +20,5 @@ TopicWho.propTypes = {
         time: React.PropTypes.instanceOf(Date).isRequired
     }).isRequired
 };
+
+module.exports = TopicWho;

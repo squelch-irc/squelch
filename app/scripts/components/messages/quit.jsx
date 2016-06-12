@@ -1,7 +1,7 @@
-import React from 'react';
-import Nick from '../nick';
+const React = require('react');
+const Nick = require('../nick');
 
-export default class Quit extends React.Component {
+class Quit extends React.Component {
     render() {
         const message = this.props.message;
 
@@ -20,3 +20,5 @@ Quit.propTypes = {
         reason: React.PropTypes.string
     }).isRequired
 };
+
+module.exports = Quit;

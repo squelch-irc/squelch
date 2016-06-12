@@ -1,4 +1,4 @@
-import _ from 'lodash';
+const _ = require('lodash');
 
 // Returns a route function for MESSAGE_ROUTES to a single target
 // specified by a prop in the message. ("Target" is channel or user)
@@ -210,4 +210,4 @@ const routeMessage = ({ message, server, current }) => {
 
 };
 
-export default routeMessage;
+module.exports =  routeMessage;

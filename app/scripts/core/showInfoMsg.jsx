@@ -1,4 +1,4 @@
-import State from '../stores/state';
+const State = require('../stores/state');
 
 const showInfoMsg = (msg) => {
     State.trigger('message:receive', {
@@ -8,4 +8,4 @@ const showInfoMsg = (msg) => {
     });
 };
 
-export default showInfoMsg;
+module.exports =  showInfoMsg;

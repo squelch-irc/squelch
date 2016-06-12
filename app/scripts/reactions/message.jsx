@@ -1,8 +1,8 @@
-import _ from 'lodash';
+const _ = require('lodash');
 
-import State from '../stores/state';
-import MessageRouter from '../core/messageRouter';
-import Squelch from '../core/squelchGlobal';
+const State = require('../stores/state');
+const MessageRouter = require('../core/messageRouter');
+const Squelch = require('../core/squelchGlobal');
 
 State.on('message:route', ({ server, type, data }) => {
     const state = State.get();

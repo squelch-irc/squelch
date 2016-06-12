@@ -1,6 +1,6 @@
-import React from 'react';
+const React = require('react');
 
-export default class Motd extends React.Component {
+class Motd extends React.Component {
     render() {
         const message = this.props.message;
 
@@ -15,3 +15,5 @@ Motd.propTypes = {
         motd: React.PropTypes.string.isRequired
     }).isRequired
 };
+
+module.exports = Motd;

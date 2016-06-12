@@ -1,8 +1,8 @@
-import test from 'ava';
-import Freezer from 'freezer-js';
-import _ from 'lodash';
+const test = require('ava');
+const Freezer = require('freezer-js');
+const _ = require('lodash');
 
-import MessageRouter from '../app/scripts/core/messageRouter';
+const MessageRouter = require('../app/scripts/core/messageRouter');
 
 // Generate a fake message object
 const fakeMsg = (from, to, msg) => {
@@ -46,7 +46,7 @@ const testMessageInServer = (t, message, serverId = 'server1') => {
     const oldLog = t.context.oldState.servers[serverId].messages;
 
     t.is(log.length, oldLog.length + 1);
-    t.same(log[log.length - 1], message);
+    t.deepEqual(log[log.length - 1], message);
 };
 
 const testMessageInChannel = (t, message, channel, serverId = 'server1') => {
@@ -54,7 +54,7 @@ const testMessageInChannel = (t, message, channel, serverId = 'server1') => {
     const oldLog = t.context.oldState.servers[serverId].channels[channel].messages;
 
     t.is(log.length, oldLog.length + 1);
-    t.same(log[log.length - 1], message);
+    t.deepEqual(log[log.length - 1], message);
 };
 
 const testMessageInUser = (t, message, user, serverId = 'server1') => {
@@ -62,7 +62,7 @@ const testMessageInUser = (t, message, user, serverId = 'server1') => {
     const oldLog = t.context.oldState.servers[serverId].userMessages[user];
 
     t.is(log.length, (oldLog || []).length + 1);
-    t.same(log[log.length - 1], message);
+    t.deepEqual(log[log.length - 1], message);
 };
 
 const testMessageInAll = (t, message, serverId = 'server1') => {
@@ -702,5 +702,5 @@ test('log overflow', t => {
     const log = t.context.state.get().servers.server2.userMessages.B0T;
 
     t.is(log.length, 100);
-    t.same(log[log.length - 1], message);
+    t.deepEqual(log[log.length - 1], message);
 });

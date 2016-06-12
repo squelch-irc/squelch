@@ -1,8 +1,8 @@
-import { CompositeDisposable } from 'event-kit';
+const { CompositeDisposable } = require('event-kit');
 
-import shrug from '../commands/shrug';
-import me from '../commands/me';
-import msg from '../commands/msg';
+const shrug = require('../commands/shrug');
+const me = require('../commands/me');
+const msg = require('../commands/msg');
 
 const CoreCommandPackage = (Squelch) => {
     return {
@@ -19,4 +19,4 @@ const CoreCommandPackage = (Squelch) => {
     };
 };
 
-export default CoreCommandPackage;
+module.exports =  CoreCommandPackage;

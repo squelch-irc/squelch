@@ -1,6 +1,6 @@
-import React from 'react';
+const React = require('react');
 
-export default class Error extends React.Component {
+class Error extends React.Component {
     render() {
         const message = this.props.message;
 
@@ -17,3 +17,5 @@ Error.propTypes = {
         params: React.PropTypes.arrayOf(React.PropTypes.string).isRequired
     }).isRequired
 };
+
+module.exports = Error;

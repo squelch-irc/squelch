@@ -1,7 +1,7 @@
-import React from 'react';
-import MenuHandler from '../../core/menuHandler';
+const React = require('react');
+const MenuHandler = require('../../core/menuHandler');
 
-export default class User extends React.Component {
+class User extends React.Component {
 
     loadContextMenu(e) {
         e.preventDefault();
@@ -22,3 +22,5 @@ User.propTypes = {
     status: React.PropTypes.string,
     nick: React.PropTypes.string
 };
+
+module.exports = User;

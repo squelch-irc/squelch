@@ -1,5 +1,5 @@
-import Squelch from './squelchGlobal';
+const Squelch = require('./squelchGlobal');
 
-export default () => (client) => {
+module.exports =  () => (client) => {
     client.info = Squelch.showMsg;
 };

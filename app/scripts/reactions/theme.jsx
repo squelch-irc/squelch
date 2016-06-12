@@ -1,8 +1,8 @@
-import path from 'path';
-import catw from 'catw';
-import concat from 'concat-stream';
+const path = require('path');
+const catw = require('catw');
+const concat = require('concat-stream');
 
-import State from '../stores/state';
+const State = require('../stores/state');
 
 const DEFAULT_THEME = 'squelch-base-theme';
 

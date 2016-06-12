@@ -1,23 +1,23 @@
-import React from 'react';
+const React = require('react');
 
-import Msg from './messages/msg';
-import Action from './messages/action';
-import Join from './messages/join';
-import Part from './messages/part';
-import Kick from './messages/kick';
-import Topic from './messages/topic';
-import TopicWho from './messages/topicwho';
-import Motd from './messages/motd';
-import Mode from './messages/mode';
-import Usermode from './messages/usermode';
-import Invite from './messages/invite';
-import Notice from './messages/notice';
-import NickMsg from './messages/nick';
-import Quit from './messages/quit';
-import ErrorMsg from './messages/error';
-import Raw from './messages/raw';
-import Info from './messages/info';
-import Timestamp from './messages/timestamp';
+const Msg = require('./messages/msg');
+const Action = require('./messages/action');
+const Join = require('./messages/join');
+const Part = require('./messages/part');
+const Kick = require('./messages/kick');
+const Topic = require('./messages/topic');
+const TopicWho = require('./messages/topicwho');
+const Motd = require('./messages/motd');
+const Mode = require('./messages/mode');
+const Usermode = require('./messages/usermode');
+const Invite = require('./messages/invite');
+const Notice = require('./messages/notice');
+const NickMsg = require('./messages/nick');
+const Quit = require('./messages/quit');
+const ErrorMsg = require('./messages/error');
+const Raw = require('./messages/raw');
+const Info = require('./messages/info');
+const Timestamp = require('./messages/timestamp');
 
 const messageHandlers = {
     msg: Msg,
@@ -39,7 +39,7 @@ const messageHandlers = {
     info: Info
 };
 
-export default class Message extends React.Component {
+class Message extends React.Component {
 
     shouldComponentUpdate(newProps) {
         return this.props.message !== newProps.message;
@@ -69,3 +69,5 @@ Message.propTypes = {
         timestamp: React.PropTypes.instanceOf(Date).isRequired
     }).isRequired
 };
+
+module.exports = Message;

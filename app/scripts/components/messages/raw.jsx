@@ -1,6 +1,6 @@
-import React from 'react';
+const React = require('react');
 
-export default class Raw extends React.Component {
+class Raw extends React.Component {
     render() {
         const message = this.props.message;
 
@@ -15,3 +15,5 @@ Raw.propTypes = {
         params: React.PropTypes.arrayOf(React.PropTypes.string).isRequired
     }).isRequired
 };
+
+module.exports = Raw;

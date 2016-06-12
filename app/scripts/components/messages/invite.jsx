@@ -1,7 +1,7 @@
-import React from 'react';
-import Nick from '../nick';
+const React = require('react');
+const Nick = require('../nick');
 
-export default class Invite extends React.Component {
+class Invite extends React.Component {
     render() {
         const message = this.props.message;
 
@@ -19,3 +19,5 @@ Invite.propTypes = {
         chan: React.PropTypes.string.isRequired
     }).isRequired
 };
+
+module.exports = Invite;

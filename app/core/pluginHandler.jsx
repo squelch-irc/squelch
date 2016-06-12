@@ -1,7 +1,7 @@
 
-import _ from 'lodash';
-import State from '../scripts/stores/state';
-import StateWrapper from '../api/stateWrapper';
+const _ = require('lodash');
+const State = require('../scripts/stores/state');
+const StateWrapper = require('../api/stateWrapper');
 
 const plugins = _(require('require-dir')('../plugins'))
     .values()
@@ -19,7 +19,7 @@ const plugins = _(require('require-dir')('../plugins'))
 
 console.info(`Loaded plugins: ${_.map(plugins, 'name')}`);
 
-export default class PluginHandler {
+class PluginHandler {
     static hasCommand(msg) {
         return _.startsWith(msg, '/');
     }
@@ -74,3 +74,5 @@ export default class PluginHandler {
     }
 
 }
+
+module.exports = PluginHandler;

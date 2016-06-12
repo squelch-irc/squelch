@@ -1,6 +1,6 @@
-import React from 'react';
+const React = require('react');
 
-export default class WelcomeView extends React.Component {
+class WelcomeView extends React.Component {
     render() {
         return (
             <div className='welcome-view'>
@@ -11,3 +11,5 @@ export default class WelcomeView extends React.Component {
         );
     }
 }
+
+module.exports = WelcomeView;

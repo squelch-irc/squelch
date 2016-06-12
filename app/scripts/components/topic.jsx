@@ -1,6 +1,6 @@
-import React from 'react';
+const React = require('react');
 
-export default class Topic extends React.Component {
+class Topic extends React.Component {
 
     render() {
         return (
@@ -14,3 +14,5 @@ export default class Topic extends React.Component {
 Topic.propTypes = {
     topic: React.PropTypes.string
 };
+
+module.exports = Topic;

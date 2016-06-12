@@ -1,4 +1,4 @@
-import Freezer from 'freezer-js';
+const Freezer = require('freezer-js');
 
 const State = new Freezer({
     servers: {},
@@ -30,4 +30,4 @@ const State = new Freezer({
     // TODO: refactor with the above 5 convenience functions
 }, { live: false });
 
-export default State;
+module.exports =  State;

@@ -1,10 +1,10 @@
 
-import _ from 'lodash';
-import PluginHandler from './pluginHandler';
-import { remote } from 'electron';
+const _ = require('lodash');
+const PluginHandler = require('./pluginHandler');
+const { remote } = require('electron');
 const { Menu, MenuItem } = remote;
 
-export default class MenuHandler {
+class MenuHandler {
     static loadUserContextMenu(user) {
         const menu = new Menu();
         const items = PluginHandler.loadUserMenu(user);
@@ -25,3 +25,5 @@ export default class MenuHandler {
         menu.popup(remote.getCurrentWindow());
     }
 }
+
+module.exports = MenuHandler;

@@ -1,9 +1,9 @@
-import path from 'path';
-import fs from 'fs-extra';
-import Promise from 'bluebird';
-import _ from 'lodash';
+const path = require('path');
+const fs = require('fs-extra');
+const Promise = require('bluebird');
+const _ = require('lodash');
 
-import State from '../stores/state';
+const State = require('../stores/state');
 
 const readJson = Promise.promisify(fs.readJson);
 

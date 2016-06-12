@@ -1,1 +1,1 @@
-export default (args) => `${args || ''} ¯\\_(ツ)_/¯`.trim();
+module.exports =  (args) => `${args || ''} ¯\\_(ツ)_/¯`.trim();

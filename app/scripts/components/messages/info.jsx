@@ -1,9 +1,9 @@
-import React from 'react';
+const React = require('react');
 
-export default class Info extends React.Component {
+class Info extends React.Component {
     render() {
         const message = this.props.message;
-        
+
         return (
             <span className='message-info'>{message.msg}</span>
         );
@@ -15,3 +15,5 @@ Info.propTypes = {
         msg: React.PropTypes.string.isRequired
     }).isRequired
 };
+
+module.exports = Info;

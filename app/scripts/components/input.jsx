@@ -1,8 +1,8 @@
-import React from 'react';
+const React = require('react');
 
-import State from '../stores/state';
+const State = require('../stores/state');
 
-export default class Input extends React.Component {
+class Input extends React.Component {
 
     submitMessage(e) {
         const ENTER_KEY_CODE = 13;
@@ -34,3 +34,5 @@ Input.propTypes = {
     serverId: React.PropTypes.string.isRequired,
     target: React.PropTypes.string
 };
+
+module.exports = Input;

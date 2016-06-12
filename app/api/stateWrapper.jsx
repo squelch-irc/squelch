@@ -1,5 +1,5 @@
 
-import _ from 'lodash';
+const _ = require('lodash');
 
 class StateWrapper {
     constructor(opts = { state: null, server: '', to: '' }) {
@@ -25,4 +25,4 @@ class StateWrapper {
     }
 }
 
-export default (opts) => new StateWrapper(opts);
+module.exports =  (opts) => new StateWrapper(opts);

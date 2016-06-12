@@ -1,8 +1,8 @@
-import _ from 'lodash';
-import Client from 'squelch-client';
+const _ = require('lodash');
+const Client = require('squelch-client');
 
-import State from '../stores/state';
-import ClientWrapper from '../core/clientWrapper';
+const State = require('../stores/state');
+const ClientWrapper = require('../core/clientWrapper');
 
 // Options for squelch-client that are always the same
 // ...they just gotta be that way

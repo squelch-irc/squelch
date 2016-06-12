@@ -1,12 +1,12 @@
-import React from 'react';
+const React = require('react');
 
-import UserList from './userlist';
-import Topic from './topic';
-import Chat from './chat';
-import Input from './input';
-import WelcomeView from './welcome';
+const UserList = require('./userlist');
+const Topic = require('./topic');
+const Chat = require('./chat');
+const Input = require('./input');
+const WelcomeView = require('./welcome');
 
-export default class ChannelView extends React.Component {
+class ChannelView extends React.Component {
     shouldComponentUpdate(newProps) {
         const oldServerId = this.props.params.serverId;
         const newServerId = newProps.params.serverId;
@@ -61,3 +61,5 @@ ChannelView.propTypes = {
         channel: React.PropTypes.string.isRequired
     }).isRequired
 };
+
+module.exports = ChannelView;

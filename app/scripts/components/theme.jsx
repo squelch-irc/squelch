@@ -1,6 +1,6 @@
-import React from 'react';
+const React = require('react');
 
-export default class Theme extends React.Component {
+class Theme extends React.Component {
     shouldComponentUpdate(newProps) {
         return this.props.theme !== newProps.theme;
     }
@@ -17,3 +17,5 @@ Theme.propTypes = {
         css: React.PropTypes.string
     }).isRequired
 };
+
+module.exports = Theme;

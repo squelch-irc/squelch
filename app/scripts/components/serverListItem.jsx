@@ -1,11 +1,11 @@
-import _ from 'lodash';
-import React from 'react';
-import { Link } from 'react-router';
-import TreeView from 'react-treeview';
-import classnames from 'classnames';
-import MenuHandler from '../../core/menuHandler';
+const _ = require('lodash');
+const React = require('react');
+const { Link } = require('react-router');
+const TreeView = require('react-treeview');
+const classnames = require('classnames');
+const MenuHandler = require('../../core/menuHandler');
 
-export default class ServerListItem extends React.Component {
+class ServerListItem extends React.Component {
 
     shouldComponentUpdate(newProps) {
         const { state } = this.props;
@@ -99,3 +99,5 @@ ServerListItem.propTypes = {
     }),
     serverId: React.PropTypes.string.isRequired
 };
+
+module.exports = ServerListItem;

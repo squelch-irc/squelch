@@ -1,7 +1,7 @@
-import React from 'react';
-import Nick from '../nick';
+const React = require('react');
+const Nick = require('../nick');
 
-export default class NickMsg extends React.Component {
+class NickMsg extends React.Component {
     render() {
         const message = this.props.message;
 
@@ -31,3 +31,5 @@ NickMsg.propTypes = {
         newNick: React.PropTypes.string.isRequired
     }).isRequired
 };
+
+module.exports = NickMsg;

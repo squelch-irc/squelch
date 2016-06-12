@@ -1,8 +1,8 @@
-import React from 'react';
-import _ from 'lodash';
-import hash from 'squelch-nick-hash';
+const React = require('react');
+const _ = require('lodash');
+const hash = require('squelch-nick-hash');
 
-import User from './user';
+const User = require('./user');
 
 const RANK_ORDER = {
     '~': 5, // owner
@@ -13,7 +13,7 @@ const RANK_ORDER = {
     '': 0   // none
 };
 
-export default class UserList extends React.Component {
+class UserList extends React.Component {
     shouldComponentUpdate(newProps) {
         return this.props.users !== newProps.users;
     }
@@ -57,3 +57,5 @@ UserList.propTypes = {
         })
     ).isRequired
 };
+
+module.exports = UserList;

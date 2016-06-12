@@ -1,9 +1,9 @@
-import _ from 'lodash';
+const _ = require('lodash');
 
-import Squelch from './squelchGlobal';
-
-export default class PackageManager {
-    constructor() {
+class PackageManager {
+    constructor(Squelch) {
+        // Need to be passed this to avoid circular dependency
+        this.Squelch = Squelch;
         this.packages = {};
     }
 
@@ -22,7 +22,7 @@ export default class PackageManager {
         }
 
         // Invoke function to get package object
-        if(_.isFunction(pkg)) pkg = pkg(Squelch);
+        if(_.isFunction(pkg)) pkg = pkg(this.Squelch);
 
         this.packages[name] = pkg;
         this.enablePackage(name);
@@ -41,7 +41,7 @@ export default class PackageManager {
         if(pkg.enabled) return;
 
         pkg.enabled = true;
-        pkg.initialize(Squelch);
+        pkg.initialize(this.Squelch);
     }
 
     /**
@@ -57,7 +57,7 @@ export default class PackageManager {
         if(!pkg.enabled) return;
 
         pkg.enabled = false;
-        pkg.destroy(Squelch);
+        pkg.destroy();
     }
 
     /**
@@ -68,3 +68,5 @@ export default class PackageManager {
         return this.packages[name];
     }
 }
+
+module.exports = PackageManager;

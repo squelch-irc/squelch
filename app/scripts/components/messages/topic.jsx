@@ -1,6 +1,6 @@
-import React from 'react';
+const React = require('react');
 
-export default class Topic extends React.Component {
+class Topic extends React.Component {
     render() {
         const message = this.props.message;
 
@@ -20,3 +20,5 @@ Topic.propTypes = {
         topic: React.PropTypes.string.isRequired
     }).isRequired
 };
+
+module.exports = Topic;

@@ -1,9 +1,9 @@
-import React from 'react';
-import _ from 'lodash';
+const React = require('react');
+const _ = require('lodash');
 
-import ServerListItem from './serverListItem';
+const ServerListItem = require('./serverListItem');
 
-export default class ServerList extends React.Component {
+class ServerList extends React.Component {
 
     shouldComponentUpdate(newProps) {
         const { state } = this.props;
@@ -29,3 +29,5 @@ export default class ServerList extends React.Component {
 ServerList.propTypes = {
     state: React.PropTypes.object.isRequired
 };
+
+module.exports = ServerList;

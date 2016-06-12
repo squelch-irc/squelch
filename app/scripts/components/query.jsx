@@ -1,9 +1,9 @@
-import React from 'react';
+const React = require('react');
 
-import Chat from './chat';
-import Input from './input';
+const Chat = require('./chat');
+const Input = require('./input');
 
-export default class QueryView extends React.Component {
+class QueryView extends React.Component {
     shouldComponentUpdate(newProps) {
 
         const oldMessages = this.props.state.servers[this.props.params.serverId]
@@ -35,3 +35,5 @@ QueryView.propTypes = {
         user: React.PropTypes.string.isRequired
     }).isRequired
 };
+
+module.exports = QueryView;

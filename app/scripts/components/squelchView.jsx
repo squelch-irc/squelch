@@ -1,10 +1,10 @@
-import React from 'react';
+const React = require('react');
 
-import Sidebar from './sidebar';
-import Theme from './theme';
-import State from '../stores/state';
+const Sidebar = require('./sidebar');
+const Theme = require('./theme');
+const State = require('../stores/state');
 
-export default class SquelchView extends React.Component {
+class SquelchView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -50,3 +50,5 @@ export default class SquelchView extends React.Component {
 SquelchView.propTypes = {
     children: React.PropTypes.element.isRequired
 };
+
+module.exports = SquelchView;
