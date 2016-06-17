@@ -6,7 +6,10 @@ class Sidebar extends React.Component {
     render() {
         return (
             <div className='pane-sm sidebar'>
-                <ServerList state={this.props.state}/>
+                <ServerList
+                    servers={this.props.state.servers}
+                    routeParams={this.props.state.route.params}
+                />
             </div>
         );
     }

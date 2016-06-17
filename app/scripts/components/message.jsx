@@ -43,7 +43,6 @@ class Message extends React.Component {
 
     shouldComponentUpdate(newProps) {
         return this.props.message !== newProps.message;
-
     }
 
     render() {

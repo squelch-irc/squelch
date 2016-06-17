@@ -140,6 +140,7 @@ State.on('message:receive', ({ type, server, data }) => {
         case 'join':
             if(data.me) {
                 channels.set(data.chan, {
+                    name: data.chan,
                     users: {},
                     mode: [],
                     messages: [],
@@ -158,6 +159,7 @@ State.on('message:receive', ({ type, server, data }) => {
         case 'kick':
             if(data.me) {
                 channels[data.chan].set({
+                    name: data.chan,
                     joined: false,
                     users: {},
                     mode: [],
@@ -214,6 +216,7 @@ State.on('message:receive', ({ type, server, data }) => {
             server = server.set('connected', false);
             _.each(channels, (channel) => {
                 channel.set({
+                    name: channel,
                     joined: false,
                     users: {},
                     mode: [],

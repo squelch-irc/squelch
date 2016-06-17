@@ -2,20 +2,18 @@ const React = require('react');
 
 const Chat = require('./chat');
 const Input = require('./input');
+const checkPropsChanged = require('../util/checkPropsChanged');
 
 class QueryView extends React.Component {
     shouldComponentUpdate(newProps) {
-
-        const oldMessages = this.props.state.servers[this.props.params.serverId]
-            .userMessages[this.props.params.user];
-        const newMessages = newProps.state.servers[newProps.params.serverId]
-            .userMessages[newProps.params.user];
-        return oldMessages !== newMessages;
+        return checkPropsChanged(
+            this.props, newProps,
+            'serverId', 'user', 'messages'
+        );
     }
 
     render() {
-        const { serverId, user } = this.props.params;
-        const messages = this.props.state.servers[serverId].userMessages[user];
+        const { serverId, messages, user } = this.props;
 
         return (
             <div className='server-view pane-group'>
@@ -29,11 +27,9 @@ class QueryView extends React.Component {
 }
 
 QueryView.propTypes = {
-    state: React.PropTypes.object.isRequired,
-    params: React.PropTypes.shape({
-        serverId: React.PropTypes.string.isRequired,
-        user: React.PropTypes.string.isRequired
-    }).isRequired
+    messages: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
+    serverId: React.PropTypes.string.isRequired,
+    user: React.PropTypes.string.isRequired
 };
 
 module.exports = QueryView;

@@ -1,7 +1,13 @@
 const React = require('react');
+
 const MenuHandler = require('../../core/menuHandler');
+const checkPropsChanged = require('../util/checkPropsChanged');
 
 class User extends React.Component {
+
+    shouldComponentUpdate(newProps) {
+        return checkPropsChanged(this.props, newProps, 'status', 'nick');
+    }
 
     loadContextMenu(e) {
         e.preventDefault();

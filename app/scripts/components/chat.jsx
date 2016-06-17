@@ -48,7 +48,7 @@ Chat.propTypes = {
             id: React.PropTypes.string.isRequired
         }).isRequired
     ).isRequired,
-    channel: React.PropTypes.string.isRequired
+    channel: React.PropTypes.string
 };
 
 module.exports = Chat;

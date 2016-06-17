@@ -3,20 +3,14 @@ const React = require('react');
 const { Link } = require('react-router');
 const TreeView = require('react-treeview');
 const classnames = require('classnames');
+
 const MenuHandler = require('../../core/menuHandler');
+const checkPropsChanged = require('../util/checkPropsChanged');
 
 class ServerListItem extends React.Component {
 
     shouldComponentUpdate(newProps) {
-        const { state } = this.props;
-        const newState = newProps.state;
-        return state.servers !== newState.servers ||
-            state.route !== newState.route;
-    }
-
-    getServer() {
-        const { state, serverId } = this.props;
-        return state.servers[serverId];
+        return checkPropsChanged(this.props, newProps, 'server', 'routeParams');
     }
 
     loadContextMenu(e) {
@@ -25,21 +19,19 @@ class ServerListItem extends React.Component {
     }
 
     render() {
-        const server = this.getServer();
+        const { server, routeParams } = this.props;
         const { id, channels, userMessages, connected } = server;
         const client = server.getClient();
-
-        const current = this.props.state.route.params;
 
         const serverActiveClass = classnames({
             'nav-group-item': true,
             server: true,
-            active: current.serverId === id && !current.channel,
+            active: routeParams.serverId === id && !routeParams.channel,
             connected
         });
 
         const treeItemClass = classnames({
-            active: current.serverId === id && !current.channel,
+            active: routeParams.serverId === id && !routeParams.channel,
             connected
         });
 
@@ -58,7 +50,7 @@ class ServerListItem extends React.Component {
                     const channelLabelClass = classnames({
                         'nav-group-item': true,
                         channel: true,
-                        active: current.serverId === id && current.channel === name,
+                        active: routeParams.serverId === id && routeParams.channel === name,
                         joined: channel.joined
                     });
                     return <Link
@@ -76,7 +68,7 @@ class ServerListItem extends React.Component {
                     const userLabelClass = classnames({
                         'nav-group-item': true,
                         user: true,
-                        active: current.serverId === id && current.user === user
+                        active: routeParams.serverId === id && routeParams.user === user
                     });
                     return <Link
                         className={userLabelClass}
@@ -91,13 +83,17 @@ class ServerListItem extends React.Component {
     }
 }
 ServerListItem.propTypes = {
-    state: React.PropTypes.shape({
-        servers: React.PropTypes.object.isRequired,
-        route: React.PropTypes.shape({
-            params: React.PropTypes.object
-        }).isRequired
-    }),
-    serverId: React.PropTypes.string.isRequired
+    server: React.PropTypes.shape({
+        id: React.PropTypes.string,
+        channels: React.PropTypes.object,
+        userMessages: React.PropTypes.object,
+        connected: React.PropTypes.bool
+    }).isRequired,
+    routeParams: React.PropTypes.shape({
+        serverId: React.PropTypes.string,
+        channel: React.PropTypes.string,
+        user: React.PropTypes.string
+    }).isRequired
 };
 
 module.exports = ServerListItem;

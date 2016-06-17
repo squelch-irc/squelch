@@ -2,23 +2,24 @@ const React = require('react');
 
 const Chat = require('./chat');
 const Input = require('./input');
+const checkPropsChanged = require('../util/checkPropsChanged');
 
 class ServerView extends React.Component {
     shouldComponentUpdate(newProps) {
-        const oldMessages = this.props.state.servers[this.props.params.serverId].messages;
-        const newMessages = newProps.state.servers[newProps.params.serverId].messages;
-        return oldMessages !== newMessages;
+        return checkPropsChanged(
+            this.props.server, newProps.server,
+            'id', 'messages'
+        );
     }
 
     render() {
-        const { serverId } = this.props.params;
-        const messages = this.props.state.servers[serverId].messages;
+        const { id, messages } = this.props.server;
 
         return (
             <div className='server-view pane-group'>
                 <div className='io-container pane'>
                     <Chat messages={messages} />
-                    <Input serverId={serverId} />
+                    <Input serverId={id} />
                 </div>
             </div>
         );
@@ -26,9 +27,9 @@ class ServerView extends React.Component {
 }
 
 ServerView.propTypes = {
-    state: React.PropTypes.object.isRequired,
-    params: React.PropTypes.shape({
-        serverId: React.PropTypes.string.isRequired
+    server: React.PropTypes.shape({
+        messages: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
+        id: React.PropTypes.string.isRequired
     }).isRequired
 };
 

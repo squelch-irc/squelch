@@ -12,9 +12,7 @@ require('./reactions/theme');
 
 const SquelchView = require('./components/squelchView');
 const WelcomeView = require('./components/welcome');
-const ServerView = require('./components/server');
-const ChannelView = require('./components/channel');
-const QueryView = require('./components/query');
+const { ServerWrapper, ChannelWrapper, QueryWrapper } = require('./components/stateWrappers');
 
 const Squelch = require('./core/squelchGlobal');
 const corePkg = require('./core/corePackage');
@@ -30,13 +28,18 @@ const onUpdate = function() {
     State.trigger('route:update', this.state);
 };
 
+// Pass state to route handlers. This lets us avoid cloning elements in SquelchView
+// (React Router wont let us pass state from SquelchView to child views otherwise)
+const createElement = (Component, props) =>
+    <Component {...props} state={State.get()} />;
+
 ReactDOM.render(
-    <Router history={hashHistory} onUpdate={onUpdate}>
+    <Router history={hashHistory} onUpdate={onUpdate} createElement={createElement}>
         <Route path="/" component={SquelchView}>
             <IndexRoute component={WelcomeView} />
-            <Route path="server/:serverId" component={ServerView} />
-            <Route path="server/:serverId/channel/:channel" component={ChannelView} />
-             <Route path="server/:serverId/user/:user" component={QueryView} />
+            <Route path="server/:serverId" component={ServerWrapper} />
+            <Route path="server/:serverId/channel/:channel" component={ChannelWrapper} />
+            <Route path="server/:serverId/user/:user" component={QueryWrapper} />
         </Route>
     </Router>
 , document.getElementById('squelch-root'));

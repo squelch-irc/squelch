@@ -21,7 +21,6 @@ State.on('theme:load', ({ useDefault }) => {
             stream
             .on('error', (err) => console.error(err))
             .pipe(concat({ encoding: 'string' }, (css) => {
-                console.log('setting css');
                 State.get().set({
                     theme: { css },
                     ready: true
