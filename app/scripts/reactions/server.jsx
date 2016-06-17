@@ -2,6 +2,7 @@ const _ = require('lodash');
 const Client = require('squelch-client');
 
 const State = require('../stores/state');
+const Squelch = require('../core/squelchGlobal');
 const ClientWrapper = require('../core/clientWrapper');
 
 // Options for squelch-client that are always the same
@@ -145,6 +146,8 @@ State.on('message:receive', ({ type, server, data }) => {
                     topic: '',
                     joined: true
                 });
+
+                Squelch.focus(id, data.chan);
             }
             else {
                 channels[data.chan].users.set(data.nick, { status: '' });
