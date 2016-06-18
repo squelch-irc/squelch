@@ -11,4 +11,4 @@ module.exports = () => {
             oldWrite.call(process.stdout, str, enc, fd);
         };
     }
-}
+};
