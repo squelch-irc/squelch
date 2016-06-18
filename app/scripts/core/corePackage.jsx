@@ -4,6 +4,7 @@ const shrug = require('../commands/shrug');
 const me = require('../commands/me');
 const msg = require('../commands/msg');
 const join = require('../commands/join');
+const part = require('../commands/part');
 
 const CoreCommandPackage = (Squelch) => {
     return {
@@ -14,6 +15,8 @@ const CoreCommandPackage = (Squelch) => {
             this.subscriptions.add(Squelch.commands.register('msg', msg));
             this.subscriptions.add(Squelch.commands.register('join', join));
             this.subscriptions.add(Squelch.commands.register('j', join));
+            this.subscriptions.add(Squelch.commands.register('part', part));
+            this.subscriptions.add(Squelch.commands.register('p', part));
         },
 
         destroy() {
