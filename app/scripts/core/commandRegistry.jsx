@@ -56,7 +56,7 @@ class CommandRegistry {
      */
     dispatch(name, args) {
         const command = this.commands[name];
-        const context = this._getCommandContext();
+        const context = this._getCommandContext(name);
 
         // If command doesn't exist, send raw message to server
         if(!command) {
@@ -64,6 +64,7 @@ class CommandRegistry {
             return;
         }
 
+        // TODO: try-catch this and output the errors to the server
         const result = command.fn(args, context);
 
         if(typeof result !== 'string') return;
@@ -86,11 +87,12 @@ class CommandRegistry {
      *             {IRCClient} client The client of the current server. Use this
      *                                to interact with the server.
      */
-    _getCommandContext() {
+    _getCommandContext(commandName) {
         const state = State.get();
         const server = state.getCurrentServer();
         return {
             server,
+            commandName,
             target: state.getCurrentTarget(),
             client: server.getClient()
         };

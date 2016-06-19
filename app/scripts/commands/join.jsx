@@ -1,14 +1,15 @@
 const parse = require('string-args');
 
-module.exports =  (args, e) => {
+module.exports =  (args, { target, client, commandName }) => {
     args = parse('target key', args);
 
-    if(!args.target && e.client.isChannel(e.target)) {
-        args.target = e.target;
+    if(!args.target && client.isChannel(target)) {
+        args.target = target;
     }
 
     if(!args.target) {
-        return e.client.info('Usage: /join [channel] {key}');
+        return client.info(`Usage: /${commandName} [channel] {key}`);
     }
-    e.client.join(args.target, args.key);
+
+    client.join(args.target, args.key);
 };
