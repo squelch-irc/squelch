@@ -1,1 +1,1 @@
-module.exports =  (args, { client, target }) => client.raw(args);
+module.exports =  (args, { client }) => client.raw(args);

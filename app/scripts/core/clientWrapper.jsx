@@ -1,7 +1,7 @@
 const _ = require('lodash');
 
 const Squelch = require('./squelchGlobal');
-const State = require ('../stores/state');
+const State = require('../stores/state');
 
 module.exports =  () => (client) => {
     client.info = Squelch.showMsg;
