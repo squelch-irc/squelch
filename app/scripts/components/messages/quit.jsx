@@ -6,7 +6,7 @@ class Quit extends React.Component {
         const message = this.props.message;
 
         return (
-            <span className='quit'>
+            <span className='message-info quit'>
                 ←&nbsp;<Nick nick={message.nick} />&nbsp;
                 has quit&nbsp;{message.reason ? '(' + message.reason + ')' : ''}
             </span>

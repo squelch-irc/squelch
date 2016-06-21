@@ -6,7 +6,7 @@ class Part extends React.Component {
         const message = this.props.message;
 
         return (
-            <span className='part'>
+            <span className='message-info part'>
                 ←&nbsp;<Nick nick={message.nick} />&nbsp;
                 has left {message.chan}&nbsp;{message.reason ? '(' + message.reason + ')' : ''}
             </span>

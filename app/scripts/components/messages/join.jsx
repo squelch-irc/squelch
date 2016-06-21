@@ -6,7 +6,7 @@ class Join extends React.Component {
         const message = this.props.message;
 
         return (
-            <span className='join'>
+            <span className='message-info join'>
                 →&nbsp;<Nick nick={message.nick} />
                 &nbsp;has joined {message.chan}
             </span>

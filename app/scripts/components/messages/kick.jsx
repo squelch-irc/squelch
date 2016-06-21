@@ -5,7 +5,7 @@ class Kick extends React.Component {
     render() {
         const message = this.props.message;
         return (
-            <span className='kick'>
+            <span className='message-info kick'>
                 <Nick nick={message.kicker} className='kicker' />&nbsp;
                 kicked
                 &nbsp;<Nick nick={message.nick} className='kicked'/>&nbsp;

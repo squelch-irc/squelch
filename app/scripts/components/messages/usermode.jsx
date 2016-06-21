@@ -6,7 +6,7 @@ class Usermode extends React.Component {
         const message = this.props.message;
 
         return (
-            <span className='usermode-set'>
+            <span className='message-info usermode-set'>
                 <Nick nick={message.sender} />
                 &nbsp;sets mode <span className='mode'>{message.mode}</span>
             </span>

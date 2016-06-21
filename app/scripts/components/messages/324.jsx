@@ -6,7 +6,7 @@ class Raw324 extends React.Component {
         const mode = this.props.message.params.slice(2);
 
         return (
-            <span className='mode-is'>
+            <span className='message-info mode-is'>
                 Mode for {chan} is <span className='mode'>{mode.join(' ')}</span>
             </span>
         );

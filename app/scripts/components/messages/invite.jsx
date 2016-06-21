@@ -6,7 +6,7 @@ class Invite extends React.Component {
         const message = this.props.message;
 
         return (
-            <span className='invite'>
+            <span className='message-info invite'>
                 &raquo;&nbsp;<Nick nick={message.from} /> has invited you to join {message.chan}
             </span>
         );

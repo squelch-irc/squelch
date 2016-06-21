@@ -7,7 +7,7 @@ class Topic extends React.Component {
         // Ignore no topic messages
         if(message.topic) {
             return (
-                <span className='topic'>
+                <span className='message-info topic'>
                     Topic is <span className='topic-text'>{message.topic}</span>
                 </span>
             );

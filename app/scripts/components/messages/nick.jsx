@@ -7,7 +7,7 @@ class NickMsg extends React.Component {
 
         if(message.me) {
             return (
-                <span className='nick-change'>
+                <span className='message-info nick-change'>
                     You are now known as&nbsp;
                     <Nick nick={message.newNick} className='new-nick' />
                 </span>
