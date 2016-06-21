@@ -7,6 +7,10 @@ module.exports =  (args, { target, client }) => {
         return client.raw('MODE ' + target);
     }
 
+    else if(!chan) {
+        return client.info('Usage: /mode [channel] {mode} {args...}');
+    }
+
     else if(!mode) {
         return client.raw('MODE ' + chan);
     }
