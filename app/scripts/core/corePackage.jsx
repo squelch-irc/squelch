@@ -12,6 +12,7 @@ const deop = require('../commands/deop');
 const voice = require('../commands/voice');
 const devoice = require('../commands/devoice');
 const info = require('../commands/info');
+const slap = require('../commands/slap');
 
 const CoreCommandPackage = (Squelch) => {
     return {
@@ -34,6 +35,7 @@ const CoreCommandPackage = (Squelch) => {
             this.subscriptions.add(Squelch.commands.register('devoice', devoice));
             this.subscriptions.add(Squelch.commands.register('info', info));
             this.subscriptions.add(Squelch.commands.register('echo', info));
+            this.subscriptions.add(Squelch.commands.register('slap', slap));
         },
 
         destroy() {
