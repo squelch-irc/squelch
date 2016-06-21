@@ -1,5 +1,3 @@
-const parse = require('string-args');
-
 module.exports =  (args, { target, client }) => {
     if(!client.isChannel(target)) {
         return client.info('/op can only be used in a channel');
