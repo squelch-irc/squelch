@@ -58,6 +58,7 @@ const MESSAGE_ROUTES = {
     topicwho: toTargetProp('chan'),
     mode: toTargetProp('chan'),
     usermode: toServer,
+    motd: toServer,
     nick: (message, server) => {
         if(message.me) {
             return { all: true };
