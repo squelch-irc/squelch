@@ -15,6 +15,8 @@ const info = require('../commands/info');
 const slap = require('../commands/slap');
 const notice = require('../commands/notice');
 const raw = require('../commands/raw');
+const amsg = require('../commands/amsg');
+const ame = require('../commands/ame');
 
 const CoreCommandPackage = (Squelch) => {
     return {
@@ -40,6 +42,8 @@ const CoreCommandPackage = (Squelch) => {
             this.subscriptions.add(Squelch.commands.register('slap', slap));
             this.subscriptions.add(Squelch.commands.register('notice', notice));
             this.subscriptions.add(Squelch.commands.register('raw', raw));
+            this.subscriptions.add(Squelch.commands.register('amsg', amsg));
+            this.subscriptions.add(Squelch.commands.register('ame', ame));
         },
 
         destroy() {
