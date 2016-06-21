@@ -1,5 +1,7 @@
 'use strict'; // eslint-disable-line strict
 
+if(process.env.NODE_ENV !== 'development') process.env.NODE_ENV = 'production';
+
 const path = require('path');
 const app = require('electron').app;
 const BrowserWindow = require('electron').BrowserWindow;
