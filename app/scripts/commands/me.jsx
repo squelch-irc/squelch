@@ -1,1 +1,1 @@
-module.exports =  (args, e) => e.client.action(e.target, args);
+module.exports =  (args, { client, target }) => client.action(target, args);

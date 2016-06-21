@@ -1,3 +1,3 @@
-module.exports =  (args, e) => {
-    if(args) e.client.info(args);
+module.exports =  (args, { client }) => {
+    if(args) client.info(args);
 };

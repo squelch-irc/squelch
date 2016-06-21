@@ -1,9 +1,9 @@
 const parse = require('string-args');
 
-module.exports =  (args, e) => {
+module.exports =  (args, { client }) => {
     args = parse('target msg...', args);
     if(!args.target || !args.msg) {
-        return e.client.info('Usage: /msg [target] [message]');
+        return client.info('Usage: /msg [target] [message]');
     }
-    e.client.msg(args.target, args.msg);
+    client.msg(args.target, args.msg);
 };
