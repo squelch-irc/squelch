@@ -669,7 +669,7 @@ test('raw', t => {
     testMessageInServer(t, message);
 });
 
-test('raw (blacklisted)', t => {
+test('raw (ignored)', t => {
     const message = fakeMsg({
         type: 'raw',
         command: 'JOIN',
@@ -685,6 +685,46 @@ test('raw (blacklisted)', t => {
 
     testNotModified(t, 'server1');
     testNotModified(t, 'server2');
+});
+
+test('raw 324', t => {
+    const message = fakeMsg({
+        type: 'raw',
+        command: '324',
+        params: ['SquelchUser', '#empty', '+npt']
+        // Other data omitted for brevity
+    });
+
+    MessageRouter({
+        message,
+        server: t.context.state.get().servers.server1,
+        current: t.context.current
+    });
+
+    testModified(t, 'server1');
+    testNotModified(t, 'server2');
+    testMessageInChannel(t, message, '#empty');
+    testMessageInServer(t, message);
+});
+
+test('raw 400-599', t => {
+    const message = fakeMsg({
+        type: 'raw',
+        command: '403',
+        params: ['SquelchUser', '#notexists', 'No such channel']
+        // Other data omitted for brevity
+    });
+
+    MessageRouter({
+        message,
+        server: t.context.state.get().servers.server1,
+        current: t.context.current
+    });
+
+    testModified(t, 'server1');
+    testNotModified(t, 'server2');
+    testMessageInChannel(t, message, '#kellyirc');
+    testMessageInServer(t, message);
 });
 
 test('log overflow', t => {

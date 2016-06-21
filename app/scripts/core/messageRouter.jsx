@@ -29,6 +29,9 @@ const toCurrentAndServer = (message) => {
 // A route function that routes to all logs
 const toAll = () => { return { all: true }; };
 
+// A route function that routes nowhere
+const ignore = () => { return {}; };
+
 // Functions that return where a message type should be sent to
 // Should return {all: boolean, server: boolean, targets: [], message: {}}
 // If all is true, will route to all open logs, otherwise
@@ -117,15 +120,40 @@ const MESSAGE_ROUTES = {
     error: toAll
 };
 
-// TODO: Route certain raw commands.
-// Need to route 421 -> toCurrentAndServer
-// May need to route ranges of number messages depending on what they are?
+const RAW_MESSAGE_ROUTES = {
+    324: (message) => {
+        return { targets: [message.params[1]], server: true };
+    },
+    '400-599': toCurrentAndServer,
+    331: ignore,
+    332: ignore,
+    333: ignore,
+    353: ignore,
+    366: ignore,
+    372: ignore,
+    375: ignore,
+    376: ignore,
+    PING: ignore,
+    PONG: ignore,
+    PRIVMSG: ignore,
+    NOTICE: ignore,
+    JOIN: ignore,
+    PART: ignore,
+    KICK: ignore,
+    MODE: ignore,
+    NAMES: ignore,
+    NICK: ignore,
+    INVITE: ignore,
+    ERROR: ignore,
+    QUIT: ignore
+};
 
-// Raw message commands we should ignore either because they
-// already have a parsed version or a user ain't wanna see that
-const RAW_COMMAND_BLACKLIST = [
-    'PING', 'PONG', 'PRIVMSG', 'NOTICE', 'JOIN', 'PART', 'KICK', 'MODE', 'NAMES', 'NICK', 'INVITE', 'ERROR', 'QUIT', '331', '332', '333', '353', '366', '372', '375', '376'
-];
+const getKeyRange = require('get-key-range').bind(null, RAW_MESSAGE_ROUTES);
+
+// This function takes a number and returns value in above RAW_MESSAGE_ROUTES
+// that satisfies a key's range. Memoized because this runs often w/ same result
+const getRawRoute = _.memoize((cmd) => RAW_MESSAGE_ROUTES[cmd] || getKeyRange(cmd));
+
 const MESSAGE_LIMIT = 100;
 
 // Append to a message log, respecting the message limit
@@ -149,12 +177,18 @@ const appendToUserLog = function(server, user, message) {
 
 // Send message to correct log in state
 const routeMessage = ({ message, server, current }) => {
-
-    // If we have a route defined for this type, send to the
-    // specified logs
+    let route;
+    // Match message against a message type
     if(MESSAGE_ROUTES[message.type]) {
-        const route = MESSAGE_ROUTES[message.type](message, server);
+        route = MESSAGE_ROUTES[message.type](message, server);
+    }
+    // Match message against a specific raw command number
+    else if(message.type === 'raw' && getRawRoute(message.command)) {
+        route = getRawRoute(message.command)(message, server);
+    }
 
+    // If we have a route defined for this type, send to the specified logs
+    if(route) {
         if(route.message) {
             route.message.id = message.id;
             route.message.timestamp = message.timestamp;
@@ -203,8 +237,8 @@ const routeMessage = ({ message, server, current }) => {
         }
 
     }
-    // Else, log to the server if it's not a blacklisted reply
-    else if(message.type === 'raw' && !_.includes(RAW_COMMAND_BLACKLIST, message.command)) {
+    // Else, log to the server
+    else if(message.type === 'raw') {
         appendToLog(server.messages, message);
     }
 

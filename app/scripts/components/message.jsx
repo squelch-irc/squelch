@@ -16,6 +16,7 @@ const NickMsg = require('./messages/nick');
 const Quit = require('./messages/quit');
 const ErrorMsg = require('./messages/error');
 const Raw = require('./messages/raw');
+const Raw324 = require('./messages/324');
 const Info = require('./messages/info');
 const Timestamp = require('./messages/timestamp');
 
@@ -39,6 +40,10 @@ const messageHandlers = {
     info: Info
 };
 
+const rawMessageHandlers = {
+    324: Raw324
+};
+
 class Message extends React.Component {
 
     shouldComponentUpdate(newProps) {
@@ -46,11 +51,13 @@ class Message extends React.Component {
     }
 
     render() {
-        const message = this.props.message;
-        const MessageHandler = messageHandlers[message && message.type];
+        const message = this.props.message || {};
+        const MessageHandler = rawMessageHandlers[message.command] ||
+            messageHandlers[message.type];
         if(!MessageHandler) {
             return null;
         }
+
         return (
             <li className='message'>
                 <Timestamp timestamp={message.timestamp} />
