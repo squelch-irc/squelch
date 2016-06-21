@@ -7,6 +7,10 @@ const join = require('../commands/join');
 const part = require('../commands/part');
 const clear = require('../commands/clear');
 const mode = require('../commands/mode');
+const op = require('../commands/op');
+const deop = require('../commands/deop');
+const voice = require('../commands/voice');
+const devoice = require('../commands/devoice');
 
 const CoreCommandPackage = (Squelch) => {
     return {
@@ -23,6 +27,10 @@ const CoreCommandPackage = (Squelch) => {
             this.subscriptions.add(Squelch.commands.register('close', part));
             this.subscriptions.add(Squelch.commands.register('clear', clear));
             this.subscriptions.add(Squelch.commands.register('mode', mode));
+            this.subscriptions.add(Squelch.commands.register('op', op));
+            this.subscriptions.add(Squelch.commands.register('deop', deop));
+            this.subscriptions.add(Squelch.commands.register('voice', voice));
+            this.subscriptions.add(Squelch.commands.register('devoice', devoice));
         },
 
         destroy() {
