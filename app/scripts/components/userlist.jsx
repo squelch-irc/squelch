@@ -39,9 +39,9 @@ class UserList extends React.Component {
                     {
                         this.sortedUsers().map((user) => {
                             const userClass = `nav-group-item user nick-color-${hash(user.nick)}`;
-                            return <a href='' className={userClass} key={user.nick}>
+                            return <div className={userClass} key={user.nick}>
                                 <User nick={user.nick} status={user.status} />
-                            </a>;
+                            </div>;
                         })
                     }
                 </div>
