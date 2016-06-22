@@ -18,6 +18,13 @@ const notice = require('../commands/notice');
 const raw = require('../commands/raw');
 const amsg = require('../commands/amsg');
 const ame = require('../commands/ame');
+const disconnect = require('../commands/disconnect');
+const kick = require('../commands/kick');
+const kickban = require('../commands/kickban');
+const ns = require('../commands/ns');
+const cs = require('../commands/cs');
+const ban = require('../commands/ban');
+const unban = require('../commands/unban');
 
 const CoreCommandPackage = (Squelch) => {
     return {
@@ -46,6 +53,14 @@ const CoreCommandPackage = (Squelch) => {
             this.subscriptions.add(Squelch.commands.register('raw', raw));
             this.subscriptions.add(Squelch.commands.register('amsg', amsg));
             this.subscriptions.add(Squelch.commands.register('ame', ame));
+            this.subscriptions.add(Squelch.commands.register('disconnect', disconnect));
+            this.subscriptions.add(Squelch.commands.register('quit', disconnect));
+            this.subscriptions.add(Squelch.commands.register('kick', kick));
+            this.subscriptions.add(Squelch.commands.register('kickban', kickban));
+            this.subscriptions.add(Squelch.commands.register('ns', ns));
+            this.subscriptions.add(Squelch.commands.register('cs', cs));
+            this.subscriptions.add(Squelch.commands.register('ban', ban));
+            this.subscriptions.add(Squelch.commands.register('unban', unban));
         },
 
         destroy() {
