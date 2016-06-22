@@ -14,6 +14,7 @@ module.exports =  () => (client) => {
         Squelch.clear(this.id, target);
     };
 
+    const originalPart = client.part;
     /**
      * Closes the view of the target from the UI. If the target is a channel,
      * the client will part the channel before closing.
@@ -21,33 +22,59 @@ module.exports =  () => (client) => {
      */
     client.close = function(target) {
         if(this.isInChannel(target)) {
-            return this.part(target);
+            return originalPart.call(client, target);
         }
 
         Squelch.close(this.id, target);
     };
 
-    client.part = _.wrap(client.part, function(part, channel, ...args) {
-        return part.apply(client, [channel].concat(args))
+    client.part = function(channel, ...args) {
+        const ret = originalPart.apply(client, [channel].concat(args));
+        Squelch.close(this.id, channel);
+        return ret;
+    };
 
-        // Wait for a confirming part event, then close the view
-        .then(() => Squelch.close(this.id, channel));
-    });
+    // Rename these because they use the internal state of the irc client
+    // which is different than our state.
+    delete client.channels;
+    delete client.getChannel;
 
     /**
-     * Returns an array of channels the client is currently in.
-     * @return {Array} Array of channels the client is currently in
+     * Returns an array of channels that the client is currently joined.
+     * @return {string[]} Currently joined channels
      */
-    client.channels = function() {
-        return Object.keys(State.get().servers[this.id].channels);
+    client.getJoinedChannels = function() {
+        return _(State.get().servers[client.id].channels)
+        .filter('joined')
+        .map('name')
+        .value();
     };
 
     /**
-     * Checks if the client is in the given channel.
-     * @param  {string} chan The channel to check
-     * @return {Boolean}     True if the client is in chan, False otherwise
+     * Returns the users currently joined in the given channel.
+     * @param  {string} chan The channel to get users from
+     * @return {string[]}      Array of users in channel
      */
-    client.isInChannel = function(chan) {
-        return State.get().servers[this.id].channels[chan].joined;
+    client.getUsers = function(chan) {
+        return _.values(State.get().servers[client.id].channels[chan].users);
+    };
+
+    /**
+     * Gets the status symbol of a user. This is usually `@` for op, `+` for
+     * voice, or the empty string for a normal user
+     * @param  {string} chan Channel to check
+     * @param  {string} user User to check
+     * @return {string}      The status symbol of user in channel.
+     */
+    client.getUserStatus = function(chan, user) {
+        return State.get().servers[client.id].channels[chan].users[user].status;
+    };
+
+    /**
+     * Returns a list of users that this client has open query windows for.
+     * @return {string[]} Array of users with open query windows
+     */
+    client.getOpenUserWindows = function() {
+        return _.keys(State.get().servers[client.id].userMessages);
     };
 };

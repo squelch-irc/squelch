@@ -157,7 +157,7 @@ State.on('message:receive', ({ type, server, data }) => {
 
         case 'part':
         case 'kick':
-            if(data.me) {
+            if(data.me && channels[data.chan]) {
                 channels[data.chan].set({
                     name: data.chan,
                     joined: false,
@@ -172,11 +172,12 @@ State.on('message:receive', ({ type, server, data }) => {
             break;
 
         case 'names':
+            // TODO: don't rely on client._.channels
             channels[data.chan].set('users', _.reduce(
-                client.getChannel(data.chan).users(),
+                client._.channels[data.chan].users(),
                 (users, nick) =>  {
                     users[nick] = {
-                        status: client.getChannel(data.chan).getStatus(nick)
+                        status: client._.channels[data.chan].getStatus(nick)
                     };
                     return users;
                 },

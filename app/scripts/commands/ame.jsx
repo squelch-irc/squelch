@@ -3,5 +3,5 @@ module.exports =  (args, { client }) => {
         return client.info('Usage: /ame [message]');
     }
 
-    client.channels().map(chan => client.action(chan, args));
+    client.getJoinedChannels().map(chan => client.action(chan, args));
 };

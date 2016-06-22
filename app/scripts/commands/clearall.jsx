@@ -1,5 +1,5 @@
-module.exports =  (args, { client, server }) => {
+module.exports =  (args, { client }) => {
     client.clear();
-    client.channels().forEach(chan => client.clear(chan));
-    Object.keys(server.userMessages).forEach(user => client.clear(user));
+    client.getJoinedChannels().forEach(chan => client.clear(chan));
+    client.getOpenUserWindows().forEach(user => client.clear(user));
 };

@@ -83,8 +83,7 @@ const Squelch = {
 
         if(server.channels[target]) {
             if(server.channels[target].joined) {
-                server.getClient().part(target)
-                .then(() => server.channels.remove(target));
+                server.getClient().part(target);
             }
 
             server.channels.remove(target);
