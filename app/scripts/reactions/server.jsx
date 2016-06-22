@@ -217,7 +217,7 @@ State.on('message:receive', ({ type, server, data }) => {
             server = server.set('connected', false);
             _.each(channels, (channel) => {
                 channel.set({
-                    name: channel,
+                    name: channel.name,
                     joined: false,
                     users: {},
                     mode: [],
