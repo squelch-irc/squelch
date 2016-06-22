@@ -1,6 +1,5 @@
 const React = require('react');
 
-const MenuHandler = require('../../core/menuHandler');
 const checkPropsChanged = require('../util/checkPropsChanged');
 
 class User extends React.Component {
@@ -9,14 +8,9 @@ class User extends React.Component {
         return checkPropsChanged(this.props, newProps, 'status', 'nick');
     }
 
-    loadContextMenu(e) {
-        e.preventDefault();
-        MenuHandler.loadUserContextMenu(this);
-    }
-
     render() {
         return (
-            <div onContextMenu={this.loadContextMenu.bind(this.props)}>
+            <div>
                 <span className='user-flag'>{this.props.status}</span>
                 <span className='user-name'>{this.props.nick}</span>
             </div>

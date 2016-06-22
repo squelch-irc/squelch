@@ -4,18 +4,12 @@ const { Link } = require('react-router');
 const TreeView = require('react-treeview');
 const classnames = require('classnames');
 
-const MenuHandler = require('../../core/menuHandler');
 const checkPropsChanged = require('../util/checkPropsChanged');
 
 class ServerListItem extends React.Component {
 
     shouldComponentUpdate(newProps) {
         return checkPropsChanged(this.props, newProps, 'server', 'routeParams');
-    }
-
-    loadContextMenu(e) {
-        e.preventDefault();
-        MenuHandler.loadChannelContextMenu(this);
     }
 
     render() {
@@ -56,8 +50,7 @@ class ServerListItem extends React.Component {
                     return <Link
                         className={channelLabelClass}
                         key={name}
-                        to={{ pathname: url }}
-                        onContextMenu={this.loadContextMenu.bind(channel)}>
+                        to={{ pathname: url }}>
                         {name}
                     </Link>;
                 })

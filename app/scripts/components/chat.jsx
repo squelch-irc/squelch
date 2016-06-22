@@ -3,7 +3,6 @@ const React = require('react');
 const ReactDOM = require('react-dom');
 
 const Message = require('./message');
-const MenuHandler = require('../../core/menuHandler');
 
 class Chat extends React.Component {
 
@@ -11,15 +10,10 @@ class Chat extends React.Component {
         return this.props.messages !== newProps.messages;
     }
 
-    loadContextMenu(e) {
-        e.preventDefault();
-        MenuHandler.loadChannelContextMenu(this);
-    }
-
     render() {
         const messages = this.props.messages;
         return (
-            <div className='message-container' onContextMenu={this.loadContextMenu.bind(this.props.channel)}>
+            <div className='message-container'>
                 <ul className='messages'>{
                     _.map(messages, (message) =>
                         <Message message={message} key={message.id} />
