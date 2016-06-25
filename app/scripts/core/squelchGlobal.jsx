@@ -115,6 +115,22 @@ const Squelch = {
         else if(server.userMessages[target]) {
             server.userMessages.set(target, []);
         }
+    },
+
+    addServer(config) {
+        State.trigger('server:add', { config });
+    },
+
+    /**
+     * Close and remove a server from Squelch.
+     * @param  {string|Server|Client} id The id of the server, or the server
+     *                                   state object, or the server Client
+     */
+    removeServer(id) {
+        // Get id if id is server objector Client
+        if(typeof id === 'object') id = id.id;
+
+        State.trigger('server:remove', { id });
     }
 
 };

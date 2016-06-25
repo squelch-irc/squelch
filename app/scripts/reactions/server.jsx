@@ -97,13 +97,12 @@ State.on('server:add', ({ config }) => {
 /**
  * Removes a server. Accepts a server id, a server object, or irc client
  */
-State.on('server:remove', ({ id, server, client }) => {
-    id = id || server.id || client.id;
-    server = State.get().servers[id];
+State.on('server:remove', ({ id }) => {
+    const server = State.get().servers[id];
 
     if(!server) throw new Error(`Cannot remove ${id}, it does not exist, or has already been removed. (Saving references to servers is highly discouraged, as it can lead to memory leaks.)`);
 
-    client = server.getClient();
+    const client = server.getClient();
     client.forceQuit();
     client.removeAllListeners();
 

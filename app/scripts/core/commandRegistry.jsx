@@ -91,6 +91,7 @@ class CommandRegistry {
         const state = State.get();
         const server = state.getCurrentServer();
         return {
+            state,
             server,
             commandName,
             target: state.getCurrentTarget(),

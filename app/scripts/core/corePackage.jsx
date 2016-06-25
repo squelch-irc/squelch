@@ -20,6 +20,7 @@ const amsg = require('../commands/amsg');
 const ame = require('../commands/ame');
 const disconnect = require('../commands/disconnect');
 const reconnect = require('../commands/reconnect');
+const connect = require('../commands/connect');
 const kick = require('../commands/kick');
 const kickban = require('../commands/kickban');
 const ns = require('../commands/ns');
@@ -56,6 +57,7 @@ const CoreCommandPackage = (Squelch) => {
             this.subscriptions.add(Squelch.commands.register('ame', ame));
             this.subscriptions.add(Squelch.commands.register('disconnect', disconnect));
             this.subscriptions.add(Squelch.commands.register('reconnect', reconnect));
+            this.subscriptions.add(Squelch.commands.register('connect', connect(Squelch)));
             this.subscriptions.add(Squelch.commands.register('quit', disconnect));
             this.subscriptions.add(Squelch.commands.register('kick', kick));
             this.subscriptions.add(Squelch.commands.register('kickban', kickban));
