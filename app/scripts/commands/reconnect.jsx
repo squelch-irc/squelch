@@ -1,6 +1,6 @@
 module.exports =  (args, { client }) => {
 
-    if(client.isConnected()) return;
+    if(client.isConnected() || client.isConnecting()) return;
 
     client.connect();
 };

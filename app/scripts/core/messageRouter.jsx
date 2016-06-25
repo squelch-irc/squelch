@@ -104,10 +104,10 @@ const MESSAGE_ROUTES = {
             message: { type: 'info', msg: `Reconnecting in ${message.delay/1000} seconds (${message.triesLeft} tries remaining)...` }
         };
     },
-    disconnect: () => {
+    disconnect: (message) => {
         return {
             all: true,
-            message: { type: 'info', msg: 'Disconnected' }
+            message: { type: 'info', msg: `Disconnected (${message.reason})` }
         };
     },
     quit: (message, server) => {
