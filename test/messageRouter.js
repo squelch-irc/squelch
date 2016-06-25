@@ -545,9 +545,7 @@ test('connect', t => {
 test('disconnect', t => {
     const message = fakeMsg({
         type: 'disconnect',
-        server: 'irc.ircnet.net',
-        port: 6667,
-        nick: 'PakaluPapito'
+        reason: 'Force Quit'
     });
 
     MessageRouter({
@@ -560,7 +558,7 @@ test('disconnect', t => {
         type: 'info',
         id: message.id,
         timestamp: message.timestamp,
-        msg: 'Disconnected'
+        msg: 'Disconnected (Force Quit)'
     };
 
     testModified(t, 'server1');
