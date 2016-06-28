@@ -2,6 +2,7 @@ const path = require('path');
 const fs = require('fs-extra');
 const Promise = require('bluebird');
 const _ = require('lodash');
+const appPath = require('electron').remote.app.getPath('exe');
 
 const State = require('../stores/state');
 
@@ -20,6 +21,7 @@ const DEFAULT_CONFIG = {
 
 const CONFIG_PATHS = [
     '.',
+    appPath,
     DEFAULT_PATH
 ];
 
