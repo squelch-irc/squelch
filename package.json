@@ -7,8 +7,7 @@
   "main": "main.js",
   "scripts": {
     "start": "npm run start-dev",
-    "start-dev": "cross-env NODE_ENV=development npm run start-prod",
-    "start-debug": "cross-env DEBUG=squelch-client npm run start-dev",
+    "start-dev": "cross-env NODE_ENV=development DEBUG=squelch-client npm run start-prod",
     "start-prod": "electron .",
     "clean": "rimraf release/",
     "lint": "eslint --ext .js,.jsx app main.js menu.js",
