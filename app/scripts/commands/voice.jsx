@@ -7,3 +7,6 @@ module.exports =  (args, { target, client }) => {
 
     client.voice(target, args.split(/\s+/));
 };
+
+module.exports.help = 'Sets voice status on one or more users in the channel.';
+module.exports.usage = '[nick...]';

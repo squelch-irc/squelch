@@ -9,3 +9,6 @@ module.exports =  (args, { target, client, commandName }) => {
 
     client.close(args.target || target, args.reason);
 };
+
+module.exports.help = 'Leaves a channel. An explicit channel and reason may be optionally provided';
+module.exports.usage = '{channel} {reason}';

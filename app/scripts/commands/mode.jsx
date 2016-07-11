@@ -17,3 +17,6 @@ module.exports =  (args, { target, client }) => {
 
     client.mode(chan, mode, modeArgs);
 };
+
+module.exports.help = 'Sets the mode for a channel. If the mode is omitted, then the current mode will be shown.';
+module.exports.usage = '[channel] {mode} {args...}';

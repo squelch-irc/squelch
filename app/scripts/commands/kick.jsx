@@ -13,5 +13,8 @@ module.exports =  (args, { target, client, commandName }) => {
     }
 
     client.kick(target, args.nick, args.reason);
-    
+
 };
+
+module.exports.help = 'Kicks a user from the channel. An optional reason may be provided.';
+module.exports.usage = '[nick] {reason}';

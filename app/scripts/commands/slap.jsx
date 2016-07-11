@@ -7,3 +7,6 @@ module.exports =  (args, { target, client }) => {
     }
     client.action(target, `slaps ${args} around a bit with a large trout`);
 };
+
+module.exports.help = 'Slaps a user';
+module.exports.usage = '[nick]';

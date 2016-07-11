@@ -41,11 +41,11 @@ const Squelch = {
      * Show an info message in the current server.
      * @param  {String} msg The message to display
      */
-    showMsg(msg) {
+    showMsg(msg, opts = {}) {
         State.trigger('message:receive', {
             server: State.get().getCurrentServer(),
             type: 'info',
-            data: { msg }
+            data: Object.assign({ msg }, opts)
         });
     },
 

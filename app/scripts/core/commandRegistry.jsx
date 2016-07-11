@@ -27,6 +27,8 @@ class CommandRegistry {
         }
 
         opts.fn = fn;
+        opts.help = opts.help || opts.fn.help;
+        opts.usage = opts.usage || opts.fn.usage;
         this.commands[name] = opts;
         return new Disposable(() => this.unregister(name));
     }
@@ -127,6 +129,10 @@ class CommandRegistry {
 
         this.dispatch(commandParts.name, commandParts.args);
         return true;
+    }
+
+    getCommands() {
+        return this.commands;
     }
 }
 

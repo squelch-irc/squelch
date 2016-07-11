@@ -7,3 +7,6 @@ module.exports =  (args, { target, client }) => {
 
     client.devoice(target, args.split(/\s+/));
 };
+
+module.exports.help = 'Removes voice status from one or more users in the channel.';
+module.exports.usage = '[nick...]';

@@ -7,3 +7,6 @@ module.exports =  (args, { target, client }) => {
 
     client.deop(target, args.split(/\s+/));
 };
+
+module.exports.help = 'Removes op status from one or more users in the channel.';
+module.exports.usage = '[nick...]';

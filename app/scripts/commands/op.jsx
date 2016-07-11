@@ -7,3 +7,6 @@ module.exports =  (args, { target, client }) => {
 
     client.op(target, args.split(/\s+/));
 };
+
+module.exports.help = 'Sets op status on one or more users in the channel.';
+module.exports.usage = '[nick...]';

@@ -16,3 +16,6 @@ module.exports =  (args, { target, client, commandName }) => {
     client.ban(target, args.nick);
 
 };
+
+module.exports.help = 'Kicks and bans a user from the channel. An optional reason can be provided.';
+module.exports.usage = '[nick] {reason}';

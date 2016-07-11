@@ -7,3 +7,6 @@ module.exports =  (args, { client }) => {
     }
     client.msg(args.target, args.msg);
 };
+
+module.exports.help = 'Sends a message to a target.';
+module.exports.usage = '[target] [message]';

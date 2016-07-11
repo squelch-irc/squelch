@@ -13,3 +13,6 @@ module.exports =  (args, { target, client, commandName }) => {
 
     client.join(args.target, args.key);
 };
+
+module.exports.help = 'Joins a channel. A channel key may optionally be provided';
+module.exports.usage = '[channel] {key}';

@@ -4,3 +4,5 @@ module.exports =  (args, { client }) => {
 
     client.connect();
 };
+
+module.exports.help = 'Reconnects to the server.';

@@ -11,3 +11,6 @@ module.exports =  (args, { target, client, commandName }) => {
     client.unban(target, args.nick);
 
 };
+
+module.exports.help = 'Unbans a user from the channel.';
+module.exports.usage = '[nick]';

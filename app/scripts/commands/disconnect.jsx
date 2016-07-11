@@ -6,3 +6,6 @@ module.exports =  (args, { client }) => {
 
     return client.info('You are not connected to this server');
 };
+
+module.exports.help = 'Disconnects from the current server.';
+module.exports.usage = '{reason}';
