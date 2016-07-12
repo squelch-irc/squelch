@@ -28,6 +28,7 @@ const cs = require('../commands/cs');
 const ban = require('../commands/ban');
 const unban = require('../commands/unban');
 const help = require('../commands/help');
+const topic = require('../commands/topic');
 
 const CoreCommandPackage = (Squelch) => {
     return {
@@ -67,6 +68,7 @@ const CoreCommandPackage = (Squelch) => {
             this.subscriptions.add(Squelch.commands.register('ban', ban));
             this.subscriptions.add(Squelch.commands.register('unban', unban));
             this.subscriptions.add(Squelch.commands.register('help', help(Squelch)));
+            this.subscriptions.add(Squelch.commands.register('topic', topic));
         },
 
         destroy() {

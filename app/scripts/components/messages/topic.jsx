@@ -12,6 +12,10 @@ class Topic extends React.Component {
                 </span>
             );
         }
+        
+        return <span className='message-info topic no-topic'>
+            No topic is set
+        </span>;
     }
 }
 
