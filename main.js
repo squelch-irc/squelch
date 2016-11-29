@@ -1,31 +1,42 @@
-'use strict'; // eslint-disable-line strict
+if (process.env.NODE_ENV !== 'development') process.env.NODE_ENV = 'production'
 
-if(process.env.NODE_ENV !== 'development') process.env.NODE_ENV = 'production';
+const path = require('path')
+const app = require('electron').app
+const BrowserWindow = require('electron').BrowserWindow
+const Menu = require('electron').Menu
+const localShortcut = require('electron-localshortcut')
 
-const path = require('path');
-const app = require('electron').app;
-const BrowserWindow = require('electron').BrowserWindow;
-const Menu = require('electron').Menu;
+require('electron-debug')()
 
-require('electron-debug')();
+const load = (win) => win.loadURL(path.join('file://', __dirname, '/app/index.html'))
 
-let mainWindow = null;
+const reload = () => {
+  load(BrowserWindow.getFocusedWindow())
+}
 
-app.on('window-all-closed', () => app.quit());
+let mainWindow = null
+
+app.on('window-all-closed', () => app.quit())
 
 app.on('ready', () => {
-    Menu.setApplicationMenu(require('./menu')(app));
+  // Override electron-debug shortcut to reload from home page
+  localShortcut.register('CmdOrCtrl+R', reload)
+  localShortcut.register('F5', reload)
 
-    mainWindow = new BrowserWindow({
-        width: 1024,
-        height: 576
-    });
+  Menu.setApplicationMenu(require('./menu')(app))
 
-    mainWindow.loadURL(path.join('file://', __dirname, '/app/app.html'));
+  mainWindow = new BrowserWindow({
+    width: 1024,
+    height: 576
+  })
 
-    mainWindow.on('closed', () => mainWindow = null);
+  load(mainWindow)
 
-    if(process.env.NODE_ENV === 'development') {
-        mainWindow.openDevTools();
-    }
-});
+  mainWindow.on('closed', () => {
+    mainWindow = null
+  })
+
+  if (process.env.NODE_ENV === 'development') {
+    mainWindow.openDevTools()
+  }
+})
