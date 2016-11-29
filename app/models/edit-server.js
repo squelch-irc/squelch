@@ -20,7 +20,7 @@ const checkit = Checkit({
     if (nick.match(/^\d/)) throw new Error(`The nickname can't start with a digit`)
     if (nick[0] === '-') throw new Error(`The nickname can't start with a hyphen`)
     if (nick.match(/\s/)) throw new Error(`The nickname can't have spaces`)
-    var invalidChar = nick.match(/(^[^a-z_\-\[\]\\^{}|`]|[^a-z0-9_\-\[\]\\^{}|`])/i)
+    var invalidChar = nick.match(/(^[^a-z_\-[\]\\^{}|`]|[^a-z0-9_\-[\]\\^{}|`])/i)
     if (invalidChar) {
       throw new Error(`The nickname can't have this character: ${invalidChar[0]}`)
     }
