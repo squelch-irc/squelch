@@ -30,7 +30,7 @@ app.model(require('choo-location-electron')())
 app.model(require('./models/main'))
 app.model(require('./models/select-server'))
 app.model(require('./models/edit-server'))
-// app.model(require('./models/config'))
+app.model(require('./models/config'))
 
 app.router('/', [
   ['/', require('./views/welcome')],

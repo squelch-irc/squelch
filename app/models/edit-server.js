@@ -1,7 +1,6 @@
 const immutably = require('object-path-immutable')
 const username = require('username').sync()
 const Checkit = require('checkit')
-// TODO: test this in electron so this actually works
 // TODO: don't use sync call
 
 const addLabel = label => rule => ({ rule, label })
@@ -46,6 +45,22 @@ module.exports = {
     validation: {
       err: null,
       valid: false
+    }
+  },
+  effects: {
+    save: (state, data, send, done) => {
+      if (!state.validation.valid) throw new Error('Cannot save invalid server')
+
+      let promise
+      if (state.index != null) {
+        // TODO: edit existing server
+      } else {
+        promise = send('config:addServer', { server: state.config })
+      }
+      return promise.then(() => {
+        // TODO: goto irc page
+        console.log('done saving')
+      })
     }
   },
   reducers: {

@@ -118,7 +118,11 @@ module.exports = (state, prev, send) => {
             className: 'mr2',
             onClick: () => window.history.back()
           })}
-          ${PrimaryButton({ label: 'Save', disabled: !validation.valid })}
+          ${PrimaryButton({
+            label: 'Save',
+            disabled: !validation.valid,
+            onClick: () => send('editServer:save')
+          })}
         </div>
       </div>
     </main>
