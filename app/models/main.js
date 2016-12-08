@@ -13,9 +13,9 @@ module.exports = {
         actualConfig.port = config.port
         actualConfig.ssl = config.ssl
       }
-      return send('editServer:reset')
-      .then(() => { if (showAdvanced) return send('editServer:toggleAdvanced') })
-      .then(() => send('editServer:setConfig', actualConfig))
+      return send('editServer_reset')
+      .then(() => { if (showAdvanced) return send('editServer_toggleAdvanced') })
+      .then(() => send('editServer_setConfig', actualConfig))
       .then(() => send('location:set', '/edit-server'))
     }
   }

@@ -2,7 +2,7 @@
 html, body, main {
   width: 100%;
   height: 100%;
-  font-family: 'helvetica neue', helvetica, sans-serif;
+  font-family: system, -apple-system, ".SFNSDisplay-Regular", "Helvetica Neue", Helvetica, "Segoe UI", sans-serif;
 }
 
 /* Appify for Electron */
@@ -23,6 +23,10 @@ form, input, optgroup, select, textarea {
 
 /* Custom CSS Classes */
 
+.f7 {
+  font-size: .75rem;
+}
+
 .focus-b--light-gray:focus {
   border-color: var(--light-gray);
   transition: border-color .15s ease-in;
@@ -34,4 +38,16 @@ form, input, optgroup, select, textarea {
 
 .disabled {
   pointer-events: none;
+}
+
+.w-sidebar {
+  width: 12rem;
+}
+
+.w-tiny {
+  width: .75rem;
+}
+
+.h-tiny {
+  height: .75rem;
 }

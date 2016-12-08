@@ -22,8 +22,8 @@ const ServerInfo = (config) => html`
 
 module.exports = (state, prev, send) => {
   const { config, showAdvanced, validation } = state.editServer
-  const toggleAdvanced = () => send('editServer:toggleAdvanced')
-  const updateConfig = (prop) => value => send('editServer:setConfig', { [prop]: value })
+  const toggleAdvanced = () => send('editServer_toggleAdvanced')
+  const updateConfig = (prop) => value => send('editServer_setConfig', { [prop]: value })
 
   let err = {}
   if (validation.err) err = validation.err.toJSON()
@@ -121,7 +121,7 @@ module.exports = (state, prev, send) => {
           ${PrimaryButton({
             label: 'Save',
             disabled: !validation.valid,
-            onClick: () => send('editServer:save')
+            onClick: () => send('editServer_save')
           })}
         </div>
       </div>

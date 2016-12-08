@@ -31,12 +31,17 @@ app.model(require('./models/main'))
 app.model(require('./models/select-server'))
 app.model(require('./models/edit-server'))
 app.model(require('./models/config'))
+app.model(require('./models/servers'))
 
+// TODO: have a loading screen at '/' and only go to welcome if no servers in config
 app.router('/', [
   ['/', require('./views/welcome')],
   ['/select-server', require('./views/select-server')],
-  ['/edit-server', require('./views/edit-server')]
+  ['/edit-server', require('./views/edit-server')],
+  ['/server/:serverId', require('./views/main')]
 ])
 
 const tree = app.start()
 document.body.appendChild(tree)
+
+window.app = app;
