@@ -34,14 +34,18 @@ app.model(require('./models/config'))
 app.model(require('./models/servers'))
 
 // TODO: have a loading screen at '/' and only go to welcome if no servers in config
+const escapeParams = require('./util/escapeParams')
 app.router('/', [
   ['/', require('./views/welcome')],
   ['/select-server', require('./views/select-server')],
   ['/edit-server', require('./views/edit-server')],
-  ['/server/:serverId', require('./views/main')]
+  ['/server/:serverId', require('./views/main'), [
+    ['/channel/:channel', escapeParams(require('./views/main'))],
+    ['/user/:user', escapeParams(require('./views/main'))]
+  ]]
 ])
 
 const tree = app.start()
 document.body.appendChild(tree)
 
-window.app = app;
+window.app = app

@@ -36,7 +36,7 @@ module.exports = {
       return send('_addServer', { config: serverConfig, client })
       .then(() => {
         client.connect(Infinity)
-        return send('location:set', `/server/${client.id}`)
+        return send('gotoServer', { serverId: client.id })
       })
     },
     removeServer: (state, { id }, send) => {
@@ -53,6 +53,7 @@ module.exports = {
   reducers: {
     _addServer: (state, { config, client }) => {
       return immutably.set(state, ['servers', client.id], {
+        id: client.id,
         name: config.name,
         messages: [],
         userMessages: {},
