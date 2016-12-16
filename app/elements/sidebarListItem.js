@@ -8,6 +8,7 @@ module.exports = ({
   onClick
 }) => {
   const className = cn('pv1 pl3 pointer', {
+    // TODO: probably need custom hover colors (transparent instead of gray, light-blue is too light)
     'o-70 hover-bg-mid-gray': !active && !highlighted,
     'bg-blue hover-bg-light-blue': active,
     'fw5': highlighted && !active
