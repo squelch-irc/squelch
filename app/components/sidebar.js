@@ -60,7 +60,7 @@ const Server = (state, id, send) => {
 
 module.exports = (state, prev, send) => {
   return html`
-    <nav class="h-100 w-sidebar near-white bg-dark-gray">
+    <nav class="h-100 w-sidebar overflow-scroll near-white bg-dark-gray">
       ${_.map(state.servers, (server, id) => Server(state, id, send))}
     </nav>
   `
