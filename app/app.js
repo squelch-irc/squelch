@@ -39,8 +39,8 @@ app.router({ default: '/' }, [
   ['/select-server', require('./views/select-server')],
   ['/edit-server', require('./views/edit-server')],
   ['/server/:serverId', require('./views/main'), [
-    ['/channel/:channel', (require('./views/main'))],
-    ['/user/:user', (require('./views/main'))]
+    ['/channel/:channel', escapeParams(require('./views/main'))],
+    ['/user/:user', escapeParams(require('./views/main'))]
   ]]
 ])
 

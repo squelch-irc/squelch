@@ -2,7 +2,7 @@ const html = require('choo/html')
 const cn = require('classnames')
 const _ = require('lodash')
 
-const { isActive } = require('../models/util')
+const { isActive, getCurrentChannel, getCurrentPrivMsg } = require('../models/util')
 const ListItem = require('../elements/sidebarListItem')
 
 const ConnectionIndicator = connected => {
@@ -34,18 +34,37 @@ const PrivMsgListItem = (state, server, nick, send) => {
   })
 }
 
+const ServerListItem = (state, server, send) => {
+  const desiredNick = state.config.servers[server.name].nick
+  const active = isActive(state, server.id) &&
+    !getCurrentChannel(state) &&
+    !getCurrentPrivMsg(state)
+
+  const classNames = cn('mv2 pv2 pl3 pointer', {
+    'hover-bg-mid-gray': !active,
+    'bg-blue hover-bg-light-blue': active
+  })
+
+  const onClick = () => {
+    if (!active) send('gotoServer', { serverId: server.id })
+  }
+
+  return html`
+    <div class=${classNames} onclick=${onClick}>
+      <h1 class="f4 mt0 mb2">${server.name}</h1>
+      <h2 class="flex items-center f7 fw3 mv0">
+        ${ConnectionIndicator(server.connected)}
+        <span class="o-40">${server.client.nick() || desiredNick}</span>
+      </h2>
+    </div>
+  `
+}
+
 const Server = (state, id, send) => {
   const server = state.servers[id]
-  const desiredNick = state.config.servers[server.name].nick
   return html`
     <div>
-      <div class="pv3 pl3">
-        <h1 class="f4 mt0 mb2">${server.name}</h1>
-        <h2 class="flex items-center f7 fw3 mv0">
-          ${ConnectionIndicator(server.connected)}
-          <span class="o-40">${server.client.nick() || desiredNick}</span>
-        </h2>
-      </div>
+      ${ServerListItem(state, server, send)}
       <h2 class="f7 fw4 ttu tracked o-40 mt0 mb1 pl3">Channels</h2>
       <ul class="list f5 fw3 mt0 mb2 ph0">
         ${_.map(server.channels, chan => ChannelListItem(state, server, chan, send))}

@@ -1,6 +1,6 @@
 const immutably = require('object-path-immutable')
 
-// TODO: find a way to avoid having to use this
+// TODO: remove this when https://github.com/yoshuawuyts/wayfarer/pull/51 is merged
 module.exports = view => (state, ...args) => {
   const { channel, user } = state.location.params
   state = immutably.assign(state, 'location.params', {
