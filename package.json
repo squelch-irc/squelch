@@ -63,8 +63,8 @@
     "require-dir": "^0.3.0",
     "squelch-base-theme": "^0.0.11",
     "squelch-client": "^0.19.0",
-    "squelch-nick-hash": "^1.0.1",
     "string-args": "^1.0.2",
+    "string-hash": "^1.1.1",
     "tachyons": "^4.5.6",
     "tachyons-svg": "^1.0.0",
     "username": "^2.2.2"
