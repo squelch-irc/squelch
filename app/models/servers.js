@@ -201,8 +201,8 @@ module.exports = {
           case '-mode':
           case 'disconnect':
             send(`serverEvent_${event}`, data)
-            send('receiveMessage', data)
         }
+        send('receiveMessage', data)
 
         // Workaround to tell choo's promise plugin that this subscription never ends
         return new Promise(() => {})
