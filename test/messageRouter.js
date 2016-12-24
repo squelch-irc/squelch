@@ -1,3 +1,4 @@
+// TODO: get unit test coverage and make sure this covers everything
 const test = require('ava')
 const _ = require('lodash')
 const deepFreeze = require('deep-freeze-node')

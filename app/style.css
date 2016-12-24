@@ -51,3 +51,7 @@ form, input, optgroup, select, textarea {
 .h-tiny {
   height: .75rem;
 }
+
+.break-word {
+  word-break: break-word;
+}
