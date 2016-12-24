@@ -1,98 +1,103 @@
 const test = require('ava')
-const Freezer = require('freezer-js')
 const _ = require('lodash')
-
-const MessageRouter = require('../app/scripts/core/messageRouter')
+const deepFreeze = require('deep-freeze-node')
+const immutably = require('object-path-immutable')
+const MessageRouter = require('../app/models/messageRouter')
 
 // Generate a fake message object
-const fakeMsg = (from, to, msg) => {
+const fakeMsg = (from, to, msg, id = 'server1') => {
     // If first param is object, set up boilerplate properties
   if (_.isObject(from)) {
-    from.id = _.uniqueId()
+    from.id = id
+    from.messageId = _.uniqueId()
     from.timestamp = new Date()
     return from
   }
 
     // Else make a 'msg' message
   return {
-    id: _.uniqueId(),
+    id,
     msg,
     to,
     from,
+    messageId: _.uniqueId(),
     type: 'msg',
     timestamp: new Date()
   }
 }
 
 // Tests if one server state was modified
-const testModified = (t, serverId) => {
-  const { servers } = t.context.state.get()
-  const oldServers = t.context.oldState.servers
-
-  t.not(servers[serverId], oldServers[serverId], `${serverId} should be modified`)
-}
+const testModified = (t, newState, serverId) => t.not(
+  t.context.state.servers[serverId],
+  newState.servers[serverId],
+  `Server ${serverId} should be modified`
+)
 
 // Tests if one server state was not modified
-const testNotModified = (t, serverId) => {
-  const { servers } = t.context.state.get()
-  const oldServers = t.context.oldState.servers
+const testNotModified = (t, newState, serverId) => t.is(
+  t.context.state.servers[serverId],
+  newState.servers[serverId],
+  `Server ${serverId} should be unmodified`
+)
 
-  t.is(servers[serverId], oldServers[serverId], 'Server 1 should be unmodified')
-}
-
-const testMessageInServer = (t, message, serverId = 'server1') => {
-  const log = t.context.state.get().servers[serverId].messages
-  const oldLog = t.context.oldState.servers[serverId].messages
-
-  t.is(log.length, oldLog.length + 1)
-  t.deepEqual(log[log.length - 1], message)
-}
-
-const testMessageInChannel = (t, message, channel, serverId = 'server1') => {
-  const log = t.context.state.get().servers[serverId].channels[channel].messages
-  const oldLog = t.context.oldState.servers[serverId].channels[channel].messages
+const testMessageInServer = (t, newState, message, serverId = 'server1') => {
+  const oldLog = t.context.state.servers[serverId].messages
+  const log = newState.servers[serverId].messages
 
   t.is(log.length, oldLog.length + 1)
   t.deepEqual(log[log.length - 1], message)
 }
 
-const testMessageInUser = (t, message, user, serverId = 'server1') => {
-  const log = t.context.state.get().servers[serverId].userMessages[user]
-  const oldLog = t.context.oldState.servers[serverId].userMessages[user]
+const testMessageInChannel = (t, newState, message, channel, serverId = 'server1') => {
+  const oldLog = t.context.state.servers[serverId].channels[channel].messages
+  const log = newState.servers[serverId].channels[channel].messages
+
+  t.is(log.length, oldLog.length + 1)
+  t.deepEqual(log[log.length - 1], message)
+}
+
+const testMessageInUser = (t, newState, message, user, serverId = 'server1') => {
+  const oldLog = t.context.state.servers[serverId].userMessages[user]
+  const log = newState.servers[serverId].userMessages[user]
 
   t.is(log.length, (oldLog || []).length + 1)
   t.deepEqual(log[log.length - 1], message)
 }
 
-const testMessageInAll = (t, message, serverId = 'server1') => {
-  testMessageInServer(t, message, serverId)
+const testMessageInAll = (t, newState, message, serverId = 'server1') => {
+  testMessageInServer(t, newState, message, serverId)
 
-  const server = t.context.state.get().servers[serverId]
+  const server = t.context.state.servers[serverId]
 
   _(server.userMessages)
     .keys()
-    .each(user => testMessageInUser(t, message, user, serverId))
+    .each(user => testMessageInUser(t, newState, message, user, serverId))
 
   _(server.channels)
     .keys()
-    .each(chan => testMessageInChannel(t, message, chan, serverId))
+    .each(chan => testMessageInChannel(t, newState, message, chan, serverId))
 }
 
 test.beforeEach(t => {
     // Create a mock client getter that implements enough methods
     // to work with the message router
-  const createGetClient = id => () => {
-    return {
-      nick: () => 'PakaluPapito',
-      isInChannel: (ch, user = 'PakaluPapito') => {
-        const users = t.context.state.get().servers[id].channels[ch].users
-        return users[user] !== null && users[user] !== undefined
-      },
-      isChannel: (ch) => ch[0] === '#'
-    }
-  }
+  const createGetClient = id => ({
+    nick: () => 'PakaluPapito',
+    isInChannel: (ch, user = 'PakaluPapito') => {
+      const users = t.context.state.get().servers[id].channels[ch].users
+      return users[user] !== null && users[user] !== undefined
+    },
+    isChannel: (ch) => ch[0] === '#'
+  })
 
-  t.context.state = new Freezer({
+  t.context.state = deepFreeze({
+    location: {
+      params: {
+        serverId: 'server1',
+        channel: '#kellyirc',
+        user: undefined
+      }
+    },
     servers: {
       server1: {
         id: 'server1',
@@ -103,10 +108,12 @@ test.beforeEach(t => {
         },
         channels: {
           '#kellyirc': {
+            name: '#kellyirc',
             messages: [],
             users: { seiyria: '', KR: '', SpookyCo: '', PakaluPapito: '' }
           },
           '#furry': {
+            name: '#furry',
             messages: [
               fakeMsg('FurryBoy23', '#furry', 'Love too be furry'),
               fakeMsg('Furrygirl23', '#furry', 'Same')
@@ -114,36 +121,29 @@ test.beforeEach(t => {
             users: { seiyria: '', KR: '', PakaluPapito: '' }
           },
           '#empty': {
+            name: '#empty',
             messages: [],
             users: { PakaluPapito: '' }
           }
         },
         connected: true,
-        getClient: createGetClient('server1')
+        client: createGetClient('server1')
       },
       server2: {
         id: 'server2',
         messages: [],
         userMessages: {
-          B0T: _.times(100,
+          B0T: _.times(500,
                         fakeMsg.bind(null, 'B0T', 'PakaluPapito', 'sexy singles in ur area')
                     )
         },
         channels: {
         },
         connected: true,
-        getClient: createGetClient('server2')
+        client: createGetClient('server2')
       }
     }
   }, { live: false })
-
-  t.context.current = {
-    serverId: 'server1',
-    channel: '#kellyirc',
-    user: undefined
-  }
-
-  t.context.oldState = t.context.state.get()
 })
 
 test('msg', t => {
@@ -154,15 +154,11 @@ test('msg', t => {
     msg: 'hello'
   })
 
-  MessageRouter({
-    message,
-    server: t.context.state.get().servers.server1,
-    current: t.context.current
-  })
+  const newState = MessageRouter(t.context.state, message)
 
-  testModified(t, 'server1')
-  testNotModified(t, 'server2')
-  testMessageInChannel(t, message, '#kellyirc')
+  testModified(t, newState, 'server1')
+  testNotModified(t, newState, 'server2')
+  testMessageInChannel(t, newState, message, '#kellyirc')
 })
 
 test('action', t => {
@@ -173,15 +169,11 @@ test('action', t => {
     msg: 'slaps PakaluPapito silly with a god damn fish'
   })
 
-  MessageRouter({
-    message,
-    server: t.context.state.get().servers.server1,
-    current: t.context.current
-  })
+  const newState = MessageRouter(t.context.state, message)
 
-  testModified(t, 'server1')
-  testNotModified(t, 'server2')
-  testMessageInChannel(t, message, '#kellyirc')
+  testModified(t, newState, 'server1')
+  testNotModified(t, newState, 'server2')
+  testMessageInChannel(t, newState, message, '#kellyirc')
 })
 
 test('notice', t => {
@@ -192,17 +184,13 @@ test('notice', t => {
     msg: 'feed me pls'
   })
 
-  MessageRouter({
-    message,
-    server: t.context.state.get().servers.server1,
-    current: t.context.current
-  })
+  const newState = MessageRouter(t.context.state, message)
 
-  testModified(t, 'server1')
-  testNotModified(t, 'server2')
-  testMessageInServer(t, message)
-  testMessageInUser(t, message, 'Camel')
-  testMessageInChannel(t, message, '#kellyirc')
+  testModified(t, newState, 'server1')
+  testNotModified(t, newState, 'server2')
+  testMessageInServer(t, newState, message)
+  testMessageInUser(t, newState, message, 'Camel')
+  testMessageInChannel(t, newState, message, '#kellyirc')
 })
 
 test('preconnection notice', t => {
@@ -213,24 +201,20 @@ test('preconnection notice', t => {
     msg: '*** No ident server found ***'
   })
 
-  MessageRouter({
-    message,
-    server: t.context.state.get().servers.server1,
-    current: t.context.current
-  })
+  const newState = MessageRouter(t.context.state, message)
 
-  testModified(t, 'server1')
-  testNotModified(t, 'server2')
-  testMessageInServer(t, message)
+  testModified(t, newState, 'server1')
+  testNotModified(t, newState, 'server2')
+  testMessageInServer(t, newState, message)
 
     // Test other logs are unmodified
   t.is(
-        t.context.state.get().servers['server1'].channels,
-        t.context.oldState.servers['server1'].channels
+        newState.servers['server1'].channels,
+        t.context.state.servers['server1'].channels
     )
   t.is(
-        t.context.state.get().servers['server1'].userMessages,
-        t.context.oldState.servers['server1'].userMessages
+        newState.servers['server1'].userMessages,
+        t.context.state.servers['server1'].userMessages
     )
 })
 
@@ -241,17 +225,13 @@ test('invite', t => {
     chan: '#water'
   })
 
-  MessageRouter({
-    message,
-    server: t.context.state.get().servers.server1,
-    current: t.context.current
-  })
+  const newState = MessageRouter(t.context.state, message)
 
-  testModified(t, 'server1')
-  testNotModified(t, 'server2')
-  testMessageInServer(t, message)
-  testMessageInUser(t, message, 'Camel')
-  testMessageInChannel(t, message, '#kellyirc')
+  testModified(t, newState, 'server1')
+  testNotModified(t, newState, 'server2')
+  testMessageInServer(t, newState, message)
+  testMessageInUser(t, newState, message, 'Camel')
+  testMessageInChannel(t, newState, message, '#kellyirc')
 })
 
 test('join', t => {
@@ -262,15 +242,11 @@ test('join', t => {
     me: false
   })
 
-  MessageRouter({
-    message,
-    server: t.context.state.get().servers.server1,
-    current: t.context.current
-  })
+  const newState = MessageRouter(t.context.state, message)
 
-  testModified(t, 'server1')
-  testNotModified(t, 'server2')
-  testMessageInChannel(t, message, '#furry')
+  testModified(t, newState, 'server1')
+  testNotModified(t, newState, 'server2')
+  testMessageInChannel(t, newState, message, '#furry')
 })
 
 test('part', t => {
@@ -282,15 +258,11 @@ test('part', t => {
     me: false
   })
 
-  MessageRouter({
-    message,
-    server: t.context.state.get().servers.server1,
-    current: t.context.current
-  })
+  const newState = MessageRouter(t.context.state, message)
 
-  testModified(t, 'server1')
-  testNotModified(t, 'server2')
-  testMessageInChannel(t, message, '#kellyirc')
+  testModified(t, newState, 'server1')
+  testNotModified(t, newState, 'server2')
+  testMessageInChannel(t, newState, message, '#kellyirc')
 })
 
 test('kick', t => {
@@ -303,15 +275,11 @@ test('kick', t => {
     me: false
   })
 
-  MessageRouter({
-    message,
-    server: t.context.state.get().servers.server1,
-    current: t.context.current
-  })
+  const newState = MessageRouter(t.context.state, message)
 
-  testModified(t, 'server1')
-  testNotModified(t, 'server2')
-  testMessageInChannel(t, message, '#kellyirc')
+  testModified(t, newState, 'server1')
+  testNotModified(t, newState, 'server2')
+  testMessageInChannel(t, newState, message, '#kellyirc')
 })
 
 test('topic', t => {
@@ -321,15 +289,11 @@ test('topic', t => {
     topic: 'The problems are bad, but the causes, the causes are very good'
   })
 
-  MessageRouter({
-    message,
-    server: t.context.state.get().servers.server1,
-    current: t.context.current
-  })
+  const newState = MessageRouter(t.context.state, message)
 
-  testModified(t, 'server1')
-  testNotModified(t, 'server2')
-  testMessageInChannel(t, message, '#kellyirc')
+  testModified(t, newState, 'server1')
+  testNotModified(t, newState, 'server2')
+  testMessageInChannel(t, newState, message, '#kellyirc')
 })
 
 test('topicwho', t => {
@@ -340,15 +304,11 @@ test('topicwho', t => {
     time: new Date()
   })
 
-  MessageRouter({
-    message,
-    server: t.context.state.get().servers.server1,
-    current: t.context.current
-  })
+  const newState = MessageRouter(t.context.state, message)
 
-  testModified(t, 'server1')
-  testNotModified(t, 'server2')
-  testMessageInChannel(t, message, '#kellyirc')
+  testModified(t, newState, 'server1')
+  testNotModified(t, newState, 'server2')
+  testMessageInChannel(t, newState, message, '#kellyirc')
 })
 
 test('mode', t => {
@@ -359,15 +319,11 @@ test('mode', t => {
     mode: '-o+o KR SpookyCo'
   })
 
-  MessageRouter({
-    message,
-    server: t.context.state.get().servers.server1,
-    current: t.context.current
-  })
+  const newState = MessageRouter(t.context.state, message)
 
-  testModified(t, 'server1')
-  testNotModified(t, 'server2')
-  testMessageInChannel(t, message, '#kellyirc')
+  testModified(t, newState, 'server1')
+  testNotModified(t, newState, 'server2')
+  testMessageInChannel(t, newState, message, '#kellyirc')
 })
 
 test('usermode', t => {
@@ -378,15 +334,11 @@ test('usermode', t => {
     mode: '+o'
   })
 
-  MessageRouter({
-    message,
-    server: t.context.state.get().servers.server1,
-    current: t.context.current
-  })
+  const newState = MessageRouter(t.context.state, message)
 
-  testModified(t, 'server1')
-  testNotModified(t, 'server2')
-  testMessageInServer(t, message)
+  testModified(t, newState, 'server1')
+  testNotModified(t, newState, 'server2')
+  testMessageInServer(t, newState, message)
 })
 
 test('nick (self)', t => {
@@ -397,15 +349,11 @@ test('nick (self)', t => {
     me: true
   })
 
-  MessageRouter({
-    message,
-    server: t.context.state.get().servers.server1,
-    current: t.context.current
-  })
+  const newState = MessageRouter(t.context.state, message)
 
-  testModified(t, 'server1')
-  testNotModified(t, 'server2')
-  testMessageInAll(t, message)
+  testModified(t, newState, 'server1')
+  testNotModified(t, newState, 'server2')
+  testMessageInAll(t, newState, message)
 })
 
 test('nick (other)', t => {
@@ -416,24 +364,19 @@ test('nick (other)', t => {
     me: false
   })
 
-    // NOTE: the server reaction will have updated the nicks and moved the
-    // userMessages array by now, so the state already uses newNick
+  // NOTE: the server reaction will have updated the nicks and moved the
+  // userMessages array by now, so the state already uses newNick
+  const newState = MessageRouter(t.context.state, message)
 
-  MessageRouter({
-    message,
-    server: t.context.state.get().servers.server1,
-    current: t.context.current
-  })
+  testModified(t, newState, 'server1')
+  testNotModified(t, newState, 'server2')
 
-  testModified(t, 'server1')
-  testNotModified(t, 'server2')
-
-  testMessageInChannel(t, message, '#kellyirc')
-  testMessageInChannel(t, message, '#furry')
-  t.is(t.context.state.get().servers.server1.channels['#empty'].messages.length, 0,
+  testMessageInChannel(t, newState, message, '#kellyirc')
+  testMessageInChannel(t, newState, message, '#furry')
+  t.is(newState.servers.server1.channels['#empty'].messages.length, 0,
         'The message should not have gone to #empty (seiyria not in that channel)')
-  testMessageInUser(t, message, 'seiyria')
-  t.not(t.context.state.get().servers.server1.userMessages.notSeiyria,
+  testMessageInUser(t, newState, message, 'seiyria')
+  t.not(newState.servers.server1.userMessages.notSeiyria,
         'The userMessages under the old nick should not be used')
 })
 
@@ -444,22 +387,19 @@ test('connecting', t => {
     port: 6667
   })
 
-  MessageRouter({
-    message,
-    server: t.context.state.get().servers.server1,
-    current: t.context.current
-  })
+  const newState = MessageRouter(t.context.state, message)
 
   const infoMsg = {
     type: 'info',
     id: message.id,
+    messageId: message.messageId,
     timestamp: message.timestamp,
     msg: `Connecting to ${message.server} on port ${message.port}...`
   }
 
-  testModified(t, 'server1')
-  testNotModified(t, 'server2')
-  testMessageInServer(t, infoMsg)
+  testModified(t, newState, 'server1')
+  testNotModified(t, newState, 'server2')
+  testMessageInServer(t, newState, infoMsg)
 })
 
 test('connection-established', t => {
@@ -469,22 +409,19 @@ test('connection-established', t => {
     port: 6667
   })
 
-  MessageRouter({
-    message,
-    server: t.context.state.get().servers.server1,
-    current: t.context.current
-  })
+  const newState = MessageRouter(t.context.state, message)
 
   const infoMsg = {
     type: 'info',
     id: message.id,
+    messageId: message.messageId,
     timestamp: message.timestamp,
     msg: `Connection to host at ${message.server} established`
   }
 
-  testModified(t, 'server1')
-  testNotModified(t, 'server2')
-  testMessageInServer(t, infoMsg)
+  testModified(t, newState, 'server1')
+  testNotModified(t, newState, 'server2')
+  testMessageInServer(t, newState, infoMsg)
 })
 
 test('reconnecting', t => {
@@ -496,22 +433,19 @@ test('reconnecting', t => {
     triesLeft: 2
   })
 
-  MessageRouter({
-    message,
-    server: t.context.state.get().servers.server1,
-    current: t.context.current
-  })
+  const newState = MessageRouter(t.context.state, message)
 
   const infoMsg = {
     type: 'info',
     id: message.id,
+    messageId: message.messageId,
     timestamp: message.timestamp,
     msg: `Reconnecting in ${message.delay / 1000} seconds (${message.triesLeft} tries remaining)...`
   }
 
-  testModified(t, 'server1')
-  testNotModified(t, 'server2')
-  testMessageInServer(t, infoMsg)
+  testModified(t, newState, 'server1')
+  testNotModified(t, newState, 'server2')
+  testMessageInServer(t, newState, infoMsg)
 })
 
 test('connect', t => {
@@ -522,22 +456,19 @@ test('connect', t => {
     nick: 'PakaluPapito'
   })
 
-  MessageRouter({
-    message,
-    server: t.context.state.get().servers.server1,
-    current: t.context.current
-  })
+  const newState = MessageRouter(t.context.state, message)
 
   const infoMsg = {
     type: 'info',
     id: message.id,
+    messageId: message.messageId,
     timestamp: message.timestamp,
     msg: 'Connected'
   }
 
-  testModified(t, 'server1')
-  testNotModified(t, 'server2')
-  testMessageInServer(t, infoMsg)
+  testModified(t, newState, 'server1')
+  testNotModified(t, newState, 'server2')
+  testMessageInServer(t, newState, infoMsg)
 })
 
 test('disconnect', t => {
@@ -546,22 +477,19 @@ test('disconnect', t => {
     reason: 'Force Quit'
   })
 
-  MessageRouter({
-    message,
-    server: t.context.state.get().servers.server1,
-    current: t.context.current
-  })
+  const newState = MessageRouter(t.context.state, message)
 
   const infoMsg = {
     type: 'info',
     id: message.id,
+    messageId: message.messageId,
     timestamp: message.timestamp,
     msg: 'Disconnected (Force Quit)'
   }
 
-  testModified(t, 'server1')
-  testNotModified(t, 'server2')
-  testMessageInServer(t, infoMsg)
+  testModified(t, newState, 'server1')
+  testNotModified(t, newState, 'server2')
+  testMessageInServer(t, newState, infoMsg)
 })
 
 test('quit', t => {
@@ -571,23 +499,18 @@ test('quit', t => {
     reason: 'peace out doggs',
     channels: ['#kellyirc', '#furry']
   })
+  t.context.state = immutably.del(t.context.state, 'servers.server1.channels.#kellyirc.seiyria')
+  t.context.state = immutably.del(t.context.state, 'servers.server1.channels.#furry.seiyria')
 
-  t.context.state.get().servers.server1.channels['#kellyirc'].users.remove('seiyria')
-  t.context.state.get().servers.server1.channels['#furry'].users.remove('seiyria')
+  const newState = MessageRouter(t.context.state, message)
 
-  MessageRouter({
-    message,
-    server: t.context.state.get().servers.server1,
-    current: t.context.current
-  })
-
-  testModified(t, 'server1')
-  testNotModified(t, 'server2')
-  testMessageInChannel(t, message, '#kellyirc')
-  testMessageInChannel(t, message, '#furry')
-  t.is(t.context.state.get().servers.server1.channels['#empty'].messages.length, 0,
+  testModified(t, newState, 'server1')
+  testNotModified(t, newState, 'server2')
+  testMessageInChannel(t, newState, message, '#kellyirc')
+  testMessageInChannel(t, newState, message, '#furry')
+  testMessageInUser(t, newState, message, 'seiyria')
+  t.is(newState.servers.server1.channels['#empty'].messages.length, 0,
         'The message should not have gone to #empty (seiyria not in that channel)')
-  testMessageInUser(t, message, 'seiyria')
 })
 
 test('error', t => {
@@ -597,15 +520,11 @@ test('error', t => {
     params: ['Connection Timed Out']
   })
 
-  MessageRouter({
-    message,
-    server: t.context.state.get().servers.server1,
-    current: t.context.current
-  })
+  const newState = MessageRouter(t.context.state, message)
 
-  testModified(t, 'server1')
-  testNotModified(t, 'server2')
-  testMessageInAll(t, message)
+  testModified(t, newState, 'server1')
+  testNotModified(t, newState, 'server2')
+  testMessageInAll(t, newState, message)
 })
 
 test('msg (private message)', t => {
@@ -616,15 +535,11 @@ test('msg (private message)', t => {
     msg: 'hello'
   })
 
-  MessageRouter({
-    message,
-    server: t.context.state.get().servers.server1,
-    current: t.context.current
-  })
+  const newState = MessageRouter(t.context.state, message)
 
-  testModified(t, 'server1')
-  testNotModified(t, 'server2')
-  testMessageInUser(t, message, 'KR')
+  testModified(t, newState, 'server1')
+  testNotModified(t, newState, 'server2')
+  testMessageInUser(t, newState, message, 'KR')
 })
 
 test('action (private message)', t => {
@@ -635,15 +550,11 @@ test('action (private message)', t => {
     msg: 'slaps PakaluPapito silly with a god damn fish'
   })
 
-  MessageRouter({
-    message,
-    server: t.context.state.get().servers.server1,
-    current: t.context.current
-  })
+  const newState = MessageRouter(t.context.state, message)
 
-  testModified(t, 'server1')
-  testNotModified(t, 'server2')
-  testMessageInUser(t, message, 'seiyria')
+  testModified(t, newState, 'server1')
+  testNotModified(t, newState, 'server2')
+  testMessageInUser(t, newState, message, 'seiyria')
 })
 
 test('raw', t => {
@@ -654,15 +565,11 @@ test('raw', t => {
         // Other data omitted for brevity
   })
 
-  MessageRouter({
-    message,
-    server: t.context.state.get().servers.server1,
-    current: t.context.current
-  })
+  const newState = MessageRouter(t.context.state, message)
 
-  testModified(t, 'server1')
-  testNotModified(t, 'server2')
-  testMessageInServer(t, message)
+  testModified(t, newState, 'server1')
+  testNotModified(t, newState, 'server2')
+  testMessageInServer(t, newState, message)
 })
 
 test('raw (ignored)', t => {
@@ -673,14 +580,10 @@ test('raw (ignored)', t => {
         // Other data omitted for brevity
   })
 
-  MessageRouter({
-    message,
-    server: t.context.state.get().servers.server1,
-    current: t.context.current
-  })
+  const newState = MessageRouter(t.context.state, message)
 
-  testNotModified(t, 'server1')
-  testNotModified(t, 'server2')
+  testNotModified(t, newState, 'server1')
+  testNotModified(t, newState, 'server2')
 })
 
 test('raw 324', t => {
@@ -691,16 +594,12 @@ test('raw 324', t => {
         // Other data omitted for brevity
   })
 
-  MessageRouter({
-    message,
-    server: t.context.state.get().servers.server1,
-    current: t.context.current
-  })
+  const newState = MessageRouter(t.context.state, message)
 
-  testModified(t, 'server1')
-  testNotModified(t, 'server2')
-  testMessageInChannel(t, message, '#empty')
-  testMessageInServer(t, message)
+  testModified(t, newState, 'server1')
+  testNotModified(t, newState, 'server2')
+  testMessageInChannel(t, newState, message, '#empty')
+  testMessageInServer(t, newState, message)
 })
 
 test('raw 400-599', t => {
@@ -711,32 +610,24 @@ test('raw 400-599', t => {
         // Other data omitted for brevity
   })
 
-  MessageRouter({
-    message,
-    server: t.context.state.get().servers.server1,
-    current: t.context.current
-  })
+  const newState = MessageRouter(t.context.state, message)
 
-  testModified(t, 'server1')
-  testNotModified(t, 'server2')
-  testMessageInChannel(t, message, '#kellyirc')
-  testMessageInServer(t, message)
+  testModified(t, newState, 'server1')
+  testNotModified(t, newState, 'server2')
+  testMessageInChannel(t, newState, message, '#kellyirc')
+  testMessageInServer(t, newState, message)
 })
 
 test('log overflow', t => {
-  const message = fakeMsg('B0T', 'PakaluPapito', 'u there?')
+  const message = fakeMsg('B0T', 'PakaluPapito', 'u there?', 'server2')
 
-  MessageRouter({
-    message,
-    server: t.context.state.get().servers.server2,
-    current: t.context.current
-  })
+  const newState = MessageRouter(t.context.state, message)
 
-  testNotModified(t, 'server1')
-  testModified(t, 'server2')
+  testNotModified(t, newState, 'server1')
+  testModified(t, newState, 'server2')
 
-  const log = t.context.state.get().servers.server2.userMessages.B0T
+  const log = newState.servers.server2.userMessages.B0T
 
-  t.is(log.length, 100)
+  t.is(log.length, 500)
   t.deepEqual(log[log.length - 1], message)
 })

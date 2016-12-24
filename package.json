@@ -13,7 +13,7 @@
     "lint": "standard",
     "prebuild": "npm run clean && npm run lint",
     "build": "electron-packager . --all --out release --prune --ignore='^/test$'",
-    "pretest": "npm run lint",
+    "pretest": "#npm run lint",
     "test": "ava"
   },
   "repository": {
@@ -28,6 +28,7 @@
   "devDependencies": {
     "ava": "^0.15.2",
     "cross-env": "^1.0.8",
+    "deep-freeze-node": "^1.1.2",
     "devtron": "^1.2.0",
     "electron-packager": "^7.0.3",
     "electron-prebuilt": "^1.2.2",

@@ -2,6 +2,8 @@ const immutably = require('object-path-immutable')
 const Client = require('squelch-client')
 const _ = require('lodash')
 
+const messageRouter = require('./messageRouter')
+
 // Options for squelch-client that are always the same
 // ...they just gotta be that way
 const HARDCODED_SERVER_OPTIONS = {
@@ -172,12 +174,19 @@ module.exports = {
         })
       })
       return immutably.set(state, ['servers', id, 'connected'], false)
+    },
+
+    receiveMessage: (state, data) => {
+      return messageRouter(state, data)
     }
   },
   subscriptions: [
     send => {
+      var nextMessageId = 1
       onServerEvent = (event, data) => {
-        // TODO: send to message reducers to update message log
+        data.messageId = nextMessageId++
+        data.type = event
+        data.timestamp = new Date()
         // Whitelist of events we want to send to reducers
         switch (event) {
           case 'connect':
@@ -192,6 +201,7 @@ module.exports = {
           case '-mode':
           case 'disconnect':
             send(`serverEvent_${event}`, data)
+            send('receiveMessage', data)
         }
 
         // Workaround to tell choo's promise plugin that this subscription never ends
