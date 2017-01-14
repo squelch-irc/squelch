@@ -55,3 +55,7 @@ form, input, optgroup, select, textarea {
 .break-word {
   word-break: break-word;
 }
+
+.pre-wrap {
+  white-space: pre-wrap;
+}
